@@ -1,0 +1,1273 @@
+{
+ "note": "Observed client demand. Quotes verbatim from the cited pages; poster claims are claims, not facts. Reddit was blocked on every route on 2026-10-12.",
+ "issues": [
+  {
+   "id": "obs-01",
+   "n": 1,
+   "title": "Card declined or blocked on a routine purchase (false fraud flag)",
+   "category": "declined transactions",
+   "frequency": "very common",
+   "frequencyEvidence": "Very common. Nine separate Trustpilot reviews in 2026 alone; appears in every month sampled.",
+   "quotes": [
+    {
+     "text": "\"Declined my card for a $60 pizza purchase. 5 hour wait to figure out why.\" (Aug 16, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=2",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"they flagged it as fraud suspicion and blocked my card\" (Jun 26, 2026; paying a locksmith to get back into their own home)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=5",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"My CC has been blocked 3 days in a row\" (Mar 26, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=9",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"to have a transaction unblocked/unflagged, so it could go through.\" (Jul 5, 2026; Visa refused for online use, no supervisor offered)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Complete an ordinary purchase right now, often time-critical (food, locksmith, contractor).",
+   "emotion": "angry, embarrassed at the counter, then exhausted by the wait.",
+   "resolutionSeen": "Mostly unresolved in the post; several say they are closing the account. Made worse: long hold times (five hours cited), being told to wait until the next day and visit a branch in another town, a rep ending the call when asked why.",
+   "posterClaims": "that RBC blocks repeat purchases at the same merchant on consecutive days; that a $40k daily limit was in place yet a $1,200 transaction was still blocked (\"RBC will not allow other transactions for said amount through their visa even with over 40k daily limit\", Feb 1, 2026, https://ca.trustpilot.com/review/www.rbc.com?page=2).",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-02",
+   "n": 2,
+   "title": "Own credit-card payment or transfer flagged as fraud, account restricted",
+   "category": "declined transactions",
+   "frequency": "common",
+   "frequencyEvidence": "Common (four 2026 reviews).",
+   "quotes": [
+    {
+     "text": "\"The bank locked my business account because they deemed my OWN credit card payment as ‘fraudulent’.\" (Oct 10, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"multiple \"account restrictions\" placed on the account and can neither pay a contractor\" (Jul 24, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=4",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"RBC just blocked two e-transfer in three days.\" (Jul 21, 2026; account locked pending a password reset the client refused)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Pay their own card bill before the limit or due date; pay a tradesperson.",
+   "emotion": "angry, scared of missing a due date.",
+   "resolutionSeen": "Pending manager callbacks and branch appointments; no closure in the posts. Made worse: no advance notice of the restriction; the client cannot pay a near-limit card and fears interest or over-limit fees.",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-03",
+   "n": 3,
+   "title": "Debit daily purchase limit blocks an emergency purchase; changing one limit locks others",
+   "category": "declined transactions",
+   "frequency": "common",
+   "frequencyEvidence": "Common (three 2026 reviews).",
+   "quotes": [
+    {
+     "text": "\"there's a limit of debit purchase transaction per day of 2k.\" (Sep 8, 2026; a roughly $4,500 emergency flight while travelling, bank could not raise it)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=2",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"So you'll change your debit card limit for two months\" (Mar 24, 2026; changing the debit limit locked e-transfer limits)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=9",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"I can't change my daily limit AND when I call them they ghost me\" (Aug 12, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=3",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Make one large purchase today.",
+   "emotion": "scared (stranded), angry.",
+   "resolutionSeen": "None; \"could not raise the limit or offer a temporary fix.\"",
+   "posterClaims": "$2,000 per day debit purchase cap; limit changes are locked for two months.\n\n---",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-04",
+   "n": 4,
+   "title": "Card locked or declined abroad; cannot reach anyone to unlock",
+   "category": "travel and foreign use",
+   "frequency": "very common",
+   "frequencyEvidence": "Very common. The single most emotionally intense cluster; recurs across Trustpilot, creditcardGenius and ConsumerAffairs.",
+   "quotes": [
+    {
+     "text": "\"We have been locked out of our cards while abroad and the are refusing to unlock them.\" (Jan 2, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com?page=2",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Do never bank with RBC if you travel out of Canada.\" (Oct 8, 2026; 12-plus hour waits, transferred in loops, closing all accounts)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"it was declined multiple times while in Europe with no specific reason given.\" (about a year ago, Avion Visa Infinite)",
+     "url": "https://creditcardgenius.ca/credit-cards/rbc-avion-visa-infinite#user-reviews",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"they marked my account as FRAUD and reversed the payment that I had a confirmation number for!!\" (Mar 20, 2026; rental payment abroad, hung up on twice)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=9",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Pay for accommodation, food or transport in a foreign country with no fallback.",
+   "emotion": "scared, then furious.",
+   "resolutionSeen": "Family wired money instead; several clients closed accounts after returning. Made worse: being told to visit a branch (impossible abroad), mobile banking also locked so the self-serve unlock is unavailable.",
+   "posterClaims": "that advising RBC of travel plans does not prevent blocks; that the fraud line will not unlock a card from abroad without a branch visit.",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-05",
+   "n": 5,
+   "title": "Mobile banking locked while abroad; told to attend a branch with two pieces of ID",
+   "category": "travel and foreign use",
+   "frequency": "common",
+   "frequencyEvidence": "Common (overlaps with 4; three distinct 2026 reviews).",
+   "quotes": [
+    {
+     "text": "\"being unable to make purchases on Amazon using my Virtual Visa Debit\" (Oct 9, 2026; same review says mobile banking locked while travelling and told to visit a branch with two IDs)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"they had lett someone else in my online banking account.\" (Dec 13, 2025; about seven weeks without access, says helpline called him a scammer)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com?page=2",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"it was denied and was told it was fraud\" (Apr 15, 2026; card and online banking restricted for over two weeks, branch refused to return the card)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=8",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Regain control of the account and card without flying home.",
+   "emotion": "scared, humiliated (\"called me a scammer\").",
+   "resolutionSeen": "Unresolved for weeks in every post.",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-06",
+   "n": 6,
+   "title": "Foreign transaction fee higher than expected, or confusion with merchant currency conversion",
+   "category": "travel and foreign use",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional in this corpus (one direct complaint), but a well-known confusion point.",
+   "quotes": [
+    {
+     "text": "\"On one transaction I wa charged the eqivalent of 5% exchange whereas they claim to only charge 2.5%.\" (Dec 4, 2022; WestJet Elite card, about $10,000 transaction; call disconnected, told to contact Mastercard)",
+     "url": "https://www.smartcustomer.com/reviews/rbcroyalbank.com",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Understand and contest the exchange rate on a big foreign purchase.",
+   "emotion": "confused, then angry at being bounced to the network.",
+   "resolutionSeen": "None. Made worse: told to contact Mastercard directly.",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-07",
+   "n": 7,
+   "title": "Foreign ATM declined but account debited",
+   "category": "travel and foreign use",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional (one case).",
+   "quotes": [
+    {
+     "text": "\"my transaction was refused. No cash was dispensed.\" (May 9, 2019; Malaysia, $800, 90-day investigation found cash was dispensed, no refund, Ombudsman produced nothing)",
+     "url": "https://www.smartcustomer.com/reviews/rbcroyalbank.com",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Get $800 back for cash never received.",
+   "emotion": "resigned after escalation failed.",
+   "resolutionSeen": "",
+   "posterClaims": "the investigation took 90 days and relied solely on the foreign bank's word.\n\n---",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-08",
+   "n": 8,
+   "title": "Unauthorized charges on credit or debit; refund slow, partial or refused",
+   "category": "fraud and unauthorized transactions",
+   "frequency": "very common",
+   "frequencyEvidence": "Very common. OBSI: fraud is one-third of all banking cases (2025).",
+   "quotes": [
+    {
+     "text": "\"their Fraud department told me that there was no fraud\" (Jun 26, 2026; payment via a processor to a scam organisation; felt blamed)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=5",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"I got a fraudulent transaction on my debit card EVEN AFTER LOCKING my card\" (Oct 2, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"they couldn't place a stop payment or even issue a new card right away.\" (Apr 10, 2026; account locked, three-week investigation, no refund promised)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=9",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Lost $1,600 to a fraudster and the bank was not willing to find out the reason\" (Aug 30, 2024)",
+     "url": "https://www.smartcustomer.com/reviews/rbcroyalbank.com",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Get the money back and stop further loss.",
+   "emotion": "scared, then angry at being treated as the suspect.",
+   "resolutionSeen": "Mixed: one reviewer got funds back after \"7 business days\" (\"allowing money to be removed from my account without consent and then I have to wait 7 business days\", Aug 4, 2026, https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=3); others report nothing after weeks. Made worse: no provisional credit, no stop-payment, no immediate replacement card, being told the fraud was \"the customer's\".",
+   "posterClaims": "that a card lock does not stop fraudulent debits (RBC's own page says locks block purchases, cash advances and withdrawals but allow pre-authorized payments and refunds, https://www.rbcroyalbank.com/credit-cards/cardholders/lost-or-stolen-credit-card.html); that RBC holds the client liable if not reported within 30 days of the statement (RBC Caribbean FAQ wording surfaced in search).",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-09",
+   "n": 9,
+   "title": "Fraud alert received but cannot reach the fraud line; transferred in loops",
+   "category": "fraud and unauthorized transactions",
+   "frequency": "very common",
+   "frequencyEvidence": "Very common (six 2026 reviews).",
+   "quotes": [
+    {
+     "text": "\"I got an alert about an unauthorized purchase and they just pass me from one person to the next.\" (Apr 9, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=9",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"ive been trying to reach the fraud line and i have not been able to get through.\" (Jun 2, 2026; locked out of online banking over two weeks)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=7",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"I was transferred to the fraud department in an unacceptable manner.\" (Apr 10, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=8",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"He was extremely rude to a client.\" (Jan 31, 2026; fraud department agent)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com?page=2",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Respond to the bank's own alert and confirm or deny a transaction.",
+   "emotion": "anxious, then angry.",
+   "resolutionSeen": "Usually none in the post. Made better (rare): one reviewer said \"RBC flagged them i called RBC and HAD them CANCELL THE CHARGE AND BLOCK MY CARD.\" (Apr 28, 2026, $18 charge reversed same call) https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=8",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-10",
+   "n": 10,
+   "title": "Debit fraud claim denied: deadline missed, \"insecure PIN\", or lost card",
+   "category": "fraud and unauthorized transactions",
+   "frequency": "common",
+   "frequencyEvidence": "Common; the two biggest news stories about RBC cards are this type.",
+   "quotes": [
+    {
+     "text": "\"I had to file a claim with my rbc visa debit cause someone stole 6000cad dollars\" (Apr 26, 2026; claim closed, told of a 10-day deadline they did not know about, refused a new claim)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=8",
+     "snippetOnly": false
+    },
+    {
+     "text": "Snippet only (page body not served): CTV reports RBC \"will only refund her $470 in charges that were processed using tap\" and \"$8,772 in transactions completed by the thieves using a PIN won't be refunded because her numbers were not secure enough\"; she said BMO and Tangerine refunded similar losses within days. (published May 9, 2022)",
+     "url": "https://www.ctvnews.ca/toronto/article/ontario-woman-warns-about-choosing-credit-card-pin-after-rbc-refuses-to-refund-8-772",
+     "snippetOnly": true
+    },
+    {
+     "text": "Snippet only: \"Ontario student warns about losing debit card after RBC refuses to refund $14,000\" (page returned 404 on fetch)",
+     "url": "https://www.ctvnews.ca/toronto/article/ontario-student-warns-about-losing-debit-card-after-rbc-refuses-to-refund-14-000",
+     "snippetOnly": true
+    }
+   ],
+   "underlyingJob": "Recover thousands in stolen funds.",
+   "emotion": "scared, then resigned; the $6,000 reviewer was \"referred to the Better Business Bureau\".",
+   "resolutionSeen": "",
+   "posterClaims": "a 10-day claim deadline on Visa Debit; that PIN-based transactions are refused if the PIN is judged guessable; that tap transactions are refunded but PIN ones are not.",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-11",
+   "n": 11,
+   "title": "Supplementary card the client says they never activated used fraudulently",
+   "category": "fraud and unauthorized transactions",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional (one news case).",
+   "quotes": [],
+   "underlyingJob": "Not be billed for a card they did not use.",
+   "emotion": "confused, angry.",
+   "resolutionSeen": "RBC \"resolved the issue and isn't investigating further\" per its statement to CBC.\n\n---",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-12",
+   "n": 12,
+   "title": "Dispute for goods not delivered or merchant failure: slow, denied, or no investigation",
+   "category": "disputes and chargebacks",
+   "frequency": "common",
+   "frequencyEvidence": "Common. OBSI: chargeback complaints \"increased substantially\" in 2025.",
+   "quotes": [
+    {
+     "text": "\"I reported to RCBC credit card and they never paid for my loss\" (Sep 24, 2026; online purchase never delivered, cancelling card)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"They didn't do a proper investigation and would not provide me with the information I needed to stop it.\" (Mar 3, 2026; about $1,000, still owed)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=10",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Tried to contact with RBC dispute department regarding disputed transaction but the person don't listen me\" (Feb 15, 2026; call cut off)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=10",
+     "snippetOnly": false
+    },
+    {
+     "text": "Positive counter-example: \"handling my Credit Card Dispute case so professionally and swiftly.\" (Jul 30, 2026; $4,000 non-delivery, credit restored in about five business days on the date the agent promised)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=4",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Get money back from a merchant who did not deliver.",
+   "emotion": "angry, feeling unheard.",
+   "resolutionSeen": "Ranges from five-day credit to \"never paid\". What made it better: the agent gave a specific date and met it. What made it worse: no written reasons, calls ending mid-explanation.",
+   "posterClaims": "",
+   "verifiedContext": "contact the merchant first and \"give the merchant or service provider 15-20 business days to issue a credit prior to contacting RBC\"; dispute requests can be started in Online Banking; temporary credit \"usually within about two business days\"; a request with no reply after 10 business days is treated as closed. https://www.RBCroyalbank.com/credit-cards/cardholders/credit-card-transaction-help.html",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-13",
+   "n": 13,
+   "title": "Unrecognised small charge or vague descriptor; bounced between bank, PayPal and merchant",
+   "category": "disputes and chargebacks",
+   "frequency": "common",
+   "frequencyEvidence": "Common (three 2026 reviews).",
+   "quotes": [
+    {
+     "text": "\"I had a charge taken out of my Royal chequing bank account for $16.66 through PayPal and Visa.\" (May 21, 2026; sent between PayPal, branch and Visa, unresolved)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=7",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"I had an unauthorized hold placed on my card for a Walmart\" (Mar 15, 2026; descriptions vague, told to contact the merchant)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=9",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Identify a charge and make it stop.",
+   "emotion": "confused, then irritated.",
+   "resolutionSeen": "None; \"representative said the reviewer had to contact the merchant.\"",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-14",
+   "n": 14,
+   "title": "Pre-authorization hold mistaken for a charge",
+   "category": "disputes and chargebacks",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional (folded into 13; the Walmart \"hold\" case above). Worth a dedicated training scenario because the fix is explanation, not a dispute.\n\n---",
+   "quotes": [],
+   "underlyingJob": "",
+   "emotion": "",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-15",
+   "n": 15,
+   "title": "Replacement or renewal card slow, never arrives, or sent to the wrong address",
+   "category": "lost, stolen, replacement and renewal",
+   "frequency": "very common",
+   "frequencyEvidence": "Very common. Eight distinct 2025 to 2026 reviews, plus one creditcardGenius.",
+   "quotes": [
+    {
+     "text": "\"Sent my replacement credit card to the wrong address\" (Mar 5, 2026; conflicting information on card status, still waiting a week later)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=9",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"why I didn't receive my new RBC visa card since the old one will be expired soon\" (Jul 31, 2026; agent refused to help or transfer to a manager)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=3",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Took over 3 weeks for replacement card once reported fraudulent purchases on Privilege card\" (about a year ago)",
+     "url": "https://creditcardgenius.ca/credit-cards/rbc-avion-visa-infinite#user-reviews",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Business replacement cards take a really long time to arrive and they do not get mailed to You but to the branch.\" (Jul 12, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=4",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Have a working card before the old one dies or a trip starts.",
+   "emotion": "anxious, then angry.",
+   "resolutionSeen": "Mostly unresolved at posting; one moved their business elsewhere. Also: \"I've been waiting for my Visa Debit card for a month and a half.\" (Mar 6, 2026; spoke to five people) https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=9",
+   "posterClaims": "business cards are mailed to the branch, not the client; renewal cards were \"not sent to the branch as promised\".",
+   "verifiedContext": "7 to 10 business days after the report. https://www.rbcroyalbank.com/credit-cards/cardholders/lost-or-stolen-credit-card.html",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-16",
+   "n": 16,
+   "title": "Reporting a lost card is painful: hours on hold, repeated security questions",
+   "category": "lost, stolen, replacement and renewal",
+   "frequency": "common",
+   "frequencyEvidence": "Common.",
+   "quotes": [
+    {
+     "text": "\"It has been utterly impossible to replace a lost credit card\" (Jun 26, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=5",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"That was awful experience when I called to report my visa gone\" (Mar 9, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=9",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"the verification process took super long with too many questions\" (about a year ago, Cash Back Mastercard)",
+     "url": "https://creditcardgenius.ca/credit-cards/rbc-cash-back-mastercard",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Kill the lost card fast and get a new one.",
+   "emotion": "scared (exposure), then frustrated.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-17",
+   "n": 17,
+   "title": "Card cancelled or not renewed without notice, often right before travel",
+   "category": "lost, stolen, replacement and renewal",
+   "frequency": "common",
+   "frequencyEvidence": "Common (four reviews).",
+   "quotes": [
+    {
+     "text": "\"Cancelled my credit card without notifying me right before a trip.\" (Sep 5, 2026; had asked not to receive a replacement)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"did not renew my credit card\" (May 1, 2026; left without a card while travelling)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=6",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Now I'm receiving emails that my card has expired.\" (Oct 26, 2025; current card cancelled despite requests not to)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com?page=2",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"her card was blocked shortly after, leaving her without any usable card for days.\" (Apr 17, 2026; requesting a replacement for an expiring Mastercard deactivated the existing one; staff said this contradicted online instructions)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=8",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Keep an uninterrupted card, especially for pre-authorized payments and travel.",
+   "emotion": "angry, blindsided.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-18",
+   "n": 18,
+   "title": "Expired card plus identity verification friction (branch will not accept app or phone ID)",
+   "category": "lost, stolen, replacement and renewal",
+   "frequency": "common",
+   "frequencyEvidence": "Common.",
+   "quotes": [
+    {
+     "text": "\"I was told my card was expired.\" (Apr 22, 2026; branch would not accept online banking or phone-stored ID)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=8",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"refused to accept my identity verification via debit card\" (May 6, 2026; Visa phone support locked the accounts)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=6",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Try to get info on your credit card, cancel one, anything the AI is horrible.\" (Jun 2, 2026; verification failed, branch visit needed)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=7",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Prove who they are once and get served. \n\n---",
+   "emotion": "humiliated, angry.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-19",
+   "n": 19,
+   "title": "PIN: no guidance with a new card; reset only in person",
+   "category": "account access, PIN and lock",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional (two reviews).",
+   "quotes": [
+    {
+     "text": "\"when I received the credit card, I was not provided with clear information about the PIN or how to use it.\" (Sep 25, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"You can only reset your pin in person on a Mastercard\" (Aug 15, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Use the card at a terminal.",
+   "emotion": "confused, embarrassed.",
+   "resolutionSeen": "",
+   "posterClaims": "Mastercard PIN reset is branch-only.",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-20",
+   "n": 20,
+   "title": "Card lock feature confusion (what a lock does and does not stop)",
+   "category": "account access, PIN and lock",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional as a named complaint, but underlies issue 8 (\"EVEN AFTER LOCKING my card\").",
+   "quotes": [],
+   "underlyingJob": "",
+   "emotion": "",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "\"When your card is locked, all cash advances, purchases and withdrawals either online or in person will be declined\" while pre-authorized payments, balance payments and refunds continue. https://www.rbcroyalbank.com/credit-cards/cardholders/lost-or-stolen-credit-card.html",
+   "trainingPoint": "clients expect a lock to be a full freeze; recurring merchant pulls still post.\n\n---",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-21",
+   "n": 21,
+   "title": "Interest charged after paying in full, or payments posting late so interest accrues",
+   "category": "fees and interest",
+   "frequency": "common",
+   "frequencyEvidence": "Common (three 2026 reviews, plus a historic $17M refund).",
+   "quotes": [
+    {
+     "text": "\"they still charge interest because they take so long to post the payment.\" (Apr 24, 2026; says it happens monthly)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=8",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Credit card is finicky, takes multiple days to update payments and balances.\" (Oct 1, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Pay in full and owe nothing.",
+   "emotion": "confused, then feels cheated.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "Globe and Mail, Apr 9, 2002: RBC refunded about $17 million to about 1.6 million Visa cardholders for interest charged on new purchases by customers who had carried a balance then paid in full, citing \"a lack of clarity in the clause.\" https://www.theglobeandmail.com/report-on-business/rbc-repaying-interest-charges/article4133585",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-22",
+   "n": 22,
+   "title": "Over-limit fees with no notification",
+   "category": "fees and interest",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional.",
+   "quotes": [
+    {
+     "text": "\"RBC charged two $29 over-limit fees without sending any notification\" (Mar 9, 2026; refused waiver)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Avoid penalty fees for a small overage.",
+   "emotion": "angry.",
+   "resolutionSeen": "",
+   "posterClaims": "$29 over-limit fee, charged twice for one slight overage.",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-23",
+   "n": 23,
+   "title": "Promotional rate not honoured as advertised; rate or minimum payment raised citing missed payments",
+   "category": "fees and interest",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional (two reviews).",
+   "quotes": [
+    {
+     "text": "\"Warning! don't get hooked with RBC promo visa rate 0.99% it is not true.\" (Mar 26, 2026; card documents showed 1.90%, staff could not explain)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"they told me that I missed more than 2 minimum payments on my visa.\" (Aug 14, 2026; disputes this; rate and minimum payment rose with no notice, inconsistent answers)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=2",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Get the rate they signed up for.",
+   "emotion": "confused, distrustful.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "RBC disclosures describe a penalty rate when the minimum payment is missed \"two or more times in any 12-month period,\" and a scheduled purchase-rate increase from 20.99% to 21.99% on Cash Back Mastercards from Oct 1, 2026. https://www.rbcroyalbank.com/credit-cards/cash-back/rbc-cash-back-mastercard/rbc-cash-back-mastercard-co-application.pdf",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-24",
+   "n": 24,
+   "title": "Annual fee charged after the card was closed; credit score damage",
+   "category": "fees and interest",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional.",
+   "quotes": [
+    {
+     "text": "\"they charged annual fees, resulting in credit score lowering by a lot!\" (May 29, 2026; reversal promised by phone, charges continued months later)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=7",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Close cleanly with nothing owing.",
+   "emotion": "angry, worried about credit.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "RateAdvantage Visa terms say an earned annual-fee credit is lost if the account is closed before the next statement date. https://www.rbcroyalbank.com/credit-cards/_assets-custom/includes/pop-up/terms-and-condition/rate_adv.html",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-25",
+   "n": 25,
+   "title": "Balance protection insurance added without consent; cannot cancel",
+   "category": "fees and interest",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional (one review; no Reddit sample available).",
+   "quotes": [
+    {
+     "text": "\"RBC added BPI w/o consent, denied cancel, took $ w/o notice\" (Apr 16, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=8",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Stop paying for a product they never chose.",
+   "emotion": "angry.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-26",
+   "n": 26,
+   "title": "Statement or due-date notice never received; late payment hits credit score",
+   "category": "fees and interest",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional.",
+   "quotes": [
+    {
+     "text": "\"I never received a statement or payment due notification, online or via snail mail\" (experience Jul 9, 2026; WestJet RBC card; says score fell about 140 points)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=3",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Pay on time.",
+   "emotion": "scared about credit, angry.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-27",
+   "n": 27,
+   "title": "Prepaid / benefit-card fees (RBC Right Pay) double-charged at ATM",
+   "category": "fees and interest",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional (two reviews).",
+   "quotes": [
+    {
+     "text": "\"I never have been hit with 4.50 twice on one withdrawal before\" (Apr 16, 2026; over $100 in fees in one month)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=8",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"slamming you with fees despite their claims of the opposite\" (Apr 15, 2026; card linked to a government benefit program)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Access benefit money without erosion. \n\n---",
+   "emotion": "angry, financially stressed.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-28",
+   "n": 28,
+   "title": "Welcome bonus denied on eligibility grounds not understood at signup",
+   "category": "rewards and points",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional to common (one Trustpilot case; a recurring theme in points-blog comment sections that could not be fetched).",
+   "quotes": [
+    {
+     "text": "\"we were told that we were not eligible for the bonus because we were already RBC customers when we switched cards.\" (Jun 8, 2026; RBC British Airways Visa, denied eight months after meeting spend)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=7",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Collect the bonus they met the spend for.",
+   "emotion": "angry, feels misled.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "Avion offer terms say approval points post \"within sixty (60) days after your application has been approved\" and spend bonuses within 60 days of hitting the threshold, only if the account is open and in good standing. https://blog.rewardscanada.ca/credit-cards/70000-bonus-avion-points-rbc-avion-visa-infinite-privilege/",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-29",
+   "n": 29,
+   "title": "Points not posting to a partner program (name mismatch, missing membership number)",
+   "category": "rewards and points",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional.",
+   "quotes": [
+    {
+     "text": "\"failing to post to your Asia Miles account in a timely manner\" and RBC rep: \"there is still no membership number linked to the account\" (Apr 7, 2020; resolved after about five months, cause was a middle-name mismatch)",
+     "url": "https://princeoftravel.com/blog/rbc-cathay-pacific-visa-significant-issues-with-points-posting",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "See earned miles in the airline account.",
+   "emotion": "resigned.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-30",
+   "n": 30,
+   "title": "Redemption gone wrong: charged cash as well as points; taxes not refunded; cannot redeem online",
+   "category": "rewards and points",
+   "frequency": "common",
+   "frequencyEvidence": "Common.",
+   "quotes": [
+    {
+     "text": "\"I felt like I was robbed,\" and \"I want my money back, and I want them to apologize for calling me a liar.\" (HuffPost Canada, Oct 25, 2017; 122,000 Avion points used and the full $1,620 fare also charged; RBC called it a technical error)",
+     "url": "https://www.huffpost.com/archive/ca/entry/rbc-customer-out-1-600-after-being-charged-for-flight-he-bought-using-points_a_23255719",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Outcome so far: No clear response, no refund, no timeline.\" (Dec 27, 2025; CAD 744.60 refundable taxes on an Avion Rewards booking)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com?page=2",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Cant redeem online my points\" (Apr 29, 2026; two-hour call dropped)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=8",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Use points for a trip and pay nothing extra.",
+   "emotion": "angry, feels disbelieved.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-31",
+   "n": 31,
+   "title": "Points devaluation or partner-rate change without notice",
+   "category": "rewards and points",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional (one documented case, 2017; plus general \"worst card\" sentiment).",
+   "quotes": [
+    {
+     "text": "\"I was/am pretty unhappy about this, because it's a major devaluation.\" and \"I told them I will stop using the card.\" (May 2017; RBC to AAdvantage transfer cut from 1:1 to 7 per 10)",
+     "url": "https://blog.rewardscanada.ca/?p=4028",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Worst card to get if you looking to travel.\" (about a year ago, Avion Visa Infinite)",
+     "url": "https://creditcardgenius.ca/credit-cards/rbc-avion-visa-infinite#user-reviews",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Keep the value they were accumulating toward.",
+   "emotion": "resigned, betrayed.",
+   "resolutionSeen": "",
+   "posterClaims": "no advance email despite being on the RBC Rewards list; terms still showed the old rate.",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-32",
+   "n": 32,
+   "title": "Card-linked travel insurance claim stalls with the insurer",
+   "category": "rewards and points",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional.",
+   "quotes": [
+    {
+     "text": "\"Allianz always find something in the claim that they don't understand, and never read their full emails\" (11 months ago; trip-cancellation claim, about two months and counting)",
+     "url": "https://creditcardgenius.ca/credit-cards/rbc-avion-visa-infinite#user-reviews",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Get the trip cancellation benefit the card promised. \n\n---",
+   "emotion": "worn down.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-33",
+   "n": 33,
+   "title": "Apple Pay says the RBC card is \"not eligible\"; provisioning delays",
+   "category": "digital wallet and online",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional (one confirmed thread; older 2016 reports in search snippets).",
+   "quotes": [
+    {
+     "text": "\"I am unable to add visa card to apple pay, it says this card is not eligible\" and \"Yes it is a rbc avion infinite visa card\" (Oct 23, 2019; region and Apple status confirmed fine; no resolution in thread)",
+     "url": "https://discussions.apple.com/thread/250778344",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Tap with the phone, often because the physical card has not arrived.",
+   "emotion": "confused.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "you must be enrolled in RBC Online Banking, and \"please allow up to 48 hours for your new credit card to appear in the RBC Mobile app before you can add it to Apple Pay.\" https://www.rbcroyalbank.com/credit-cards/cardholders/instant-use-with-apple-pay.html",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-34",
+   "n": 34,
+   "title": "Virtual Visa Debit fails online, for autopay, or is the only card issued",
+   "category": "digital wallet and online",
+   "frequency": "common",
+   "frequencyEvidence": "Common (Trustpilot 2026 plus multiple third-party community threads).",
+   "quotes": [
+    {
+     "text": "\"being unable to make purchases on Amazon using my Virtual Visa Debit\" (Oct 9, 2026; pre-authorized bills also declined with funds available)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "Jun 19, 2026 reviewer asked for a physical debit card, received only a virtual one with \"extremely low limits,\" and it \"disappeared\" while abroad",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=5",
+     "snippetOnly": false
+    },
+    {
+     "text": "Snippet only (page 403): a Public Mobile community poster was told \"we are unable to verify your credit card information, so this transaction could not be completed.\"",
+     "url": "https://productioncommunity.publicmobile.ca/t5/Get-Support/Rbc-Visa-Debit-Card/m-p/664675",
+     "snippetOnly": true
+    },
+    {
+     "text": "Search snippet, Steam forum: \"I don't know why, the problem just has been fixed automatically after 2 days since I posted this discussion.\"",
+     "url": "https://steamcommunity.com/discussions/forum/1/620712364019769377",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Pay online from chequing without a credit card.",
+   "emotion": "confused, stuck.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "the virtual card \"cannot be used at physical store locations, at an ATM, or at financial institutions.\" https://brainstation.io/magazine/rbc-introduces-virtual-visa-debit-a-way-to-pay-for-things-with-your-debit-card-online",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-35",
+   "n": 35,
+   "title": "Transactions not visible or slow to post in the app",
+   "category": "digital wallet and online",
+   "frequency": "common",
+   "frequencyEvidence": "Common (recurring \"technical issue\").",
+   "quotes": [
+    {
+     "text": "\"Asked why I am unable to see my transactions for Credit Card\" (Sep 1, 2026; told \"technical issue\", no timeline, recurs every few months)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=2",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"it takes over 24 hrs for them to post a transaction\" (May 10, 2026; debit shows only \"Interac purchase\")",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=6",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Reconcile spending and spot fraud early. \n\n---",
+   "emotion": "anxious, annoyed.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-36",
+   "n": 36,
+   "title": "Pre-authorized payment declined by a dollar, retried, cascading NSF fees",
+   "category": "pre-authorized payments and subscriptions",
+   "frequency": "very common",
+   "frequencyEvidence": "Very common on the debit side (five 2026 reviews).",
+   "quotes": [
+    {
+     "text": "\"they charged me 315.00 worth of NSF fees\" (Jun 23, 2026; PAP declined for being a dollar short while other items cleared)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=5",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"They kept trying to take the charge over & over & over, a total of 48 times resulting in 48 separate charges of $50\" (May 19, 2026; says $2,400, never resolved)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=6",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"After months of having a courtesy overdraft, RBC started denying my charges.\" (Apr 5, 2026; $800 to $900 in fees)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=9",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"these fees have caused my balance to drop below zero shortly before scheduled pre-authorized payments\" (Feb 16, 2026; over $180 NSF in a year, moved payroll to a credit union)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=10",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Keep bills paid without being fined for being short by cents.",
+   "emotion": "angry, financially frightened.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-37",
+   "n": 37,
+   "title": "New card number breaks subscriptions and recurring bills",
+   "category": "pre-authorized payments and subscriptions",
+   "frequency": "common",
+   "frequencyEvidence": "Common as a secondary effect (appears inside issues 15 and 17).",
+   "quotes": [
+    {
+     "text": "Sep 5, 2026 reviewer (issue 17) explains the new card \"would have a different number, breaking pre-authorized payments\" (paraphrase in the fetched summary; lead quote \"Cancelled my credit card without notifying me right before a trip.\")",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "Oct 26, 2025 reviewer \"is updating payment methods across accounts\" after the card was cancelled against their wishes",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com?page=2",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Avoid a week of failed subscriptions after a replacement.",
+   "emotion": "resigned, annoyed.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "no first-hand post confirms whether RBC uses the Visa/Mastercard account-updater for recurring merchants; advisor should not promise it.",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-38",
+   "n": 38,
+   "title": "Payment sent to the old or closed card number; credits lost on fraud migration",
+   "category": "pre-authorized payments and subscriptions",
+   "frequency": "common",
+   "frequencyEvidence": "Common at regulator scale; occasional as a review.",
+   "quotes": [
+    {
+     "text": "\"a payment made by me mistakenly to older visa card\" (Feb 11, 2026; rep described as rude, no resolution)",
+     "url": "https://ca.trustpilot.com/review/www.rbc.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "FCAC (verified): \"RBC failed to transfer certain credits from the deactivated accounts to the new ones,\" 227,947 accounts, 2001 to 2024.",
+     "url": "https://www.canada.ca/en/financial-consumer-agency/services/industry/commissioner-decisions/summary-proceeding-5.html",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Have a payment land on the live account after a card is replaced. \n\n---",
+   "emotion": "confused, then angry.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-39",
+   "n": 39,
+   "title": "Credit limit or overdraft reduced by text, repeatedly; limit increase refused on a bureau error",
+   "category": "limits and credit decisions",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional in this corpus (no Canadian RBC credit-limit-decrease post could be reached; overdraft reductions stand in).",
+   "quotes": [
+    {
+     "text": "\"they are reducing my overdraft, then a few months later they reduce it again\" (Jul 9, 2026; 27-year client)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=4",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Finally, they refused the credit claiming I had very bad credit record due to very high debts!\" (Jul 13, 2023; Mastercard increase refused over a roughly $4 bureau error; told the ombudsman has no authority over credit adjudication)",
+     "url": "https://www.smartcustomer.com/reviews/rbcroyalbank.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"you did a hard check on my credit card. I was not applying for a credit card.\" (Feb 7, 2023; applied only for overdraft protection)",
+     "url": "https://www.smartcustomer.com/reviews/rbcroyalbank.com",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Keep the credit they have, or understand why a request was refused.",
+   "emotion": "insulted, confused.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "RBC's CCAO \"does not intervene in certain types of complaints such as credit and insurance adjudication, service fees, interest rates\" (2024 Ombudsman report, search snippet).",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-40",
+   "n": 40,
+   "title": "Application confusion: told a card is coming, then \"incomplete\"; agent pushes a new card to an existing holder",
+   "category": "limits and credit decisions",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional.",
+   "quotes": [
+    {
+     "text": "\"telling me to apply for a new credit card when I already have one.\" (Feb 20, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=10",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"I applied for a credit card and it didn't even appear that I did.\" (Jun 19, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=5",
+     "snippetOnly": false
+    },
+    {
+     "text": "Snippet only (page 403): a ConsumerAffairs reviewer was told a new card would arrive within 10 days; a month later the application was marked incomplete and they had to return to a branch.",
+     "url": "https://www.consumeraffairs.com/finance/royal_bank.html?page=6",
+     "snippetOnly": true
+    }
+   ],
+   "underlyingJob": "Know whether they have been approved. \n\n---",
+   "emotion": "confused.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-41",
+   "n": 41,
+   "title": "Debt consolidation refused; cancel request routed to collections",
+   "category": "collections and hardship",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional.",
+   "quotes": [
+    {
+     "text": "\"RBC will universally refuse to provide any service that helps the customer consolidate debt\" (Feb 16, 2026)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=10",
+     "snippetOnly": false
+    },
+    {
+     "text": "Snippet only (ConsumerAffairs, page 403): a reviewer who was not in arrears said RBC pressed them to consolidate and \"Their request to cancel the card led to a transfer to the collections department.\"",
+     "url": "https://www.consumeraffairs.com/finance/royal_bank.html?page=2",
+     "snippetOnly": true
+    }
+   ],
+   "underlyingJob": "Lower interest burden or exit cleanly.",
+   "emotion": "resigned, suspicious of motives.",
+   "resolutionSeen": "",
+   "posterClaims": "RBC refuses consolidation to protect interest income.",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-42",
+   "n": 42,
+   "title": "Paying the card balance is itself hard (branch cash, long waits)",
+   "category": "collections and hardship",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional (two 2026 reviews).",
+   "quotes": [
+    {
+     "text": "\"Have you ever tried to get cash back to pay the very card that issues it\" (Oct 8, 2026; branch staff unaware of process)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com",
+     "snippetOnly": false
+    },
+    {
+     "text": "\"Went in to pay the balance. Took 45 minutes.\" (May 16, 2026; conflicting answers about accepting cash)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=6",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Pay what they owe, in person, today. \n\n---",
+   "emotion": "exasperated.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-43",
+   "n": 43,
+   "title": "Scheduled product changes (fee, rate, voucher co-pay) landing on clients",
+   "category": "product changes and closures",
+   "frequency": "common",
+   "frequencyEvidence": "Common as a topic in coverage; no first-hand complaint quotes reachable.",
+   "quotes": [],
+   "underlyingJob": "",
+   "emotion": "",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "Cash Back Preferred World Elite annual fee $99 to $120 and purchase rate 20.99% to 21.99% from Oct 1, 2026; additional-card fee $0 to $50; no-fee Cash Back Mastercard halves the non-grocery rate (https://www.rbcroyalbank.com/credit-cards/cardholders/cash-back-updates.html; https://www.moneysense.ca/spend/credit-cards/rbc-mastercard-cash-back-fee-changes-perks/). WestJet companion voucher co-pay rose by $100 for vouchers issued on or after June 30, 2024 (https://blog.rewardscanada.ca/news/changes-westjet-companion-vouchers/).",
+   "trainingPoint": "clients will arrive with \"my fee went up\" and \"my voucher costs more\"; the no-cost exit before Dec 30, 2026 cited by MoneySense is a retention lever, verify before quoting.",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "obs-44",
+   "n": 44,
+   "title": "Privacy of card details in marketing mail",
+   "category": "product changes and closures",
+   "frequency": "occasional",
+   "frequencyEvidence": "Occasional.",
+   "quotes": [
+    {
+     "text": "\"the last 4 digits of my credit card, and my credit limit!\" (Apr 16, 2026; personalised mailing; told to visit a branch)",
+     "url": "https://ca.trustpilot.com/review/www.rbcroyalbank.com?page=8",
+     "snippetOnly": false
+    }
+   ],
+   "underlyingJob": "Not have card data printed on junk mail. \n\n---",
+   "emotion": "alarmed.",
+   "resolutionSeen": "",
+   "posterClaims": "",
+   "verifiedContext": "",
+   "trainingPoint": "",
+   "source": "Trustpilot, creditcardGenius, smartcustomer.com, news archives; Reddit unreachable. See research/observed-demand.md",
+   "fetched": "2026-10-12"
+  }
+ ]
+}

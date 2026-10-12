@@ -1,0 +1,155 @@
+{
+  "note": "Authored guided breakdowns, eleven parts each, for the highest-frequency issues in observed.json. The judgement layer is written by the author; quotes come from observed.json and policy facts from faq.json and rules.json. Depths: agent handles it, specialist owns the edge cases, lead fixes the system that creates it. Not an official bank source; confirm every figure in-system.",
+  "template": ["surfaceRequest", "underlyingJob", "emotionalRead", "psychologicalNeeds", "riskFlags", "engage", "diagnose", "resolve", "sayThisNotThis", "afterCall", "preventAndFeedBack"],
+  "breakdowns": [
+    {
+      "id": "bd-declined-routine", "observed": "obs-01", "title": "Declined on a routine purchase after a fraud flag",
+      "category": "declined transactions", "frequency": "very common",
+      "surfaceRequest": "\"Why was my card declined? Make it work.\" Often with the amount and the place: \"$60 for a pizza\", \"the locksmith to get back into my own home\".",
+      "underlyingJob": "Finish an ordinary purchase right now, often time-critical, and not be embarrassed in front of someone again tomorrow. The job is continuity of daily life, not a card.",
+      "emotionalRead": "Anger on the surface, embarrassment underneath. Tell: the caller leads with the public setting (the queue, the counter, the kids) and the length of the wait. Repeating the amount means they feel the stakes were trivial and the humiliation disproportionate.",
+      "psychologicalNeeds": "Competence and dignity (I was made to look like someone who cannot pay), control (a machine decided about my money), fairness (I did nothing wrong). Safety is low here unless the flag was for a real unknown charge.",
+      "riskFlags": ["Unanswered fraud alert: the restriction may be protecting a real compromise, so confirm the flagged transaction before lifting", "Stale contact number on file, which is why the alert never landed", "Client 60+: pace, callback offer, no product talk", "Repeated declines over days signal a system or rules problem, not a client problem"],
+      "engage": "Name the place, the purchase and the wait in the first sentence, then give a time-boxed next step: \"Declined at the pharmacy for the prescription, and you have already waited. I can see the restriction and I can deal with it on this call; give me ninety seconds to confirm two things.\"",
+      "diagnose": ["Was the transaction the system flagged yours? (yes: lift and confirm the merchant can re-run; no: block, report, replacement)", "Is the number we have for alerts the phone in your hand? (fix the cause of the silent alert)", "Do you need this purchase to go through in the next ten minutes, and is there a second card or a wallet? (solve tonight while the restriction clears)"],
+      "resolve": "If the flagged item is theirs: verify, lift the restriction, tell them the decline will not repeat for that merchant, update the contact number, explain how to reply to the next alert. If not theirs: block, report, state liability (nothing after the report; $50 cap by law before it, bank proves negligence), temporary credit per policy, replacement 7 to 10 business days or emergency in 3, wallet for the gap. Either way: written confirmation before the call ends.",
+      "sayThisNotThis": [
+        { "say": "\"I can see exactly why it declined, and it is fixable on this call.\"", "not": "\"Our fraud team has placed a restriction on your card.\"", "why": "Ownership and a path, versus a wall with no owner." },
+        { "say": "\"The alert at 10:38 did not reach you because the number we have ends in 0412; let me fix that now.\"", "not": "\"You should have replied to the text.\"", "why": "Names the cause without blame." },
+        { "say": "\"If you want to buy the medication in the next few minutes while this clears, here is what will work.\"", "not": "\"You would need to visit a branch.\"", "why": "Solves tonight; the branch is the most-cited failure in the corpus." }
+      ],
+      "afterCall": "Note: restriction lifted after client confirmed [merchant] transaction, contact number updated, alert preferences confirmed, written confirmation sent. If fraud: claim reference, block time, replacement type ordered, wallet set up, client told the figures in writing.",
+      "preventAndFeedBack": "Volume driver: alerts sent to stale numbers. Lead action: report declines-after-unanswered-alert as a root cause; propose a prompt to confirm the mobile number at every verified contact, and an IVR message during the restriction that routes straight to the desk that can lift it.",
+      "policyRefs": ["faq-12", "faq-22", "faq-01", "faq-05", "r-liability-after-report", "r-liability-cap"],
+      "depths": {
+        "agent": "Confirm the flagged transaction, lift or block, fix the number, solve tonight, confirm in writing.",
+        "specialist": "Recognise the rules pattern behind repeat declines (same merchant on consecutive days, limits that do not match the flag) and raise it with fraud strategy instead of lifting it a third time.",
+        "lead": "Measure declines-after-unanswered-alert as a share of all fraud restrictions; it is a contact-rate driver you can cut without touching the fraud model."
+      }
+    },
+    {
+      "id": "bd-locked-abroad", "observed": "obs-04", "title": "Locked or declined abroad, cannot reach anyone",
+      "category": "travel and foreign use", "frequency": "very common",
+      "surfaceRequest": "\"Unlock my card. I am in [country] and it is the only one I have.\" Often after hours on hold across time zones and at least one transfer.",
+      "underlyingJob": "Pay for accommodation, food or transport tonight with no fallback, and regain control of the account without flying home. Secondary job: not be treated as a suspect for using their own money abroad.",
+      "emotionalRead": "Fear first (stranded, often with family), anger second once the hold time is mentioned. Tell: the caller gives their location and the time there, and lists what they cannot do (no branch, mobile banking also locked). Resignation appears on repeat calls: \"I know there's nothing you can do.\"",
+      "psychologicalNeeds": "Safety (I am far from home and the money is gone), control (every door is locked), being believed (I told you I was travelling).",
+      "riskFlags": ["Mobile banking also locked means self-serve unlock is unavailable; do not send them to the app", "Genuine compromise abroad is possible: verify the flagged items before lifting", "Hotel and car-rental pre-authorisations can look like duplicate charges", "Collect and global toll-free numbers exist; give them in writing for the next time"],
+      "engage": "\"You are in Lisbon, the card declined at the hotel, and you cannot get to a branch. I can see the restriction and I can deal with it on this call. Give me ninety seconds, and before we hang up you will either have a working card or know exactly what will work instead.\"",
+      "diagnose": ["Which transaction triggered this, and was it yours?", "Is mobile banking working, or locked too?", "What do you need to pay for in the next 24 hours, and with what else could you pay it?", "Which number can we reach you on where you are?"],
+      "resolve": "Verify fully, confirm the flagged items, lift the restriction and the mobile-banking lock if both are clean; tell them the merchant can re-run. If the items are not theirs: block, report, liability stated, emergency replacement in 3 business days or less to where they are, digital wallet set up now if the card can be re-added, and the collect number for the fraud desk. Explain that travel notification is no longer required but current contact details are what keep the card alive abroad.",
+      "sayThisNotThis": [
+        { "say": "\"I can lift this now and the hotel can run the card again in a few minutes.\"", "not": "\"You would need to visit a branch with two pieces of ID.\"", "why": "The branch answer to someone abroad is the single most quoted failure." },
+        { "say": "\"Here is the number that works from Portugal, and I am putting it in a message to you now.\"", "not": "\"Call us back if it happens again.\"", "why": "The loop is the complaint; the number in writing ends it." },
+        { "say": "\"The system could not reach you to check the transaction; that is why it stopped the card.\"", "not": "\"Your account was flagged for fraud.\"", "why": "Explains the mechanism without making them the suspect." }
+      ],
+      "afterCall": "Note: restriction and mobile lock lifted after verification of [items]; contact number abroad recorded; collect number sent in writing; emergency card ordered to [city] if applicable; client told wallet route.",
+      "preventAndFeedBack": "Driver: restrictions placed while the client is unreachable abroad, with the self-serve path (the app) locked by the same event. Lead action: separate the card restriction from the mobile-banking lock in the rules where possible, and surface the global toll-free number in the decline message.",
+      "policyRefs": ["faq-26", "faq-27", "faq-05", "faq-01", "r-liability-after-report"],
+      "depths": {
+        "agent": "Verify, lift or replace, solve tonight, give the working number in writing.",
+        "specialist": "Own the abroad queue: know which restrictions can be lifted by phone and which cannot, and get the emergency-card logistics right for the country.",
+        "lead": "Report abroad-locked calls by country and hour; the hold times in this cluster are a staffing and routing problem, not an agent problem."
+      }
+    },
+    {
+      "id": "bd-unauthorised-charges", "observed": "obs-08", "title": "Unauthorised charges; refund slow, partial or refused",
+      "category": "fraud and unauthorized transactions", "frequency": "very common",
+      "surfaceRequest": "\"Someone used my card. I want it reversed and I want to know how this happened.\" Sometimes: \"I locked it and a charge still went through.\"",
+      "underlyingJob": "Get the money back, be certain it has stopped, and not be treated as the suspect. For debit clients the job includes rent or groceries this week.",
+      "emotionalRead": "Fear that money is gone, quickly turning to anger if any sentence implies doubt. Tell: \"EVEN AFTER LOCKING\" in capitals, or the phrase \"they implied it was my fault\". Resignation on second contact.",
+      "psychologicalNeeds": "Safety and being believed above all. Control (I did the right thing, I locked it, and it still happened).",
+      "riskFlags": ["Not everything the client lists is fraud: free-trial conversions, pre-authorisation holds and recurring payments are disputes or explanations", "A lock does not stop pre-authorised payments; the client may think the bank failed", "PIN used is never, alone, grounds to deny (Bank Act s. 627.33(3), FCAC B-6)", "Debit: 10-business-day response rule; loss capped at the card's limits if the client contributed; the bank must prove contribution", "After any migration, credits must follow to the new account"],
+      "engage": "\"Charges you did not make, and a lock that did not stop one of them. First, I am blocking the card now so nothing further goes through, and nothing from this report onward can be charged to you. Then we go through the list together.\"",
+      "diagnose": ["For each item: did you or anyone authorised make it, or sign up for something that converts to paid?", "When did you first notice, and when did you lock?", "Has anyone else had the card, the PIN or your phone?", "Is this debit or credit? (different rules and timelines)"],
+      "resolve": "Split the list into fraud, merchant dispute and hold, and say which is which. Fraud: block, report, claim per item, temporary credit per policy, update within the bank's stated days, replacement with the emergency option, liability stated. Dispute: merchant first with the evidence to gather, 120-day window. Hold: explain settlement. Explain in one sentence what a lock stops and what it lets through, as design, not failure. Confirm everything in writing with dates.",
+      "sayThisNotThis": [
+        { "say": "\"Nothing after this report can be charged to you, and for what already happened the law caps it at fifty dollars at most; in practice it is usually nothing, and the bank would have to prove you were grossly careless.\"", "not": "\"We will investigate and let you know if you are liable.\"", "why": "The first states the actual rule; the second reads as a threat." },
+        { "say": "\"A lock stops purchases and cash; it is designed to let your bills keep paying, which is why that one went through. That does not make it yours to pay.\"", "not": "\"The lock only applies to certain transaction types.\"", "why": "Explains design and removes the implied blame." },
+        { "say": "\"Two of the three on your list are fraud. The $14.99 is a trial that converted; that one we handle differently and I will tell you how.\"", "not": "\"I'll dispute all three.\"", "why": "Disputing an authorised charge as fraud reverses later and produces a worse call." }
+      ],
+      "afterCall": "Note per item: classification, claim reference, block time, temporary credit status, replacement type, what the client was told about liability and timing, written confirmation sent. Debit: date of report for the 10-day clock.",
+      "preventAndFeedBack": "Drivers: the lock's design is not explained in the app; alerts unanswered; trial conversions reported as fraud. Lead action: an in-app line under the lock toggle (\"bills and subscriptions keep paying\"); a claim-intake script that asks the trial question before classifying.",
+      "policyRefs": ["faq-02", "faq-09", "faq-10", "faq-11", "faq-17", "faq-18", "r-liability-cap", "r-liability-after-report", "r-debit-10-days", "r-dispute-window"],
+      "depths": {
+        "agent": "Block, state liability correctly, classify each item, give figures in writing.",
+        "specialist": "Handle the contested cases: the client who shared a PIN under coercion, the affidavit, the Debit Code burden of proof, the migration that lost a credit.",
+        "lead": "Track claims denied on 'PIN used' alone; each one is a B-6 exposure. Report trial-conversion 'fraud' claims as a self-service gap."
+      }
+    },
+    {
+      "id": "bd-fraud-alert-loop", "observed": "obs-09", "title": "Fraud alert received, cannot reach the fraud line, transferred in loops",
+      "category": "fraud and unauthorized transactions", "frequency": "very common",
+      "surfaceRequest": "\"You texted me about a charge and now I cannot get through to anyone.\" Or: \"I've been passed from one person to the next.\"",
+      "underlyingJob": "Answer the bank's own question and get back to their day; make sure the charge is stopped if it is not theirs.",
+      "emotionalRead": "Anxiety (the bank thinks something is wrong) turning to resentment (the bank made it my problem to reach them). Tell: the caller counts the transfers and the minutes.",
+      "psychologicalNeeds": "Control (I responded, now respond to me), fairness (you contacted me), competence (I know how to answer a text, your system does not let me).",
+      "riskFlags": ["Alert may be the scam itself: RBC-style alerts never ask for links or personal information; a 'reply with your PIN' is not from the bank", "Transfer again and the complaint is written; this call must be the one that ends the loop", "If the charge is the client's, the restriction can be lifted here"],
+      "engage": "\"You got our alert, you tried to answer it, and you have been passed around. I am sorry about that; you are with the right desk now and this call is where it gets handled. Let me look at the transaction the alert was about.\"",
+      "diagnose": ["Which transaction was the alert for, and is it yours?", "Did the alert ask you for anything (a link, a code, your PIN)? (scam check)", "Is the card restricted now, and do you need it in the next hour?"],
+      "resolve": "Confirm or deny with the client; lift the restriction or block and report; explain how the short-code alerts work and how to reply to the next one; set alert preferences to the number in their hand. If anyone asked for a code or PIN, treat it as a scam, protect the account, route to fraud. Written confirmation.",
+      "sayThisNotThis": [
+        { "say": "\"This is the desk that can act on that alert; nobody else needs to be involved.\"", "not": "\"Let me transfer you to the fraud department.\"", "why": "The next transfer is the complaint." },
+        { "say": "\"Our alerts come from the short code and only ask you to reply yes or no. If any message asks for a link or a code, it is not us.\"", "not": "\"You should always respond to fraud alerts.\"", "why": "Teaches the real tell, which protects them next time." }
+      ],
+      "afterCall": "Note: alert reference, client's confirm or deny, action taken, alert number updated, scam check result.",
+      "preventAndFeedBack": "Driver: alert replies that go nowhere, and routing that sends alert callers to a general queue. Lead action: a dedicated IVR path for 'I received an alert' with the authority to lift at first contact; measure transfers per alert call.",
+      "policyRefs": ["faq-12", "faq-14", "faq-22"],
+      "depths": {
+        "agent": "Act on the alert at first contact; never transfer; teach the tell.",
+        "specialist": "Own the alert-to-restriction rules: which alerts auto-restrict, which the desk can lift, which need fraud.",
+        "lead": "Transfers per alert call and time-to-lift are the two numbers; both are routing decisions you control."
+      }
+    },
+    {
+      "id": "bd-replacement-missing", "observed": "obs-15", "title": "Replacement or renewal card slow, missing, or sent to the wrong address",
+      "category": "lost, stolen, replacement and renewal", "frequency": "very common",
+      "surfaceRequest": "\"Where is my card?\" On the second or third contact: \"Your colleague said it would be here by Tuesday.\"",
+      "underlyingJob": "Have a working card before the old one dies or the trip starts, and keep the bills it pays from bouncing. On repeat contact the job becomes: be believed and get a date someone keeps.",
+      "emotionalRead": "Anxiety that becomes anger with each contact; often expressed as exhaustion (\"I'm not angry at you, I'm just done\"). Tell: counts the contacts, quotes the broken promise verbatim.",
+      "psychologicalNeeds": "Control and fairness (I did everything right), being believed (the previous person said a date), competence of the institution.",
+      "riskFlags": ["Address updated after the card was issued: the first card went to the old address by design, and that is a process gap worth naming", "Pre-authorised payments on the old number: some updated by the Account Updater, some not; fees may have been charged by merchants", "Credits or points on the cancelled account that did not migrate (the FCAC fine pattern)", "Third contact or more without a complaint code: it is a complaint, and the clock started at the first expression of dissatisfaction", "A prior advisor's unsupportable promise: own it, do not repeat it"],
+      "engage": "\"Fourth contact, a card to the wrong address, a promise for Tuesday that was not kept, and two payments bounced with a fee. I am not going to give you another wait. Here is what happens on this call.\"",
+      "diagnose": ["Which address is on file now, and since when? (explains the first mis-delivery)", "Which payments are on the old number, and which have failed? (scope the damage)", "Is there a refund or credit on the cancelled account? (check migration)", "Do you need a card in three days or ten? (emergency versus standard)"],
+      "resolve": "Order the emergency replacement to the confirmed address with tracking; move any stranded refund or credit to the new account now; list the PAPs and tell them which updated and which they must change; address the merchant fee (reverse where policy allows, otherwise the path); log the complaint with the correct start date and explain the 56-day period and OBSI route; written confirmation with the dates. Set up a wallet for the gap.",
+      "sayThisNotThis": [
+        { "say": "\"The card went to the old address because the address change landed a day after it was issued; that is our gap to fix, not yours.\"", "not": "\"The card was sent to the address on file.\"", "why": "Names the mechanism and takes the gap." },
+        { "say": "\"I am ordering the emergency card now; it arrives in three business days or less, and I am sending you the tracking.\"", "not": "\"Please allow 7 to 10 business days.\"", "why": "The standard window is the wrong answer on a fourth contact." },
+        { "say": "\"I have logged this as a complaint, dated from the 26th when you first raised it, and you will have our written answer within 56 days of that.\"", "not": "\"I'll make a note on your file.\"", "why": "A note is not a complaint; the regulator has said so." }
+      ],
+      "afterCall": "Note: emergency replacement ordered, tracking sent; refund [amount] transferred to new account; PAP list with status; merchant fee action; complaint logged with start date [first contact]; Designated Employee referral if unresolved; written acknowledgement sent.",
+      "preventAndFeedBack": "Drivers: address changes not applied to in-flight card orders; stranded credits on migration; advisors promising dates standard delivery cannot keep. Lead action: a hold-and-reissue check when an address changes within 10 days of issue; a migration checklist that includes credits; coaching on promises.",
+      "policyRefs": ["faq-01", "faq-04", "faq-05", "faq-08", "r-complaint-56", "r-complaint-14", "r-obsi"],
+      "depths": {
+        "agent": "Emergency card, migrated credit, PAP list, complaint logged, dates in writing.",
+        "specialist": "Own the migration checklist and the merchant-fee reversal path; be the person who finds the stranded credits.",
+        "lead": "Count repeat contacts per replacement and complaints coded as enquiries; both are compliance exposure and both are fixable upstream."
+      }
+    },
+    {
+      "id": "bd-dispute-non-delivery", "observed": "obs-12", "title": "Dispute for goods not delivered or merchant failure",
+      "category": "disputes and chargebacks", "frequency": "common",
+      "surfaceRequest": "\"I paid, it never came, the merchant will not answer. Get my money back.\"",
+      "underlyingJob": "Recover money from a merchant who did not deliver, with a date they can rely on and a sense that someone is actually investigating.",
+      "emotionalRead": "Anger with a strong unheard quality; the caller has often already been bounced between the merchant, a payment processor and the bank. Tell: \"nobody will give me a straight answer.\"",
+      "psychologicalNeeds": "Fairness and being heard; control (a date, a reference, a person).",
+      "riskFlags": ["Authorised purchases are merchant disputes, not fraud: do not promise zero-liability treatment", "Window: 120 days from the transaction or expected delivery (540-day ceiling); check the dates before promising anything", "Evidence decides it: order confirmation, delivery promise, merchant correspondence", "A date given and kept is the single most praised behaviour in the corpus; a date given and missed is the single most cursed"],
+      "engage": "\"You paid, it never arrived, and you have been sent around. This is a merchant dispute and there is a real process with stages. I will tell you what each stage is and what I need from you, and you will have a reference and a written summary before we hang up.\"",
+      "diagnose": ["When was the transaction, and when were the goods due? (window check)", "What have you already done with the merchant, and what do you have in writing?", "What evidence exists: order confirmation, tracking, emails, photos?"],
+      "resolve": "If the merchant has not been contacted: explain why that step is required and what to send, with a date to come back. If it has: open the dispute, state the evidence attached, explain the network stages and realistic ranges (30 to 45 days straightforward, 60 to 90 contested, longer in arbitration) rather than a single date, give the reference, and promise the written summary. Temporary credit per policy, with the honest caveat that it can reverse if the merchant provides evidence.",
+      "sayThisNotThis": [
+        { "say": "\"Here is the reference, here are the stages, and you will hear from us in writing at each one.\"", "not": "\"We'll be in touch.\"", "why": "Stages and a reference are what being heard looks like." },
+        { "say": "\"The merchant step is the network's requirement, and it is also the fastest route to your money if they respond; send them this exact wording.\"", "not": "\"You have to contact the merchant first.\"", "why": "Same requirement, explained as a route rather than a wall." },
+        { "say": "\"A temporary credit is likely within a couple of business days, and I want to be straight that it can reverse if the merchant proves delivery.\"", "not": "\"You'll get your money back.\"", "why": "Honest about reversibility; prevents the worse call later." }
+      ],
+      "afterCall": "Note: dispute reference, reason code, evidence attached, window dates, what the client was told about stages and reversibility, written summary sent, follow-up date owned by you.",
+      "preventAndFeedBack": "Drivers: clients unsure what evidence is needed; no written summary at intake. Lead action: an evidence checklist in the app dispute flow; a written-summary macro at intake; measure disputes reopened for missing evidence.",
+      "policyRefs": ["faq-17", "faq-18", "faq-19", "faq-20", "r-dispute-window", "s-fraud-vs-dispute", "s-provisional-credit"],
+      "depths": {
+        "agent": "Window check, evidence, stages not dates, reference and written summary.",
+        "specialist": "Reason-code fluency; knowing which cases are worth pre-arbitration; handling the reversal conversation.",
+        "lead": "Dispute cycle time and reopen rate; the intake checklist is the lever."
+      }
+    }
+  ]
+}

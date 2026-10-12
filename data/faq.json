@@ -1,0 +1,1458 @@
+{
+ "note": "Official RBC help content, condensed. Every figure is RBC's wording as fetched 2026-10-12; verify:true means confirm in-system before quoting to a client.",
+ "items": [
+  {
+   "id": "faq-01",
+   "n": 1,
+   "section": "A. Lost, stolen, locked and replacement cards",
+   "question": "What do I do if my credit card is lost or stolen?",
+   "dateTag": "[undated]",
+   "answer": [
+    "If misplaced: lock it temporarily in OLB or the app. If lost or stolen: call 1-800-769-2512 (24 hours); outside North America call collect 1-514-392-9167. RBC blocks the card from future use and issues a new one. You can also report through OLB (card is cancelled and a new one issued).",
+    "Replacement card arrives in 7 to 10 business days.",
+    "Report when: you know the card is lost or stolen; you do not recognize a charge; you think someone else may be using the card.",
+    "RBC's liability line on the page: if you report immediately and have been responsible in protecting your card and PIN, \"you're covered against any fraudulent or unauthorized use of your card.\""
+   ],
+   "figures": [
+    "1-800-769-2512",
+    "7 to 10 business days"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/cardholders/lost-or-stolen-credit-card.html ; https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/protecting-my-card.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/lost-or-stolen-credit-card.html",
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/protecting-my-card.html"
+   ],
+   "situations": [
+    "LOST"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-02",
+   "n": 2,
+   "section": "A. Lost, stolen, locked and replacement cards",
+   "question": "What does the card lock do (RBC \"Lock Card\")?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Credit or Client Card can be locked temporarily at any time from the account details page in the app, or via the toggle in OLB (Profile and Account Settings, toggle beside the card). Unlock the same way.",
+    "Credit card while locked: cash advances, purchases and withdrawals (online or in person) are declined. Still processed: pre-authorized payments, payments toward your balance (including Payback with Points), refunds, Avion Rewards redemptions.",
+    "Client Card (debit) while locked: pre-authorized payments, mobile deposits, online refunds, and Apple Pay / Android Wallet transactions remain active.",
+    "Locking is not a replacement for reporting a lost/stolen card."
+   ],
+   "figures": [],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/dms/mobile/lock-card/ ; https://www.rbcroyalbank.com/credit-cards/cardholders/lost-or-stolen-credit-card.html ; https://www.rbcroyalbank.com/credit-cards/cardholders/credit-card-transaction-help.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/dms/mobile/lock-card/",
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/lost-or-stolen-credit-card.html",
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/credit-card-transaction-help.html"
+   ],
+   "situations": [
+    "LOST",
+    "FRAUD",
+    "DECLINED (a locked card declines purchases)"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-03",
+   "n": 3,
+   "section": "A. Lost, stolen, locked and replacement cards",
+   "question": "How do I cancel my credit card?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Misplaced: lock it in OLB/app. Stolen or permanently lost: call 24-hour line 1-800-769-2512; RBC blocks the card and issues a new one. Switching cards: explore options then submit the online request form in OLB or call 1-800-769-2512. Cancelling outright: call 1-800-769-2512.",
+    "Agreement s.33: you may cancel by telling RBC; RBC \"may require that your cancellation be done in writing\"; the Agreement stays in effect until the Total Debt is paid; all cardholders must stop using and securely destroy or return cards."
+   ],
+   "figures": [
+    "1-800-769-2512"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/general-questions.html ; Credit Card Agreement s.33",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/general-questions.html"
+   ],
+   "situations": [
+    "LOST",
+    "ACCOUNT CLOSE"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-04",
+   "n": 4,
+   "section": "A. Lost, stolen, locked and replacement cards",
+   "question": "How do I get a replacement for a damaged card?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Sign in to OLB, select the card on the account summary page, choose Replace Card, follow prompts. New card within 7 to 10 business days."
+   ],
+   "figures": [
+    "7 to 10 business days"
+   ],
+   "sourceText": "Source: https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/protecting-my-card.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/protecting-my-card.html"
+   ],
+   "situations": [
+    "REPLACEMENT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-05",
+   "n": 5,
+   "section": "A. Lost, stolen, locked and replacement cards",
+   "question": "Is emergency card replacement available?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Yes. \"In most places around the world, your credit card can be replaced in 3 business days or less.\""
+   ],
+   "figures": [
+    "3 business days"
+   ],
+   "sourceText": "Sources: protecting-my-card FAQ (above); legal disclaimer on https://www.rbcroyalbank.com/credit-cards/cardholders/lost-or-stolen-credit-card.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/lost-or-stolen-credit-card.html"
+   ],
+   "situations": [
+    "LOST",
+    "TRAVEL"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-06",
+   "n": 6,
+   "section": "A. Lost, stolen, locked and replacement cards",
+   "question": "What should I do if my debit card (Client Card) was lost or stolen?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Personal clients: lock the card right away, then report it online through OLB; the card is cancelled and a new one issued. Additional Business Client Cardholders call 1-800-769-2520. A replacement fee may apply to personal cards but not business cards. Lost/stolen debit by phone: 1-800-769-2511.",
+    "Fee schedule: first Client Card issued or replaced per calendar year is free; \"A $5.00 replacement fee applies to each additional Client Card replacement per calendar year.\""
+   ],
+   "figures": [
+    "$5.00",
+    "1-800-769-2511",
+    "1-800-769-2520"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/banking-services/debit-card.html ; https://www.rbcroyalbank.com/banking-services/additional-account-services.html ; https://www.rbcroyalbank.com/ways-to-bank/digital-banking-guarantee.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/banking-services/debit-card.html",
+    "https://www.rbcroyalbank.com/banking-services/additional-account-services.html",
+    "https://www.rbcroyalbank.com/ways-to-bank/digital-banking-guarantee.html"
+   ],
+   "situations": [
+    "DEBIT",
+    "LOST"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-07",
+   "n": 7,
+   "section": "A. Lost, stolen, locked and replacement cards",
+   "question": "My debit card is expiring; when does the new one come?",
+   "dateTag": "[undated]",
+   "answer": [
+    "New card arrives 30 to 90 days before the end of the \"valid thru\" month; old card works until the last day of that month. If not received within 10 business days of expiry, call 1-800-769-2511 (personal) or 1-800-769-2520 (business), or visit a branch. Tactile (raised-number) card option: call 1-800-769-2511.",
+    "Note: no equivalent RBC page for credit-card renewal timing was found (search returned nothing on rbcroyalbank.com)."
+   ],
+   "figures": [
+    "1-800-769-2511",
+    "1-800-769-2520",
+    "10 business days",
+    "30 to 90 days"
+   ],
+   "sourceText": "Source: https://www.rbcroyalbank.com/banking-services/debit-card.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/banking-services/debit-card.html"
+   ],
+   "situations": [
+    "DEBIT",
+    "REPLACEMENT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-08",
+   "n": 8,
+   "section": "A. Lost, stolen, locked and replacement cards",
+   "question": "What happens to my pre-authorized payments when my card number or expiry changes?",
+   "dateTag": "[undated]",
+   "answer": [
+    "\"Credit Card Account Updater Service\" automatically updates pre-authorized payments with participating merchants when your card number or expiry date changes so recurring payments are not interrupted. All Visa and Mastercard RBC credit cards are enrolled automatically.",
+    "To opt out: call 1-800 ROYAL 1-2 (1-800-769-2512).",
+    "Agreement s.20 (pre-authorized payments): if you ask a merchant to stop and payments have not stopped, RBC \"may be able to assist if you can provide us with a copy of the written request you made to the merchant.\""
+   ],
+   "figures": [
+    "1-800-769-2512"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/general-questions.html ; Credit Card Agreement s.20",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/general-questions.html"
+   ],
+   "situations": [
+    "REPLACEMENT",
+    "PAYMENT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-09",
+   "n": 9,
+   "section": "B. Fraud, zero liability and security",
+   "question": "Am I protected against credit card fraud?",
+   "dateTag": "[undated]",
+   "answer": [
+    "\"You're covered for fraudulent online and in-store charges if you took reasonable precautions to protect your PIN and card.\" Call 1-800-769-2512. RBC links to Visa and Mastercard Zero Liability policies.",
+    "Instant-use page wording: \"Zero Liability protection ... you are not liable for fraudulent charges provided you have taken reasonable precautions to protect your PIN and your card, as set out in the RBC Royal Bank Credit Card Agreement.\""
+   ],
+   "figures": [
+    "1-800-769-2512"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/protecting-my-card.html ; https://www.rbcroyalbank.com/credit-cards/cardholders/instant-use-with-apple-pay.html ; https://www.rbcroyalbank.com/credit-cards/cardholders/how-to-protect-from-credit-card-fraud.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/protecting-my-card.html",
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/instant-use-with-apple-pay.html",
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/how-to-protect-from-credit-card-fraud.html"
+   ],
+   "situations": [
+    "FRAUD"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-10",
+   "n": 10,
+   "section": "B. Fraud, zero liability and security",
+   "question": "What does the Agreement say about unauthorized use (the legal version of zero liability)?",
+   "dateTag": "Agreement 15912 (09/2023); Disclosure 17925 (11/2025)",
+   "answer": [
+    "You are not responsible for unauthorized charges \"unless you have demonstrated gross negligence (gross fault if you reside in Quebec)\" in safeguarding the Card, Card Information or Personal Authentication Information.",
+    "Not gross negligence if you (i) establish to RBC's reasonable satisfaction that you took reasonable steps to protect the card and safeguard the PIN etc., and (ii) cooperate fully with the investigation.",
+    "You remain fully responsible if you (i) voluntarily disclose Personal Authentication Information or otherwise contribute to the unauthorized use, (ii) fail to tell RBC in a reasonable time that the card is lost/stolen or someone may know your PIN, or (iii) allow any person to use the card, including a minor.",
+    "\"You must notify us immediately\" via 24-hour 1-800 ROYAL 1-2 (1-800-769-2512); outside North America collect 1-514-392-9167. \"You will not be liable for any unauthorized use after we receive your report.\" RBC can block the card without telling you if it suspects fraud.",
+    "PIN rules: keep PIN confidential and separate from the card; must not use combinations from name, date of birth, phone numbers, address or SIN.",
+    "Quebec residents (Consumer Protection Act text reproduced in the Agreement): not liable after the issuer is notified; even without notice, \"consumer liability for the unauthorized use of a credit card is limited to $50\", unless the issuer proves gross fault regarding the PIN."
+   ],
+   "figures": [
+    "$50",
+    "1-800-769-2512"
+   ],
+   "sourceText": "Sources: Credit Card Agreement s.5 and Quebec annex; Disclosure Statement \"Unauthorized Use of Card\"",
+   "sources": [],
+   "situations": [
+    "FRAUD",
+    "LOST"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-11",
+   "n": 11,
+   "section": "B. Fraud, zero liability and security",
+   "question": "How do I report a fraudulent transaction?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Step 1: lock the card (app: Lock Card toggle at top of card details; OLB: Profile and Account Settings toggle). Step 2: dispute the transaction in OLB or app (\"I disagree with this charge\"). RBC \"will update you on your claim within 3 business days\" (transaction-help page). The Dec 4, 2024 My Money Matters article says RBC will respond \"within three to five business days\" and gives 1-800-769-2512 for fraud help.",
+    "Also: report in OLB/app, call 1-800-769-2512, or lock the card (fraud page)."
+   ],
+   "figures": [
+    "1-800-769-2512",
+    "3 business days"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/cardholders/credit-card-transaction-help.html ; https://www.rbcroyalbank.com/en-ca/my-money-matters/money-academy/cyber-security/understanding-cyber-security/everything-you-need-to-know-about-disputing-credit-card-charges/ (published Dec 4, 2024) ; https://www.rbcroyalbank.com/credit-cards/cardholders/how-to-protect-from-credit-card-fraud.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/credit-card-transaction-help.html",
+    "https://www.rbcroyalbank.com/en-ca/my-money-matters/money-academy/cyber-security/understanding-cyber-security/everything-you-need-to-know-about-disputing-credit-card-charges/",
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/how-to-protect-from-credit-card-fraud.html"
+   ],
+   "situations": [
+    "FRAUD"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-12",
+   "n": 12,
+   "section": "B. Fraud, zero liability and security",
+   "question": "How do fraud alerts work (SMS 722373)?",
+   "dateTag": "[undated]",
+   "answer": [
+    "RBC credit cardholders automatically receive an SMS from short code 722373 when a transaction \"seems out of the ordinary\"; reply to confirm or deny. RBC \"will never ask you to click a link or provide personal information through a fraud alert.\" Alerts are a free service. Set up/manage in OLB (Alert Centre) or app (Manage Preferences). Credit-limit warning alert is pre-set at available credit below $100 (also stated in the Disclosure Statement); large-purchase, payment-due and payment-confirmation alerts are available."
+   ],
+   "figures": [
+    "$100"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/ways-to-bank/banking-services/alerts.html ; https://www.rbcroyalbank.com/credit-cards/cardholders/how-to-protect-from-credit-card-fraud.html ; Disclosure Statement \"Alerts\"",
+   "sources": [
+    "https://www.rbcroyalbank.com/ways-to-bank/banking-services/alerts.html",
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/how-to-protect-from-credit-card-fraud.html"
+   ],
+   "situations": [
+    "FRAUD",
+    "DECLINED (a declined transaction often triggers this text)"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-13",
+   "n": 13,
+   "section": "B. Fraud, zero liability and security",
+   "question": "What is the RBC Digital Banking Security Guarantee?",
+   "dateTag": "[undated]",
+   "answer": [
+    "RBC \"will fully reimburse you for any unauthorized transactions\" made through RBC Mobile app or OLB (Digital Banking or Mobile Payments) provided you meet your responsibilities. Reimbursed: transactions after you report a compromised password or suspicious activity; fraud/theft/coercion if reported immediately with full cooperation; RBC or third-party negligence; Interac Online third-party negligence; system failures. Not reimbursed: failing obligations/instructions; fraudulent or dishonest acts; using a device you know or should know is compromised; transactions you made yourself (including by mistake); sharing passwords or Personal Verification Questions; consenting to or authorizing the transaction. No liability for loss of data or indirect/consequential damages. No dollar limits or deadlines stated beyond \"immediately\". Lost/stolen: 1-800-769-2511 (debit), 1-800-769-2512 (credit)."
+   ],
+   "figures": [
+    "1-800-769-2511",
+    "1-800-769-2512"
+   ],
+   "sourceText": "Source: https://www.rbcroyalbank.com/ways-to-bank/digital-banking-guarantee.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/ways-to-bank/digital-banking-guarantee.html"
+   ],
+   "situations": [
+    "FRAUD",
+    "WALLET"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-14",
+   "n": 14,
+   "section": "B. Fraud, zero liability and security",
+   "question": "What fraud protection does RBC offer? / What will RBC never ask for?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Cardholders hub answer: RBC is \"committed to protecting\" clients and links to protecting-yourself guidance.",
+    "Protecting-yourself page: RBC will never ask for your SIN in an unsolicited email or call; \"No law-abiding employee, police officer, financial advisor or lawyer will ever ask you for your PIN\"; never give your card number to someone who contacted you.",
+    "Protection page (online/telephone transactions): \"RBC does not contact clients to ask them for their credit card number.\" Try to resolve with the merchant before calling Card Services; gather supporting documents before disputing."
+   ],
+   "figures": [],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/cardholders.html ; https://www.rbc.com/privacysecurity/ca/protecting-yourself.html ; https://www.rbcroyalbank.com/credit-cards/cardholders/protection.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders.html",
+    "https://www.rbc.com/privacysecurity/ca/protecting-yourself.html",
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/protection.html"
+   ],
+   "situations": [
+    "FRAUD"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-15",
+   "n": 15,
+   "section": "B. Fraud, zero liability and security",
+   "question": "How do I report a phishing email, text or fake RBC website?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Forward the suspicious email to phishing@rbc.com (automated mailbox; RBC cannot reply). Fake website: email phishing@rbc.com with subject \"Fake RBC website\" and the full URL. If you believe your information was stolen: call 1-800-769-2511 (Canadian RBC company), 1-800-769-2555 (online services), TTY 1-800-661-1275. Credit bureaus: TransUnion 1-877-525-3823, Equifax 1-877-323-2598."
+   ],
+   "figures": [
+    "1-800-661-1275",
+    "1-800-769-2511",
+    "1-800-769-2555",
+    "1-877-323-2598",
+    "1-877-525-3823"
+   ],
+   "sourceText": "Source: https://www.rbc.com/privacysecurity/ca/contact-us.html",
+   "sources": [
+    "https://www.rbc.com/privacysecurity/ca/contact-us.html"
+   ],
+   "situations": [
+    "FRAUD"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-16",
+   "n": 16,
+   "section": "B. Fraud, zero liability and security",
+   "question": "Is it safe to use my credit card for phone or online purchases? / Visa Secure and Mastercard Identity Check",
+   "dateTag": "[undated]",
+   "answer": [
+    "\"Never give your credit card number over the phone, unless you have initiated the call\"; buy online only from recognized retailers with HTTPS and lock symbol. RBC offers Visa Secure and Mastercard Identity Check for \"extra security\" on online purchases (page gives no mechanics). Online and phone purchases usually require the 3-digit code on the back of the card, not the PIN."
+   ],
+   "figures": [],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/protecting-my-card.html ; https://rbcroyalbank.com/credit-cards/services/purchase-security.html ; https://www.rbcroyalbank.com/credit-cards/services/chip-and-pin-technology.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/protecting-my-card.html",
+    "https://rbcroyalbank.com/credit-cards/services/purchase-security.html",
+    "https://www.rbcroyalbank.com/credit-cards/services/chip-and-pin-technology.html"
+   ],
+   "situations": [
+    "FRAUD"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-17",
+   "n": 17,
+   "section": "C. Disputes and unrecognized transactions",
+   "question": "What should I do if I don't recognize a transaction?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Six common causes RBC lists: unfamiliar merchant name (storefront vs registered name); unfamiliar amount (authorized vs posted amount); unfamiliar date (settlement delay from Authorized to Posted); multiple cardholders/authorized users; price or fee changes by a merchant you know; expired trials or free memberships converting to paid."
+   ],
+   "figures": [],
+   "sourceText": "Source: https://www.rbcroyalbank.com/credit-cards/cardholders/credit-card-transaction-help.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/credit-card-transaction-help.html"
+   ],
+   "situations": [
+    "DISPUTE"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-18",
+   "n": 18,
+   "section": "C. Disputes and unrecognized transactions",
+   "question": "How do I dispute a credit card transaction?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Step 1: contact the merchant; ask for a reversal or credit; \"Allow 15-20 business days for a credit before contacting RBC\"; keep records.",
+    "Step 2 (personal cards): OLB: sign in, select card, select transaction, choose \"I disagree with this charge\" on Transaction Details, follow instructions. App: sign in, select card, tap transaction, scroll to Transaction Help, tap \"I disagree with this charge\".",
+    "RBC reviews and \"may apply a temporary credit\", usually within about two business days; RBC may contact you for more information or updates.",
+    "Agreement s.21 \"Problems with a Purchase\": you must pay the amount owing and settle with the merchant; RBC \"may be able to provide assistance ... certain time limits and other conditions may apply\"; initiate via Digital Banking or 1-800 ROYAL 1-2 (1-800-769-2512) during regular business hours."
+   ],
+   "figures": [
+    "1-800-769-2512",
+    "20 business days"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/cardholders/credit-card-transaction-help.html ; https://www.rbcroyalbank.com/ways-to-bank/tutorials/easing-financial-stress/credit-card-dispute.html ; Credit Card Agreement s.21",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/credit-card-transaction-help.html",
+    "https://www.rbcroyalbank.com/ways-to-bank/tutorials/easing-financial-stress/credit-card-dispute.html"
+   ],
+   "situations": [
+    "DISPUTE"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-19",
+   "n": 19,
+   "section": "C. Disputes and unrecognized transactions",
+   "question": "What is the difference between authorized and posted transactions?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Authorized transactions still need to be settled by the merchant; most stay authorized for 3-5 days. Posted transactions are complete and charged. Gas stations and hotels may pre-authorize an estimate, so amounts can differ. Questions about a posted item: 1-800-769-2512."
+   ],
+   "figures": [
+    "1-800-769-2512",
+    "5 days"
+   ],
+   "sourceText": "Source: https://www.rbcroyalbank.com/credit-cards/cardholders.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders.html"
+   ],
+   "situations": [
+    "DISPUTE"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-20",
+   "n": 20,
+   "section": "C. Disputes and unrecognized transactions",
+   "question": "How long do I have to report a statement error?",
+   "dateTag": "Agreement 15912 (09/2023)",
+   "answer": [
+    "\"If you do not contact us within 30 days after the last day of the relevant Statement Period, your Account statement and our records will be considered accurate, and you may not later make a claim against us.\" RBC reserves the right to correct errors at any time."
+   ],
+   "figures": [
+    "30 days"
+   ],
+   "sourceText": "Source: Credit Card Agreement s.25 (Account statements)",
+   "sources": [],
+   "situations": [
+    "DISPUTE",
+    "STATEMENT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-21",
+   "n": 21,
+   "section": "C. Disputes and unrecognized transactions",
+   "question": "Regional note (Caribbean knowledge base, not Canada):",
+   "dateTag": "\"If you do not report fraudulent activity on your card within 30 days of your statement date\" you will be held responsible for the transaction. Mark as regional; do not quote for Canadian clients.",
+   "answer": [],
+   "figures": [],
+   "sourceText": "Source: https://www.rbcroyalbank.com/caribbean/credit-cards/knowledgebase/personal/maarten/index.page [undated]",
+   "sources": [
+    "https://www.rbcroyalbank.com/caribbean/credit-cards/knowledgebase/personal/maarten/index.page"
+   ],
+   "situations": [],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-22",
+   "n": 22,
+   "section": "D. Declined cards and credit limits",
+   "question": "Why is my card being declined?",
+   "dateTag": "- RBC's dedicated FAQ page (search-public id=3319) would not render (see failures). Official RBC statements that bear on declines: a locked card declines purchases, cash advances and withdrawals (lock-card page); exceeding your limit: \"a purchase may be declined\" (payments FAQ); a balance transfer exceeding available credit \"will not be completed\" (balance transfer page); RBC's fraud detection may temporarily restrict the card if RBC cannot reach you to verify a transaction, so keep contact details current (using-cards-abroad, May 13, 2026); RBC can block a card without notice if it suspects fraud (Agreement s.5); overseas terminals may reject PINs longer than 4 digits (protecting-my-card FAQ).",
+   "answer": [
+    "RBC's dedicated FAQ page (search-public id=3319) would not render (see failures). Official RBC statements that bear on declines: a locked card declines purchases, cash advances and withdrawals (lock-card page); exceeding your limit: \"a purchase may be declined\" (payments FAQ); a balance transfer exceeding available credit \"will not be completed\" (balance transfer page); RBC's fraud detection may temporarily restrict the card if RBC cannot reach you to verify a transaction, so keep contact details current (using-cards-abroad, May 13, 2026); RBC can block a card without notice if it suspects fraud (Agreement s.5); overseas terminals may reject PINs longer than 4 digits (protecting-my-card FAQ).",
+    "Commercial cards only (RBC NextLogic, 11/2023): decline codes 9024 Visa Payment Controls; 0134 card not activated (cardholder calls 1-888-769-2575); 0805/0808 single-purchase or MCC limit exceeded; 0814/0817 transaction-count limit; 0813/0818/0820 amount limit per cycle; 0207 wrong expiry date. Support: Program Administrators 1-877-334-9938; cardholders 1-888-769-2534."
+   ],
+   "figures": [
+    "1-877-334-9938",
+    "1-888-769-2534",
+    "1-888-769-2575"
+   ],
+   "sourceText": "Sources: as cited; https://www.rbcroyalbank.com/business/credit-cards/commercial-cards-program/service-centre/payments-statements/common-decline-codes.pdf",
+   "sources": [
+    "https://www.rbcroyalbank.com/business/credit-cards/commercial-cards-program/service-centre/payments-statements/common-decline-codes.pdf"
+   ],
+   "situations": [
+    "DECLINED"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-23",
+   "n": 23,
+   "section": "D. Declined cards and credit limits",
+   "question": "What is a credit limit and where can I find it?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Maximum you can spend on purchases and cash advances; applies to you and all additional cardholders taken together. Shown on your statement, in OLB or the app under account details. Available credit = limit minus what you owe including authorized-not-yet-posted transactions."
+   ],
+   "figures": [],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/credit-limit-and-fees.html ; Disclosure Statement \"Initial Credit Limit\"",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/credit-limit-and-fees.html"
+   ],
+   "situations": [
+    "LIMIT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-24",
+   "n": 24,
+   "section": "D. Declined cards and credit limits",
+   "question": "How do I change my credit limit?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Sign in to OLB, select your card, choose \"Change credit limit\"; or call 1-800-769-2512; or visit a branch. \"Your credit limit is based on your credit history and your income.\" Agreement: RBC \"may reduce your Credit Limit, without prior notice\"."
+   ],
+   "figures": [
+    "1-800-769-2512"
+   ],
+   "sourceText": "Sources: credit-limit-and-fees FAQ; Credit Card Agreement s.9",
+   "sources": [],
+   "situations": [
+    "LIMIT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-25",
+   "n": 25,
+   "section": "D. Declined cards and credit limits",
+   "question": "What happens if I exceed my credit limit?",
+   "dateTag": "[undated]",
+   "answer": [
+    "A purchase may be declined. If approved, \"you may be charged a $29.00 overlimit fee, depending on your card and residence\" (does not apply to Quebec residents). Fee charged the day the balance exceeds the limit and on the first day of each subsequent Statement Period while over; maximum one per Statement Period."
+   ],
+   "figures": [
+    "$29.00"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/payments.html ; Disclosure Statement \"Overlimit Fee\"",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/frequently-asked-questions/payments.html"
+   ],
+   "situations": [
+    "LIMIT",
+    "DECLINED",
+    "FEES"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-26",
+   "n": 26,
+   "section": "E. Travel",
+   "question": "How do I notify RBC of my travel plans?",
+   "dateTag": "[undated]",
+   "answer": [
+    "\"You no longer need to tell RBC when you'll be away.\" Fraud detection monitors your accounts; keep contact information current (OLB: Banking tab > Profile and Preferences)."
+   ],
+   "figures": [],
+   "sourceText": "Source: https://www.rbcroyalbank.com/credit-cards/cardholders.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders.html"
+   ],
+   "situations": [
+    "TRAVEL"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-27",
+   "n": 27,
+   "section": "E. Travel",
+   "question": "Will my card work while travelling?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Yes, anywhere credit cards are accepted. Change your PIN before leaving if overseas terminals or ATMs reject PINs longer than 4 digits. Where there is no chip terminal, swipe and sign. Travel issues: call collect 416-974-7780. Credit cards global toll-free: +800-0-769-2512."
+   ],
+   "figures": [
+    "+800-0-769-2512"
+   ],
+   "sourceText": "Sources: protecting-my-card FAQ; https://www.rbcroyalbank.com/customer-service/index.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/customer-service/index.html"
+   ],
+   "situations": [
+    "TRAVEL",
+    "DECLINED"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-28",
+   "n": 28,
+   "section": "E. Travel",
+   "question": "How are foreign-currency purchases converted?",
+   "dateTag": "Disclosure 17925 (11/2025)",
+   "answer": [
+    "CAD amount charged is \"a percentage (as set out in the Information Box) over the benchmark rate\"; benchmark set by Visa (visa.com/exchange) or Mastercard (mastercard.ca/currency-converter). Card information boxes on rbcroyalbank.com state \"2.5% over a benchmark rate Royal Bank of Canada pays on the date of conversion.\" Exchange rate shown to six decimal places. Questions: 1-800 ROYAL 1-2 (1-800-769-2512).",
+    "Debit: foreign ATM withdrawals $3.50 CAD per withdrawal plus conversion 2.5% above benchmark; Cross-Border Debit typically $1.00 per transaction, converted at 2.5% above Interbank Spot Rate."
+   ],
+   "figures": [
+    "$1.00",
+    "$3.50",
+    "1-800-769-2512",
+    "2.5%"
+   ],
+   "sourceText": "Sources: Disclosure Statement \"Foreign Currency Conversion\"; https://www.rbcroyalbank.com/cards/cardapp/_assets-custom/pdf/sdm.pdf ; https://www.rbcroyalbank.com/banking-services/additional-account-services.html ; https://www.rbcroyalbank.com/banking-services/cross-border-debits.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/cards/cardapp/_assets-custom/pdf/sdm.pdf",
+    "https://www.rbcroyalbank.com/banking-services/additional-account-services.html",
+    "https://www.rbcroyalbank.com/banking-services/cross-border-debits.html"
+   ],
+   "situations": [
+    "TRAVEL",
+    "FEES"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-29",
+   "n": 29,
+   "section": "E. Travel",
+   "question": "What is the tap (contactless) limit?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Tap for purchases up to $250; above that, insert or swipe. Hold card/phone 1-2 inches from reader for 1-2 seconds. No signature needed in Canada. Terminal accepts one payment from one card at a time. To enable/disable contactless: 1-800-769-2512. Same $250 applies to Apple Pay, Google Pay and debit tap."
+   ],
+   "figures": [
+    "$250",
+    "1-800-769-2512"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/services/contactless-payments.html ; https://www.rbcroyalbank.com/ways-to-bank/mobile/mobile-pay/apple-pay.html ; https://www.rbcroyalbank.com/banking-services/debit-card.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/services/contactless-payments.html",
+    "https://www.rbcroyalbank.com/ways-to-bank/mobile/mobile-pay/apple-pay.html",
+    "https://www.rbcroyalbank.com/banking-services/debit-card.html"
+   ],
+   "situations": [
+    "DECLINED",
+    "WALLET"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-30",
+   "n": 30,
+   "section": "F. Interest, fees and payments",
+   "question": "How is interest charged? What is the grace period?",
+   "dateTag": "[undated page; Disclosure 11/2025]",
+   "answer": [
+    "Purchases have an interest-free grace period if you pay the full New Balance by the due date; otherwise interest accrues retroactively from the transaction date on new purchases until paid in full. Grace period \"typically 21 days\"; due date at least 21 days after the statement period ends; if the previous New Balance was not paid in full, \"your Payment Due Date will be extended to 25 days from the last day of your Statement Period.\" Fees are treated like purchases; \"We do not charge interest on interest.\" Cash advances, cash-like transactions and balance transfers have no grace period."
+   ],
+   "figures": [
+    "21 days",
+    "25 days"
+   ],
+   "sourceText": "Sources: credit-limit-and-fees FAQ; https://www.rbcroyalbank.com/credit-cards/cardholders/read-your-credit-card-statement.html ; Disclosure Statement \"Interest-Free Grace Period\"",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/read-your-credit-card-statement.html"
+   ],
+   "situations": [
+    "FEES"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-31",
+   "n": 31,
+   "section": "F. Interest, fees and payments",
+   "question": "How is the minimum payment calculated?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Standard: interest + fees + monthly installment payments + $10. Quebec: monthly installment payments + a percentage of the New Balance (accounts opened on/after Aug 1, 2019: 5%; earlier accounts: 2.5% rising 0.5% per year from Aug 1, 2021 to 5% on Aug 1, 2025). If the balance is under $10, the full balance is the minimum. Due date falling on a weekend/holiday moves to the next business day."
+   ],
+   "figures": [
+    "$10,",
+    "$10.",
+    "0.5%",
+    "2.5%",
+    "5%"
+   ],
+   "sourceText": "Sources: read-your-credit-card-statement page; https://www.rbcroyalbank.com/credit-cards/cardholders/credit-card-glossary.html ; Credit Card Agreement s.6",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/credit-card-glossary.html"
+   ],
+   "situations": [
+    "PAYMENT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-32",
+   "n": 32,
+   "section": "F. Interest, fees and payments",
+   "question": "What happens if I miss a minimum payment?",
+   "dateTag": "Disclosure 17925 (11/2025)",
+   "answer": [
+    "Miss it and not paid by the next statement date: you lose any promotional rate; regular rates apply from the first day of the third Statement Period after the missed payment; all Installment Plans are cancelled. Miss two or more times in any 12-month period: RBC increases your purchase and cash advance rates (per Information Box) until you pay on time for 12 consecutive months."
+   ],
+   "figures": [],
+   "sourceText": "Source: Disclosure Statement \"Minimum Payment\"",
+   "sources": [],
+   "situations": [
+    "PAYMENT",
+    "FEES"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-33",
+   "n": 33,
+   "section": "F. Interest, fees and payments",
+   "question": "What is a cash advance and what does it cost?",
+   "dateTag": "[undated page; Disclosure 11/2025]",
+   "answer": [
+    "Cash advances include cash withdrawals (branch, RBC or other ATM, in or outside Canada), balance transfers, bill payments that are not merchant pre-authorized charges, transfers from the card to an RBC bank account, and cash-like transactions (wire transfers, foreign/virtual currency, lottery tickets, gaming chips, bets). \"Interest is always charged on Cash Advances from the day the Cash Advance is made.\" Cash advance fee per the Information Box, charged within 3 business days; statement guide lists \"$3.50 per transaction (some exceptions apply)\". Cash advances earn no rewards."
+   ],
+   "figures": [
+    "$3.50",
+    "3 business days"
+   ],
+   "sourceText": "Sources: Disclosure Statement \"Cash Advance Fee\"; https://www.rbcroyalbank.com/credit-cards/product-advice/what-is-a-cash-advance.html ; read-your-credit-card-statement page; glossary",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/product-advice/what-is-a-cash-advance.html"
+   ],
+   "situations": [
+    "FEES"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-34",
+   "n": 34,
+   "section": "F. Interest, fees and payments",
+   "question": "How do balance transfers work?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Request by calling 1-866-854-7530, OLB or app during the promotional period. Promotional Rate Fee \"up to 3%\" of each transfer (exact fee disclosed in the offer). Treated as a cash advance; interest from the transfer date. \"Balance transfers are final and cannot be reversed.\" Canadian-dollar accounts only; \"may take 3 to 4 business days\"; cannot pay an RBC credit card; transfer over available credit is not completed (notice by mail). Promotional rate lasts to the end of the statement billing period after the offer expiry; a missed minimum payment ends the promo rate."
+   ],
+   "figures": [
+    "1-866-854-7530",
+    "3 to 4 business days",
+    "3%"
+   ],
+   "sourceText": "Source: https://www.rbcroyalbank.com/onlineservices/balancetransferinfo.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/onlineservices/balancetransferinfo.html"
+   ],
+   "situations": [
+    "FEES",
+    "PAYMENT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-35",
+   "n": 35,
+   "section": "F. Interest, fees and payments",
+   "question": "How do RBC Installment Plans work?",
+   "dateTag": "(terms for purchases installed on/after March 1, 2023)",
+   "answer": [
+    "Only the primary or co-applicant can set up plans (not Authorized Users). Set up after purchase in the app on eligible posted transactions (not between 5:00 PM and midnight ET on the last day of the statement period) or at checkout with select merchants. Conversion up to 3 business days. Interest daily on plan principal and/or a monthly fee (monthly fee not available in Quebec) and/or one-time fee, as disclosed at setup. Total Monthly Plan Payment is included in your Minimum Payment. Cancel anytime in the app; conversion back can take up to 3 business days. Paying the Total Account Balance in full pays off all plans. Missed minimum payment cancels all plans."
+   ],
+   "figures": [
+    "3 business days"
+   ],
+   "sourceText": "Source: https://www.rbcroyalbank.com/credit-cards/cardholders/additional-documents/rbc-installments-plan-terms-EN.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/additional-documents/rbc-installments-plan-terms-EN.html"
+   ],
+   "situations": [
+    "PAYMENT",
+    "FEES"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-36",
+   "n": 36,
+   "section": "F. Interest, fees and payments",
+   "question": "Can I still use credit card cheques?",
+   "dateTag": "[undated]",
+   "answer": [
+    "\"As of August 31, 2018, RBC Royal Bank will no longer provides or accepts credit card cheques.\" Destroy unused cheques; for payments call 1-800-769-2512 or take a cash advance via OLB, an RBC ATM or a branch."
+   ],
+   "figures": [
+    "1-800-769-2512"
+   ],
+   "sourceText": "Source: payments FAQ",
+   "sources": [],
+   "situations": [
+    "PAYMENT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-37",
+   "n": 37,
+   "section": "F. Interest, fees and payments",
+   "question": "When is the annual fee charged?",
+   "dateTag": "Disclosure 17925 (11/2025)",
+   "answer": [
+    "\"Annual fees are charged on the first day of the month following Account opening and annually thereafter on the first day of that same month. Annual fees are non-refundable.\""
+   ],
+   "figures": [],
+   "sourceText": "Source: Disclosure Statement \"Annual Fee\"",
+   "sources": [],
+   "situations": [
+    "FEES"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-38",
+   "n": 38,
+   "section": "F. Interest, fees and payments",
+   "question": "How do I pay my credit card bill?",
+   "dateTag": "[undated]",
+   "answer": [
+    "OLB (immediate or recurring); app; Automated Payments from an RBC account for the minimum or last statement balance, withdrawn on the statement due date; Telephone Banking 24/7 with PIN; any RBC ATM with Client Card and PIN; any RBC branch in Canada; by mail (postal disruption does not excuse late payment). RBC Credit Card Inquiry tool shows transactions 24/7 but cannot make payments."
+   ],
+   "figures": [],
+   "sourceText": "Source: https://www.rbcroyalbank.com/credit-cards/cardholders/pay-your-credit-card-bill.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/pay-your-credit-card-bill.html"
+   ],
+   "situations": [
+    "PAYMENT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-39",
+   "n": 39,
+   "section": "F. Interest, fees and payments",
+   "question": "How do I set up automatic payments?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Choose an account and Minimum Payment or full New Balance; OLB under Profile & Account Settings; app under Manage Cards; or call 1-800-769-2512 (24-hour)."
+   ],
+   "figures": [
+    "1-800-769-2512"
+   ],
+   "sourceText": "Source: payments FAQ",
+   "sources": [],
+   "situations": [
+    "PAYMENT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-40",
+   "n": 40,
+   "section": "F. Interest, fees and payments",
+   "question": "When is my payment due date and where do I find it?",
+   "dateTag": "[undated]",
+   "answer": [
+    "On the monthly statement, in OLB or the app; if unsure call 1-800-769-2512. Weekend/holiday due dates extend to the next business day."
+   ],
+   "figures": [
+    "1-800-769-2512"
+   ],
+   "sourceText": "Sources: payments FAQ; Credit Card Agreement s.6",
+   "sources": [],
+   "situations": [
+    "PAYMENT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-41",
+   "n": 41,
+   "section": "F. Interest, fees and payments",
+   "question": "How will I be told about rate or term changes?",
+   "dateTag": "Disclosure 11/2025; Agreement 09/2023",
+   "answer": [
+    "\"At least 30 days written notice of any increase in your interest rates\" (other than Prime Rate moves). Agreement changes: written notice at least 30 days before (where required by law or for Quebec); if changes increase your obligations you may refuse, cancel and close the account without cost within 30 days after they take effect. Fees \"may change. If they do, we will tell you in advance.\""
+   ],
+   "figures": [
+    "30 days"
+   ],
+   "sourceText": "Sources: Disclosure Statement; Credit Card Agreement s.30",
+   "sources": [],
+   "situations": [
+    "FEES"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-42",
+   "n": 42,
+   "section": "G. Statements",
+   "question": "How do I get eStatements and how far back can I see them?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Enrol in OLB (Profile & Accounts Settings > Preferences > Manage Document Preferences) or app (More > Settings > Statements). You may get one last paper statement. Archive: 7 years, starting from the first statement produced after November 14, 2006. Not eligible: Visa cards starting 4032 76, 4032 79, 4058 02, 4058 09, 4058 15, 4058 24 (use Credit Card Inquiry). No statement is produced for a period with no activity. Old-card statements visible after replacement; historical data may take a full month to appear. Switching back to paper removes archive access, so save copies first."
+   ],
+   "figures": [],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/cardholders/estatements-frequently-asked-questions.html ; https://www.rbcroyalbank.com/credit-cards/cardholders/estatements.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/estatements-frequently-asked-questions.html",
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/estatements.html"
+   ],
+   "situations": [
+    "STATEMENT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-43",
+   "n": 43,
+   "section": "G. Statements",
+   "question": "How do I get a copy of a statement or my transaction history?",
+   "dateTag": "[undated]",
+   "answer": [
+    "OLB: card's Statement/Documents link; app: card Details tab > View Statements. Statements going back 7 years. Additional monthly statement copy fee per the Information Box, charged within 3 business days. Debit/account history: $5.00 per request under 90 days old, $10.00 over 90 days."
+   ],
+   "figures": [
+    "$10.00",
+    "$5.00",
+    "3 business days",
+    "90 days"
+   ],
+   "sourceText": "Sources: payments FAQ; Disclosure Statement \"Additional Monthly Statement Copy Fee\"; additional-account-services page",
+   "sources": [],
+   "situations": [
+    "STATEMENT",
+    "FEES"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-44",
+   "n": 44,
+   "section": "H. Activation, wallets, PIN, users",
+   "question": "How do I activate my card?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Phone 1-877-900-5900 (personal and business), automated; Private Banking cards 1-888-769-2585. Online: www.rbc.com/activate. App: select the new card > Add or Activate Your Card. OLB: Accounts Summary > Activate My Credit Card. Protecting-my-card FAQ also lists 1-800-769-2512. Sign the strip; cut up the old card. Commercial cards: 1-888-769-2575."
+   ],
+   "figures": [
+    "1-800-769-2512",
+    "1-877-900-5900",
+    "1-888-769-2575",
+    "1-888-769-2585"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/activate/index.html ; protecting-my-card FAQ; commercial key contacts PDF",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/activate/index.html"
+   ],
+   "situations": [
+    "ACTIVATE"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-45",
+   "n": 45,
+   "section": "H. Activation, wallets, PIN, users",
+   "question": "Can I use my card before it arrives in the mail?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Yes, with Apple Pay. Must be enrolled in OLB; the option appears in the app \"within 48 hours\" of approval. Steps: sign in to app > select new card > Set Up Now > review documents > request one-time code by text > enter code and add to Apple Pay. Excludes RBC RateAdvantage Visa. Works with iPhone 6 and later, Apple Watch (in store), MacBook Pro (in-app)."
+   ],
+   "figures": [],
+   "sourceText": "Source: https://www.rbcroyalbank.com/credit-cards/cardholders/instant-use-with-apple-pay.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/instant-use-with-apple-pay.html"
+   ],
+   "situations": [
+    "WALLET",
+    "ACTIVATE"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-46",
+   "n": 46,
+   "section": "H. Activation, wallets, PIN, users",
+   "question": "How do I add my card to Apple Pay or Google Pay (Google Wallet)?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Eligible: RBC personal Visa and Mastercard credit cards, Interac and Virtual Visa Debit. Business credit/debit cards are not eligible. Apple Pay: app > card > Manage Cards > Add to Apple Pay, or add in Apple Wallet. Google: Google Wallet app > Add Card. First card added is the default. Card number is replaced by a token. Returns: use receipt and bring the device. Renewed cards usually update automatically; \"for new cards and some replacements, you may need to remove the old card and set up ... again.\" Virtual Visa Debit mobile tap works only at international POS terminals."
+   ],
+   "figures": [],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/ways-to-bank/mobile/mobile-pay/apple-pay.html ; https://www.rbcroyalbank.com/ways-to-bank/mobile/mobile-pay/google-pay/index.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/ways-to-bank/mobile/mobile-pay/apple-pay.html",
+    "https://www.rbcroyalbank.com/ways-to-bank/mobile/mobile-pay/google-pay/index.html"
+   ],
+   "situations": [
+    "WALLET"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-47",
+   "n": 47,
+   "section": "H. Activation, wallets, PIN, users",
+   "question": "How do I choose, change or reset my credit card PIN?",
+   "dateTag": "[undated]",
+   "answer": [
+    "A PIN is mailed separately from the card; if you already have an RBC debit card the credit card PIN is set to match it. To change or reset a forgotten PIN: visit any RBC branch with two valid pieces of ID. Change it before travelling if overseas terminals reject PINs longer than 4 digits. Questions: 1-800-769-2512.",
+    "Debit PIN: change at any RBC ATM; reset a forgotten PIN at a branch with 2 valid pieces of ID. ATM credit-card payments need your Client Card PIN; if unknown, visit a branch."
+   ],
+   "figures": [
+    "1-800-769-2512"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/services/chip-and-pin-technology.html ; https://www.rbcroyalbank.com/banking-services/debit-card.html ; pay-your-credit-card-bill page",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/services/chip-and-pin-technology.html",
+    "https://www.rbcroyalbank.com/banking-services/debit-card.html"
+   ],
+   "situations": [
+    "PIN"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-48",
+   "n": 48,
+   "section": "H. Activation, wallets, PIN, users",
+   "question": "How does a Chip and PIN purchase work?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Insert the card and leave it in for the whole transaction (\"Removing the card will terminate the transaction\"); enter PIN instead of signing; remove when prompted. Non-chip terminals: swipe and sign."
+   ],
+   "figures": [],
+   "sourceText": "Source: https://www.rbcroyalbank.com/credit-cards/cardholders.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders.html"
+   ],
+   "situations": [
+    "DECLINED",
+    "PIN"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-49",
+   "n": 49,
+   "section": "H. Activation, wallets, PIN, users",
+   "question": "How do I add a Co-Applicant, Authorized User or Family Card user?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Co-Applicant: 18+, max 1, jointly liable for the balance \"regardless of who incurred the charges\", not available on moi RBC Visa; both parties bring two pieces of ID to a branch. Authorized User: 18+, max 9, not responsible for the balance, sees only own transactions, cannot redeem points; can be added in OLB or by form. Family Card Option: 14+ and resident of Canada, pre-set limit, no credit bureau impact; limit must be stated on the form. Mail forms to RBC Royal Bank, c/o Administration Department, P.O. Box 8400, Stn Terminal, Vancouver, BC V6B 9Z9. Additional-card fees by card, e.g. Avion Visa Infinite $50, Avion Visa Infinite Privilege $99, WestJet World Elite $59, WestJet Mastercard $19, British Airways Visa Infinite $75, U.S. Dollar Visa Gold $30 USD; $0 on ION, ION+, Cash Back, Visa Platinum, Classic and others.",
+    "Removal: Agreement s.22, \"You can add or remove Authorized Users by contacting us\"; you remain liable for Authorized User charges."
+   ],
+   "figures": [
+    "$0",
+    "$19,",
+    "$30",
+    "$50,",
+    "$59,",
+    "$75,",
+    "$99,"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/cardholders/add-user.html ; protecting-my-card FAQ; Credit Card Agreement s.22",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/add-user.html"
+   ],
+   "situations": [
+    "USERS"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-50",
+   "n": 50,
+   "section": "H. Activation, wallets, PIN, users",
+   "question": "How do I apply for a credit card online?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Choose via card selector or category list and click Apply Now. OLB: Apply for a Credit Card in Account summary. App: More > Open an account > Credit Cards. Phone: 1-800-769-2512. Student page: result \"in less than a minute\"."
+   ],
+   "figures": [
+    "1-800-769-2512"
+   ],
+   "sourceText": "Sources: general-questions FAQ; https://www.rbcroyalbank.com/credit-cards/student.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/student.html"
+   ],
+   "situations": [
+    "APPLY"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-51",
+   "n": 51,
+   "section": "I. Rewards (Avion)",
+   "question": "How do I see my rewards point balance?",
+   "dateTag": "[undated]",
+   "answer": [
+    "OLB > Visa Details page > Avion Rewards in the self-serve menu; or avionrewards.com; or call 1-800 ROYAL 1-2. Only primary and co-applicant cardholders can sign in to view points (business page). Order by phone 1-800-769-2512; Avion Rewards Travel 1-877-636-2870."
+   ],
+   "figures": [
+    "1-800-769-2512",
+    "1-877-636-2870"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/business/credit-cards/faqs.html ; https://www.rbcroyalbank.com/business/credit-cards/manage-your-credit-card.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/business/credit-cards/faqs.html",
+    "https://www.rbcroyalbank.com/business/credit-cards/manage-your-credit-card.html"
+   ],
+   "situations": [
+    "REWARDS"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-52",
+   "n": 52,
+   "section": "I. Rewards (Avion)",
+   "question": "How do I pay my credit card with points (Payback with Points)?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Sign in to Avion Rewards > \"Pay Credit Card with Points\" > choose amount > redeem. Applied to the selected card's balance, not a specific transaction; cannot be converted to cash. \"2 to 3 business days\" to credit the account and adjust available credit. Business card point transfers: 1-800-769-2512."
+   ],
+   "figures": [
+    "1-800-769-2512",
+    "2 to 3 business days"
+   ],
+   "sourceText": "Source: https://www.rbcroyalbank.com/credit-cards/cardholders/pay-with-points.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/pay-with-points.html"
+   ],
+   "situations": [
+    "REWARDS",
+    "PAYMENT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-53",
+   "n": 53,
+   "section": "I. Rewards (Avion)",
+   "question": "Do Avion points expire?",
+   "dateTag": "[undated terms page]",
+   "answer": [
+    "Points remain available while the account stays open; \"forfeited twelve (12) months after\" you voluntarily close the account or RBC closes it for any reason other than cause. Points are earned on net purchases only, not cash advances, interest or fees. Travel redemption minimum 2,500 points; $100 voucher 12,000 points; short-haul flight from 15,000 points (max ticket $350); long-haul from 100,000 points (max $2,000); conversions can take up to 4 weeks and cannot be reversed."
+   ],
+   "figures": [
+    "$100",
+    "$2,000",
+    "$350"
+   ],
+   "sourceText": "Source: https://www.avionrewards.com/terms-and-conditions/index.html",
+   "sources": [
+    "https://www.avionrewards.com/terms-and-conditions/index.html"
+   ],
+   "situations": [
+    "REWARDS"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-54",
+   "n": 54,
+   "section": "I. Rewards (Avion)",
+   "question": "Avion Rewards contact and hours",
+   "dateTag": "- Credit card customer service 1-800-769-2512 (business FAQ: 24-hr, 7 days). Avion Rewards Travel 1-877-636-2870: business manage page lists Mon-Fri 7 a.m. to Midnight, weekends 7 a.m. to 9 p.m.; the same page's text elsewhere says Mon-Fri 8 a.m. to 9 p.m. EST, Sat 9 a.m. to 5 p.m. EST (conflict on RBC's own page; flag to trainees). Commercial cardholders 1-888-769-2534; commercial Avion Travel 1-888-773-7057.",
+   "answer": [
+    "Credit card customer service 1-800-769-2512 (business FAQ: 24-hr, 7 days). Avion Rewards Travel 1-877-636-2870: business manage page lists Mon-Fri 7 a.m. to Midnight, weekends 7 a.m. to 9 p.m.; the same page's text elsewhere says Mon-Fri 8 a.m. to 9 p.m. EST, Sat 9 a.m. to 5 p.m. EST (conflict on RBC's own page; flag to trainees). Commercial cardholders 1-888-769-2534; commercial Avion Travel 1-888-773-7057."
+   ],
+   "figures": [
+    "1-800-769-2512",
+    "1-877-636-2870",
+    "1-888-769-2534",
+    "1-888-773-7057",
+    "7 days"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/business/credit-cards/manage-your-credit-card.html ; commercial key contacts PDF",
+   "sources": [
+    "https://www.rbcroyalbank.com/business/credit-cards/manage-your-credit-card.html"
+   ],
+   "situations": [
+    "REWARDS",
+    "CONTACT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-55",
+   "n": 55,
+   "section": "J. Optional add-ons and credit tools",
+   "question": "What is BalanceProtector Max and what does it cost?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Premium $1.20 per $100 of statement balance (plus taxes) when balance is $10 or more, up to $25,000; $0.60 per $100 after age 66 (Job Loss/Disability). Benefits: Job Loss, Total Disability and Life, each max $50,000 as a single payment. Job loss requires 30 consecutive days unemployed. Eligibility: primary cardholder, Canadian resident, age 18 to 64, working at least 16 hours per week; not on business/corporate/non-CAD cards. Cancel anytime; full refund if cancelled within 30 days of receiving the Certificate. Coverage transfers to a replacement card. Insurer: Assurant (American Bankers). Apply 1-800-769-2512; claims/questions 1-888-896-2766 (customer-service page: Mon-Fri 8 a.m. to 8 p.m. per business page). Quebec tax on premiums rises from 9% to 9.975% effective January 1, 2027."
+   ],
+   "figures": [
+    "$0.60",
+    "$1.20",
+    "$10",
+    "$100",
+    "$25,000",
+    "$50,000",
+    "1-800-769-2512",
+    "1-888-896-2766",
+    "30 days",
+    "9%",
+    "9.975%"
+   ],
+   "sourceText": "Source: https://www.rbcroyalbank.com/credit-cards/cardholders/optional-add-on-services/balance-protector-credit-card-insurance.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/optional-add-on-services/balance-protector-credit-card-insurance.html"
+   ],
+   "situations": [
+    "ADDON"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-56",
+   "n": 56,
+   "section": "J. Optional add-ons and credit tools",
+   "question": "What identity-theft protection does RBC offer?",
+   "dateTag": "[undated]",
+   "answer": [
+    "FirstReport-ID / FirstReport-Advantage (Sigma Loyalty Group): free for 30 days for first-time customers; 24/7 monitoring of dark web, credit bureau files, bank and card accounts, SIN, licence, passport; quarterly Equifax reports; sign up online or 1-855-826-5328. Price after trial not stated."
+   ],
+   "figures": [
+    "1-855-826-5328",
+    "30 days"
+   ],
+   "sourceText": "Source: https://www.rbcroyalbank.com/credit-cards/cardholders/optional-add-on-services/identity-credit-theft-protection.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/cardholders/optional-add-on-services/identity-credit-theft-protection.html"
+   ],
+   "situations": [
+    "ADDON",
+    "FRAUD"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-57",
+   "n": 57,
+   "section": "J. Optional add-ons and credit tools",
+   "question": "How do I check my credit score (CreditView)?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Free; \"soft\" inquiry with no impact on your score. OLB: My Services > View Your Credit Score > accept disclaimer and dashboard agreement. App: More > Credit Score > enrol. Only OLB clients of age of majority; RBC shares name, address and date of birth with TransUnion each time; if TransUnion cannot match you, contact RBC. TransUnion questions: 1-855-889-4157. Credit Score Simulator usable without affecting rating."
+   ],
+   "figures": [
+    "1-855-889-4157"
+   ],
+   "sourceText": "Sources: https://rbcroyalbank.com/dms/olb/credit-score/index.html ; https://www.rbcroyalbank.com/ways-to-bank/tutorials/financial-advice/check-credit-score.html",
+   "sources": [
+    "https://rbcroyalbank.com/dms/olb/credit-score/index.html",
+    "https://www.rbcroyalbank.com/ways-to-bank/tutorials/financial-advice/check-credit-score.html"
+   ],
+   "situations": [
+    "CREDIT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-58",
+   "n": 58,
+   "section": "K. Students and newcomers",
+   "question": "Student credit cards: who can apply?",
+   "dateTag": "[undated; offers dated to Nov 2026 / Feb 2027]",
+   "answer": [
+    "Minimum age 18 in Alberta, Manitoba, Saskatchewan, Ontario, Quebec and PEI; 19 elsewhere. Some cards require proof of enrolment. Student credit limit up to $2,000 with no credit history required (newcomer page). International students: visit a branch or call an advisor. Cards listed: ION+ ($48), ION ($0), Cash Back Mastercard ($0), WestJet RBC Mastercard ($39), Avion Visa Platinum ($120); purchase rates 20.99% to 21.99%, cash advance 22.99%."
+   ],
+   "figures": [
+    "$0",
+    "$120",
+    "$2,000",
+    "$39",
+    "$48",
+    "20.99%",
+    "21.99%",
+    "22.99%"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/credit-cards/student.html ; https://www.rbcroyalbank.com/en-ca/new-to-canada/credit-score-canada/",
+   "sources": [
+    "https://www.rbcroyalbank.com/credit-cards/student.html",
+    "https://www.rbcroyalbank.com/en-ca/new-to-canada/credit-score-canada/"
+   ],
+   "situations": [
+    "STUDENT/NEWCOMER"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-59",
+   "n": 59,
+   "section": "K. Students and newcomers",
+   "question": "Newcomer credit cards with no credit history",
+   "dateTag": "[page dated by offer: apply by October 31, 2026]",
+   "answer": [
+    "Permanent residents and international students who arrived within the last 12 months; temporary resident workers within 48 months; must meet RBC eligibility and credit criteria. Credit limit up to $15,000 with no credit history (excludes RateAdvantage Visa; not for existing RBC cardholders). Newcomer support 1-866-756-1107. A separate newcomer page notes a security-deposit route if you do not qualify for an unsecured card."
+   ],
+   "figures": [
+    "$15,000",
+    "1-866-756-1107"
+   ],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/en-ca/new-to-canada/credit-score-canada/ ; https://rbcroyalbank.com/dms/enterprise/newcomers/hybrid/offers.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/en-ca/new-to-canada/credit-score-canada/",
+    "https://rbcroyalbank.com/dms/enterprise/newcomers/hybrid/offers.html"
+   ],
+   "situations": [
+    "STUDENT/NEWCOMER"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-60",
+   "n": 60,
+   "section": "L. Contact and general",
+   "question": "Is there a number I can call about my account?",
+   "dateTag": "[undated]",
+   "answer": [
+    "1-800-769-2512 (customer service, 24-hour toll-free per the general FAQ). Disclosure Statement: call \"during regular business hours\"."
+   ],
+   "figures": [
+    "1-800-769-2512"
+   ],
+   "sourceText": "Source: general-questions FAQ; Disclosure Statement \"How to Contact Us\"",
+   "sources": [],
+   "situations": [
+    "CONTACT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-61",
+   "n": 61,
+   "section": "L. Contact and general",
+   "question": "How do I get help by chat?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Virtual assistant in app: tap the question mark (top right) > Contact us > Chat now. OLB: Help Center > blue chat icon bottom right. \"Available 24/7.\" The assistant \"connects you with the right advisor.\" Existing clients can also send a Secure Message in OLB (complaint page)."
+   ],
+   "figures": [],
+   "sourceText": "Sources: https://www.rbcroyalbank.com/ways-to-bank/tutorials/general/personalized-support.html ; https://www.rbcroyalbank.com/ways-to-bank/mobile/rbc-mobile-app/index.html ; https://www.rbc.com/customercare/index.html",
+   "sources": [
+    "https://www.rbcroyalbank.com/ways-to-bank/tutorials/general/personalized-support.html",
+    "https://www.rbcroyalbank.com/ways-to-bank/mobile/rbc-mobile-app/index.html",
+    "https://www.rbc.com/customercare/index.html"
+   ],
+   "situations": [
+    "CONTACT"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  },
+  {
+   "id": "faq-62",
+   "n": 62,
+   "section": "L. Contact and general",
+   "question": "Why does RBC offer both Visa and Mastercard? / How many corporate cards can a business have?",
+   "dateTag": "[undated]",
+   "answer": [
+    "Choice and value; compare via selector. Corporate card count depends on the program."
+   ],
+   "figures": [],
+   "sourceText": "Source: general-questions FAQ",
+   "sources": [],
+   "situations": [
+    "GENERAL"
+   ],
+   "verify": true,
+   "fetched": "2026-10-12"
+  }
+ ],
+ "captures": "Required captures\n\n### 2.1 RBC complaint-escalation ladder (RBC Royal Bank, personal banking incl. cards)\n\nSources: https://www.rbc.com/customercare/index.html ; How to Make a Complaint brochure (PDF); CCAO Annual Report 2025 (03/2026); https://www.rbc.com/customercare/popup-additional-resources.html ; Credit Card Agreement s.35.\n\n- **Step 0, start at the source.** Assemble documents and dates; be clear what you want. 3 ways: OLB Message Centre (\"Send a Secure Message\"), call 1-800-769-2511, or visit the branch/office in question. Agreement s.35: \"call us at 1-800-769-2512 or visit your local branch.\" If unsatisfied, ask to be referred to a manager.\n- **Level 1 (CCAO report):** client complains online, in branch or by phone.\n- **Level 2, Escalate to RBC Client Care.** Ask to escalate via the same channels; RBC forwards it to RBC Client Care, which reviews and responds.\n- **Level 3, Appeal to the RBC Client Complaints Appeal Office (CCAO).** \"The most senior designated office appointed to address appealed complaints within RBC.\" RBC forwards on your behalf; a case manager contacts you, determines root cause, issues a final decision letter. CCAO 2025 report: 2,978 banking complaints reviewed; 282 resolved, 2,696 closed; 46 days average review; credit cards were 16.9% of volume (second after accounts, 45.0%); fraud 28.9%, closure 13.1%, fees/charges 6.9%, transaction 6.6% by nature. The 2023 report (per search summary) states CCAO will not intervene in credit/insurance adjudication, general policy or litigation matters.\n- **Level 4, External Complaints Body: Ombudsman for Banking Services and Investments (OBSI).** You may go to OBSI if RBC \"has exhausted the 56-calendar-day prescribed period\" or you are not satisfied with the CCAO. \"You have up to 180 calendar days to submit your complaint to OBSI after receiving a final response from RBC, or if 56 calendar days have passed since your complaint was made.\" OBSI is free, independent, and \"regulated as an External Complaints Body by the Financial Consumer Agency of Canada (FCAC)\". Contact: 20 Queen Street West, Suite 2400, PO Box 8, Toronto ON M5H 3R3; toll-free 1-888-451-4519; fax 1-888-422-2865; ombudsman@obsi.ca; obsi.ca. (RBC's 2023 report named ADR Chambers Banking Ombuds Office; 2024/2025 reports and the current site name OBSI.)\n- **Regulator: Financial Consumer Agency of Canada (FCAC).** Supervises federally regulated financial institutions for compliance with federal consumer protection laws; answers questions on rights and complaint-handling. 427 Laurier Avenue West, 5th Floor, Ottawa ON K1R 7Y2; English 1-866-461-FCAC (3222); French 1-866-461-ACFC (2232); outside Canada 613-960-4666; TTY 1-866-914-6097 / 613-947-7771; canada.ca/fcac; online form canada.ca/en/financial-consumer-agency/corporate/contact-us.html; VRS accepted.\n- **Related:** Creditor insurance (BalanceProtector is not listed; HomeProtector/LoanProtector) complaints: RBC Insurance Services Inc. 1-800-769-2523. Privacy complaints: Office of the RBC Chief Privacy Officer, PO Box 7500, Station A, Toronto ON M5W 1P9, fax 416-955-2192; Office of the Privacy Commissioner of Canada 1-800-282-1376. Clients outside Canada: refer to regulators in their jurisdiction after a CCAO review.\n\n### 2.2 RBC's fraud / zero-liability promise wording (verbatim or near-verbatim)\n- Lost-or-stolen page: if you report immediately and have been responsible in protecting your card and PIN, \"you're covered against any fraudulent or unauthorized use of your card.\"\n- Protecting-my-card FAQ: \"You're covered for fraudulent online and in-store charges if you took reasonable precautions to protect your PIN and card.\"\n- Instant-use page: \"Zero Liability protection, which means you are not liable for fraudulent charges provided you have taken reasonable precautions to protect your PIN and your card, as set out in the RBC Royal Bank Credit Card Agreement.\"\n- Fraud page: if you have protected your card, account information and authentication details (PINs, passwords, access codes, CVCs) and followed your card agreement, you are covered against unauthorized use \"both in-store and online.\"\n- Agreement s.5 / Disclosure: not responsible for unauthorized use \"unless you have demonstrated gross negligence (gross fault if you reside in Quebec)\"; \"You will not be liable for any unauthorized use after we receive your report.\"\n- Digital Banking Security Guarantee: RBC \"will fully reimburse you for any unauthorized transactions\" made through RBC Mobile app or Online Banking, subject to the conditions in item 13.\n- Quebec statutory cap: $50 even if no notice was given (Agreement annex).\n\n### 2.3 Dispute / chargeback time limits RBC states\n- Merchant first: \"Allow 15-20 business days for a credit before contacting RBC.\" (transaction-help)\n- Temporary credit \"usually within about two business days\" after a dispute request; fraud claim update \"within 3 business days\" (transaction-help); \"three to five business days\" (Dec 4, 2024 article).\n- Statement errors: contact RBC \"within 30 days after the last day of the relevant Statement Period\" or the statement is deemed accurate (Agreement s.25).\n- Merchant disputes: \"certain time limits and other conditions may apply\" (Agreement s.21); no specific chargeback window is published on the Canadian pages.\n- Caribbean knowledge base only: report fraudulent activity within 30 days of statement date (regional).\n- Note: the search-engine summary of the OLB dispute flow said \"if you don't see another update from RBC after 10 business days, you can consider the request closed\"; that sentence was not visible on any page I could load and is NOT confirmed; do not teach it.\n\n### 2.4 Replacement-card delivery times\n- Lost/stolen or damaged credit card: \"7 to 10 business days\" (lost-or-stolen page; protecting-my-card FAQ).\n- Emergency replacement: \"3 business days or less\" in most places worldwide.\n- Debit renewal: new card 30 to 90 days before expiry; call if not received within 10 business days of expiry.\n- Instant use: Apple Pay option within 48 hours of approval (eligible personal cards, OLB enrolment required, excludes RateAdvantage Visa).\n- Balance transfer appears in 3 to 4 business days; Payback with Points credits in 2 to 3 business days; installment conversion up to 3 business days.\n\n### 2.5 RBC Lock / card controls\n- Lock Card toggle in app (top of card details) and OLB (Profile and Account Settings). Temporary, reversible anytime. Credit card: declines purchases, cash advances, withdrawals; allows pre-authorized payments, balance payments (incl. Payback with Points), refunds, Avion redemptions. Client Card: pre-authorized payments, mobile deposits, online refunds, Apple Pay/Android Wallet still processed. Contactless can be enabled/disabled by calling 1-800-769-2512. Alerts (free): fraud SMS 722373, available-credit-below-$100 (adjustable), large purchase, payment due, payment made. Family Card Option gives an Authorized User a pre-set limit. Commercial cards: Program Administrator spend controls in RBC NextLogic (per-transaction, MCC group, count and amount limits).\n- Sources: items 2, 12, 22, 29, 49.\n\n### 2.6 How clients contact the Cards team\nSource: https://www.rbcroyalbank.com/customer-service/index.html (no hours printed on this page); hours as stated on https://www.rbcroyalbank.com/business/credit-cards/manage-your-credit-card.html and the commercial key contacts PDF.\n- Credit Cards (personal and business clients): 1-800-769-2512 (1-800 ROYAL 1-2). Business page: \"24-hr support, 7 days a week\". General FAQ: 24-hour toll-free. Disclosure Statement: \"during regular business hours\" (RBC's own pages conflict; flag).\n- TTY, credit cards: 1-800-769-2518. Everyday banking (Client Cards): 1-800-769-2511; TTY 1-800-661-1275.\n- Lost/stolen credit card: 1-800-769-2512 (24-hour) or, per the business FAQ/manage page, 1-800-361-0152 (24/7); outside North America collect 1-514-392-9167 (personal pages) or 514-392-9167. Private Banking activation 1-888-769-2585. Card activation/replacement automated line 1-877-900-5900 (24/7).\n- International: global toll-free +800-0-769-2512 (21 countries); collect 416-974-7780; Hong Kong 80-093-8929; China South 10-800-140-1005; China North 10-800-714-1031.\n- Online/Mobile Banking technical support: 1-800-769-2555; global +800-0-769-2555; collect 506-864-1555.\n- BalanceProtector (Assurant): 1-888-896-2766 (Mon-Fri 8 a.m. to 8 p.m. per business page). Card Assist Plus / InfoProtector card registry: 1-877-773-7774 (24/7). Travel Emergency Insurance: 1-800-533-2778 (24/7). Balance transfers: 1-866-854-7530. Avion Rewards Travel: 1-877-636-2870.\n- Business banking 1-800-769-2520. Commercial cardholders 1-888-769-2534 (24/7; option 3 lost/stolen, option 6 insurance Mon-Fri 8 a.m. to 10 p.m. EST, weekends 9 a.m. to 5 p.m.); commercial Program Administrators 1-877-334-9938 (Mon-Fri 8:30 a.m. to 7:30 p.m. EST); commercial international 1-705-522-7437.\n- In-app: virtual assistant chat 24/7 (question mark > Contact us > Chat now); OLB Help Center chat; Secure Message Centre in OLB; book an appointment; branch locator maps.rbcroyalbank.com.\n- Accessibility line 1-800-769-2511 (Braille stickers, activation with an agent); accessible-format card documents 1-800-769-2597; automated-call verification/opt-out 1-800-769-2512; self-serve voice assistant 1-800-769-2544.\n- Fraud reporting: phishing@rbc.com (automated); info-theft 1-800-769-2511.\n\n---"
+}
