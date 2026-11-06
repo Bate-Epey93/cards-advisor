@@ -13,7 +13,7 @@ import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
-const WATCH = ['index.html', 'manifest.webmanifest', 'css', 'js', 'data', 'icons'];
+const WATCH = ['index.html', 'manifest.webmanifest', 'css', 'js', 'vendor', 'data', 'fonts', 'assets', 'icons'];
 const SKIP = new Set(['js/version.js']);   // rewritten by this script
 
 function walk(p, out = []) {

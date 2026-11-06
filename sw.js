@@ -1,15 +1,20 @@
 // Cards Advisor service worker. Offline-first for a fully static app.
 // VERSION is stamped by tools/stamp-version.mjs; run it before every commit.
-const VERSION = 'cards-831b3dea19';
+const VERSION = 'cards-c63b498330';
 const BASE = self.registration.scope;
 const DEV = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(self.location.hostname);
 
 const ASSETS = [
   '', 'index.html', 'manifest.webmanifest',
   'css/app.css',
-  'js/app.js', 'js/store.js', 'js/data.js', 'js/render.js', 'js/issue.js', 'js/policy.js',
-  'js/study.js', 'js/practice.js', 'js/debrief.js', 'js/highlight.js', 'js/pwa.js', 'js/toast.js', 'js/version.js',
+  'js/app.js', 'js/store.js', 'js/data.js', 'js/render.js', 'js/diagram.js', 'js/issue.js', 'js/policy.js',
+  'js/study.js', 'js/practice.js', 'js/debrief.js', 'js/badge.js', 'js/highlight.js', 'js/pwa.js', 'js/toast.js', 'js/version.js',
   'data/observed.json', 'data/faq.json', 'data/rules.json', 'data/breakdowns.json', 'data/brush.js',
+  'vendor/rough.js',
+  'fonts/CormorantGaramond.woff2', 'fonts/CormorantGaramond-Italic.woff2',
+  'fonts/SourceSerif4.woff2', 'fonts/SourceSerif4-Italic.woff2',
+  'fonts/BricolageGrotesque.woff2', 'fonts/HankenGrotesk.woff2', 'fonts/JetBrainsMono.woff2',
+  'assets/enso-complete.svg', 'assets/enso-gate.svg',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'
 ].map(p => new URL(p, BASE).toString());
 

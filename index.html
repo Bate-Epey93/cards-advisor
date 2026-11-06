@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Cards Advisor — card issues, read and resolved</title>
-<meta name="description" content="Study tool for a bank cards advisor: the common card issues, what the client wants underneath, and a guided breakdown of how to engage, diagnose and resolve each one. Not affiliated with any bank.">
-<meta name="theme-color" content="#0a0a0f">
+<title>Cards Advisor — Call Deconstructor &amp; Policy Workbench</title>
+<meta name="description" content="Step-by-step interactive call deconstructor and policy workbench for bank cards advisors: client psychology, call anatomy maps, regulatory rules, role-play drills, and spaced repetition. Not affiliated with any bank.">
+<meta name="theme-color" content="#070913">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Cards Advisor">
@@ -17,46 +17,106 @@
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="topbar">
-  <button class="icon-btn" id="menuBtn" aria-label="Open navigation" aria-expanded="false">☰</button>
-  <a class="brand" href="#/">
-    <span class="brand-mark" id="brandMark" aria-hidden="true"></span>
-    <span class="brand-text">
-      <strong>Cards Advisor</strong>
-      <em>Read the person · run the call · know the rule</em>
-    </span>
-  </a>
-  <div class="topbar-right">
-    <button class="icon-btn" id="searchBtn" aria-label="Search everything" title="Search (press /)">⌕</button>
-    <button class="icon-btn" id="themeBtn" aria-label="Toggle theme" title="Toggle theme">◐</button>
-    <button class="ghost-btn" id="installBtn" hidden>Install</button>
-  </div>
-</header>
+<div id="app" class="app-shell">
+  <header class="topbar" id="topbar">
+    <div class="tb-left">
+      <button class="tb-btn tb-back" id="backBtn" aria-label="Back to Issue Bank" title="Back to Issue Bank (Esc)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span class="tb-back-lbl">Issues</span>
+      </button>
+      <a class="brand" href="#/" id="brandHome" title="Cards Advisor — Home">
+        <span class="brand-mark" id="brandMark" aria-hidden="true"></span>
+        <span class="brand-text">
+          <span class="brand-name">CARDS ADVISOR</span>
+          <span class="brand-sub">Call Deconstructor · Policy Workbench</span>
+        </span>
+      </a>
+    </div>
 
-<div class="shell">
-  <nav class="sidenav" id="sidenav" aria-label="Primary">
-    <div class="sidenav-inner" id="sidenavInner"></div>
-  </nav>
-  <div class="scrim" id="scrim" hidden></div>
-  <main id="main" tabindex="-1"><div class="wrap"><p class="dim">Loading the issue bank…</p></div></main>
+    <nav class="tb-nav" id="tbNav" aria-label="Primary navigation">
+      <a class="tb-tab" href="#/" data-nav="issues">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="9" y="2" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="2" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.4"/><rect x="9" y="9" width="5" height="5" rx="1" stroke="currentColor" stroke-width="1.4"/></svg>
+        <span>Issues</span>
+      </a>
+      <a class="tb-tab" href="#/policy" data-nav="policy">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 2.5h8A1.5 1.5 0 0113.5 4v8a1.5 1.5 0 01-1.5 1.5H4A1.5 1.5 0 012.5 12V4A1.5 1.5 0 014 2.5z" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 6h5M5.5 8.5h5M5.5 11h3" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <span>Policy</span>
+      </a>
+      <a class="tb-tab" href="#/practice" data-nav="practice">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11z" stroke="currentColor" stroke-width="1.4"/><path d="M6.5 6l4 2-4 2V6z" fill="currentColor"/></svg>
+        <span>Practice</span>
+      </a>
+      <a class="tb-tab" href="#/cards" data-nav="cards">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2" y="4" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.4"/><path d="M5 4V3a1 1 0 011-1h7a1 1 0 011 1v7a1 1 0 01-1 1h-1" stroke="currentColor" stroke-width="1.4"/></svg>
+        <span id="navCardsLabel">Cards</span>
+      </a>
+      <a class="tb-tab" href="#/debrief" data-nav="debrief">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M12 2.5H4A1.5 1.5 0 002.5 4v8A1.5 1.5 0 004 13.5h8a1.5 1.5 0 001.5-1.5V4A1.5 1.5 0 0012 2.5z" stroke="currentColor" stroke-width="1.4"/><path d="M5.5 8l1.8 1.8L10.8 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Debrief</span>
+      </a>
+      <a class="tb-tab" href="#/id" data-nav="id">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true"><rect x="2.5" y="2" width="11" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="6" r="2" stroke="currentColor" stroke-width="1.3"/><path d="M5 11.5c0-1.4 1.3-2.5 3-2.5s3 1.1 3 2.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="6.5" y1="2" x2="9.5" y2="2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span>ID Badge</span>
+      </a>
+    </nav>
+
+    <div class="tb-right">
+      <div class="reader-ctrls" id="readerCtrls">
+        <div class="depth-switch" id="depthSwitch" role="group" aria-label="Advisor depth level">
+          <button class="depth-btn" data-depth="agent" title="New advisor — plain language, first 15s, what to say">Agent</button>
+          <button class="depth-btn" data-depth="spec" title="Specialist — edge cases, policy citations, workarounds">Spec</button>
+          <button class="depth-btn" data-depth="lead" title="Team lead — systemic fixes, metrics, coaching">Lead</button>
+        </div>
+        <button class="tb-btn tb-pol-btn" id="topPolicyBtn" title="Open Policy &amp; Figures drawer">
+          <span>§ Policy</span>
+        </button>
+      </div>
+
+      <button class="tb-icon-btn" id="searchBtn" aria-label="Search everything (press /)" title="Search issues, scripts, figures (press / or ⌘K)">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </button>
+
+      <button class="tb-icon-btn" id="themeBtn" aria-label="Toggle color theme" title="Toggle light / dark theme">
+        <svg class="ico-sun" width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3.2" stroke="currentColor" stroke-width="1.4"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M12.6 3.4l-1.4 1.4M4.8 11.2l-1.4 1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
+        <svg class="ico-moon" width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M13.2 10.2A5.8 5.8 0 015.8 2.8a5.8 5.8 0 107.4 7.4z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+      </button>
+
+      <a class="tb-icon-btn tb-badge-btn" href="#/id" id="badgeNavBtn" aria-label="Advisor ID Badge" title="Advisor ID Badge (Employee Credentials)">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><rect x="2.5" y="2" width="11" height="12" rx="2" stroke="currentColor" stroke-width="1.4"/><circle cx="8" cy="6" r="2.2" stroke="currentColor" stroke-width="1.3"/><path d="M4.8 12c0-1.5 1.4-2.7 3.2-2.7s3.2 1.2 3.2 2.7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="6.5" y1="2" x2="9.5" y2="2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </a>
+
+      <a class="tb-icon-btn" href="#/about" id="aboutBtn" aria-label="Settings, corpus, and backup" title="Settings, corpus &amp; backup">
+        <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6" stroke="currentColor" stroke-width="1.4"/><path d="M8 7.2v4M8 5.1v.1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </a>
+
+      <button class="btn sm pri" id="installBtn" hidden>Install</button>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="screen screen-active">
+      <div class="screen-inner"><p class="dim">Loading the issue bank…</p></div>
+    </section>
+  </main>
 </div>
-
-<nav class="tabbar" id="tabbar" aria-label="Quick navigation">
-  <a href="#/"><i>◆</i>Issues</a>
-  <a href="#/policy"><i>§</i>Policy</a>
-  <a href="#/practice"><i>✎</i>Practice</a>
-  <a href="#/cards"><i>⚑</i>Cards</a>
-  <a href="#/debrief"><i>◷</i>Debrief</a>
-</nav>
 
 <div class="palette" id="palette" hidden role="dialog" aria-modal="true" aria-label="Search everything">
   <div class="palette-box">
-    <input id="paletteInput" type="search" placeholder="Search issues, quotes, bank pages, rules…" autocomplete="off" spellcheck="false">
+    <div class="palette-head">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="palette-ico"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input id="paletteInput" type="search" placeholder="Search issues, client quotes, bank FAQ pages, statutory rules…" autocomplete="off" spellcheck="false">
+      <kbd class="kbd">ESC</kbd>
+    </div>
     <div class="palette-results" id="paletteResults"></div>
-    <div class="palette-hint">Enter to open · Esc to close</div>
+    <div class="palette-hint">
+      <span><kbd class="kbd">↑</kbd> <kbd class="kbd">↓</kbd> to navigate</span>
+      <span><kbd class="kbd">↵</kbd> to open</span>
+      <span><kbd class="kbd">/</kbd> or <kbd class="kbd">⌘K</kbd> anytime</span>
+    </div>
   </div>
 </div>
 
+<script src="vendor/rough.js"></script>
 <script type="module" src="js/app.js"></script>
 </body>
 </html>

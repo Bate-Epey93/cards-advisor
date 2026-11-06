@@ -22,54 +22,143 @@ export function guard(text) {
 }
 
 export function debriefView(main) {
+  document.body.classList.remove('reading');
   const D = data();
   const list = store.debriefs;
-  const opts = D.issues.map(i => `<option value="${i.id}">${esc(i.title)}</option>`).join('');
+  const opts = D.issues.map(i => `<option value="${esc(i.id)}">${esc(i.title)}</option>`).join('');
   const byIssue = {};
   list.forEach(d => { byIssue[d.issue] = (byIssue[d.issue] || 0) + 1; });
-  const top = Object.entries(byIssue).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const top = Object.entries(byIssue).sort((a, b) => b[1] - a[1]).slice(0, 6);
+  const maxN = top.length ? Math.max(1, top[0][1]) : 1;
 
-  main.innerHTML = `<div class="wrap">
-    <div class="eyebrow">Shift debrief</div>
-    <h1 class="h-lg">Three lines after a shift, pattern only</h1>
-    <p class="lede">Issue type, what worked, what to look up. No names, no numbers, no client details: the box refuses them and tells you why. The pattern over weeks is what gets you to specialist.</p>
+  main.innerHTML = `<section class="screen screen-active">
+    <div class="screen-inner">
+      <header class="view-head">
+        <div>
+          <span class="kicker">Shift Debrief · Pattern Log</span>
+          <h1 class="h-xl">Three lines after a shift, pattern only</h1>
+          <p class="lede">Issue type, what worked, and what to look up. No names, no numbers, no client details: the privacy guard refuses them in real time and explains why. Your pattern over weeks is what gets you to specialist.</p>
+        </div>
+        <div class="guard-badge ok" id="guardBadge">
+          <span class="guard-dot"></span>
+          <span id="guardBadgeTxt">Privacy Guard Active · Local Only</span>
+        </div>
+      </header>
 
-    <div class="card" style="display:block">
-      <div class="field"><span>Issue type</span>
-        <select id="dbIssue"><option value="">Pick the closest issue</option>${opts}<option value="other">Something not in the bank yet</option></select></div>
-      <div class="field"><span>What worked</span><textarea id="dbWorked" rows="2" placeholder="The line, the question, the order that landed"></textarea></div>
-      <div class="field"><span>What to look up</span><textarea id="dbLookup" rows="2" placeholder="The figure you were not sure of, the procedure you had to hold for"></textarea></div>
-      <div class="field"><span>Pattern (optional)</span><input id="dbPattern" placeholder="e.g. third decline-after-alert this week, all stale phone numbers"></div>
-      <div class="between"><span class="dim" id="dbGuard" style="font-size:12.6px"></span><button class="btn" id="dbSave">Save debrief</button></div>
+      <div class="debrief-layout">
+        <div class="pol-card debrief-form-card">
+          <div class="pol-card-top">
+            <span class="bd-domain" style="--dom:var(--teal)">NEW SHIFT ENTRY</span>
+            <span class="mono dim" style="font-size:11px">${new Date().toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}</span>
+          </div>
+
+          <div class="field">
+            <span>1 · Issue type</span>
+            <select id="dbIssue">
+              <option value="">Pick the closest issue driver…</option>
+              ${opts}
+              <option value="other">Something not in the issue bank yet</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <span>2 · What worked on the call</span>
+            <textarea id="dbWorked" rows="2" placeholder="The opener, the diagnostic question, or the sequence that landed…"></textarea>
+          </div>
+
+          <div class="field">
+            <span>3 · What to look up before next shift</span>
+            <textarea id="dbLookup" rows="2" placeholder="The figure you weren't sure of, or the procedure you had to place a hold for…"></textarea>
+          </div>
+
+          <div class="field">
+            <span>4 · Pattern noticed (optional)</span>
+            <input id="dbPattern" placeholder="e.g. Third decline-after-alert this week, all stale SMS numbers">
+          </div>
+
+          <div class="debrief-foot">
+            <div class="guard-msg" id="dbGuard">
+              <span class="dim">Zero network calls. Card numbers, names, emails, phones, and addresses are automatically blocked.</span>
+            </div>
+            <button class="btn pri" id="dbSave">Save debrief →</button>
+          </div>
+        </div>
+
+        <div class="debrief-side">
+          <div class="pol-card">
+            <div class="pol-card-top">
+              <span class="kicker">Call Driver Frequency</span>
+              <span class="mono dim" style="font-size:11px">${list.length} logged</span>
+            </div>
+            ${top.length ? `<div class="driver-bars">
+              ${top.map(([id, n]) => {
+                const i = D.issues.find(x => x.id === id);
+                const pct = Math.round((n / maxN) * 100);
+                const label = i ? i.title.replace(/\s*\(.*\)$/, '') : (id === 'other' ? 'Not in the bank yet' : id);
+                return `<div class="driver-row">
+                  <div class="between" style="font-size:12.5px;margin-bottom:4px">
+                    ${i ? `<a href="#/issue/${esc(id)}" class="driver-link">${esc(label)}</a>` : `<span>${esc(label)}</span>`}
+                    <span class="mono dim">${n}</span>
+                  </div>
+                  <div class="driver-bar-track"><div class="driver-bar-fill" style="width:${pct}%"></div></div>
+                </div>`;
+              }).join('')}
+            </div>` : `<p class="dim" style="font-size:13px;margin:8px 0 0">Log your first shift debrief to see your personal call-driver distribution and weak spots.</p>`}
+          </div>
+
+          <div class="b-key" style="margin:0">
+            <span class="lbl">Why 3 lines work</span>
+            <p>Advisors plateau when every call blurs into the next. Naming the single line that landed and the single procedure you had to look up turns a shift into deliberate practice.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="sec-head" style="margin-top:28px">
+        <span class="sec-title">Shift Log (${list.length})</span>
+        <span class="sec-line"></span>
+      </div>
+
+      ${list.length ? `<div class="bd-grid">
+        ${list.slice(0, 60).map(d => {
+          const i = D.issues.find(x => x.id === d.issue);
+          return `<div class="pol-card">
+            <div class="pol-card-top">
+              <strong>${esc(i ? i.title : d.issue === 'other' ? 'Not in the bank yet' : d.issue)}</strong>
+              <span class="dim mono" style="font-size:11px">${new Date(d.at).toLocaleDateString()}</span>
+            </div>
+            ${d.worked ? `<div class="debrief-line"><span class="tag teal">Worked</span><div class="debrief-line-body">${md(d.worked)}</div></div>` : ''}
+            ${d.lookUp ? `<div class="debrief-line"><span class="tag amber">Look up</span><div class="debrief-line-body">${md(d.lookUp)}</div></div>` : ''}
+            ${d.pattern ? `<div class="debrief-line"><span class="tag">Pattern</span><div class="debrief-line-body">${md(d.pattern)}</div></div>` : ''}
+            <div class="pol-card-foot" style="margin-top:auto;padding-top:8px">
+              ${i ? `<a class="ghost-btn sm" href="#/issue/${esc(i.id)}">Open issue →</a>` : '<span></span>'}
+              <button class="ghost-btn sm" data-del="${esc(d.id)}">Remove</button>
+            </div>
+          </div>`;
+        }).join('')}
+      </div>` : `<div class="empty">Nothing logged yet. After your next shift, write three lines.</div>`}
     </div>
-
-    ${top.length ? `<div class="eyebrow" style="margin-top:22px">Your pattern, ${list.length} debriefs</div>
-      <div class="card" style="display:block">${top.map(([id, n]) => {
-        const i = D.issues.find(x => x.id === id);
-        return `<div class="row between"><a href="#/issue/${id}">${esc(i ? i.title : id === 'other' ? 'Not in the bank yet' : id)}</a><span class="mono dim">${n}</span></div>`;
-      }).join('')}</div>` : ''}
-
-    <div class="eyebrow" style="margin-top:22px">Log</div>
-    ${list.length ? list.slice(0, 60).map(d => {
-      const i = D.issues.find(x => x.id === d.issue);
-      return `<div class="card" style="display:block">
-        <div class="between"><strong>${esc(i ? i.title : d.issue === 'other' ? 'Not in the bank yet' : d.issue)}</strong><span class="dim mono" style="font-size:12px">${new Date(d.at).toLocaleDateString()}</span></div>
-        ${d.worked ? `<div style="margin-top:6px"><span class="tag">worked</span> ${md(d.worked)}</div>` : ''}
-        ${d.lookUp ? `<div style="margin-top:4px"><span class="tag">look up</span> ${md(d.lookUp)}</div>` : ''}
-        ${d.pattern ? `<div style="margin-top:4px"><span class="tag">pattern</span> ${md(d.pattern)}</div>` : ''}
-        <div style="margin-top:6px"><button class="ghost-btn" data-del="${d.id}">Remove</button></div>
-      </div>`;
-    }).join('') : `<div class="empty">Nothing yet. After your next shift, three lines.</div>`}
-  </div>`;
+  </section>`;
 
   const fields = ['dbWorked', 'dbLookup', 'dbPattern'].map(id => main.querySelector('#' + id));
   const guardEl = main.querySelector('#dbGuard');
+  const badgeEl = main.querySelector('#guardBadge');
+  const badgeTxt = main.querySelector('#guardBadgeTxt');
+
   const check = () => {
     for (const f of fields) {
       const g = guard(f.value);
-      if (g) { guardEl.innerHTML = `<span style="color:var(--rs)">Blocked: ${esc(g.why)}</span> Remove "${esc(g.hit)}" and describe the pattern instead.`; return g; }
+      if (g) {
+        guardEl.innerHTML = `<span class="guard-alert"><strong>Blocked:</strong> ${esc(g.why)} Remove <code>${esc(g.hit)}</code> and describe the pattern instead.</span>`;
+        badgeEl?.classList.remove('ok');
+        badgeEl?.classList.add('blocked');
+        if (badgeTxt) badgeTxt.textContent = 'Client Data Blocked';
+        return g;
+      }
     }
-    guardEl.textContent = '';
+    guardEl.innerHTML = `<span class="dim">Zero network calls. Card numbers, names, emails, phones, and addresses are automatically blocked.</span>`;
+    badgeEl?.classList.add('ok');
+    badgeEl?.classList.remove('blocked');
+    if (badgeTxt) badgeTxt.textContent = 'Privacy Guard Active · Local Only';
     return null;
   };
   fields.forEach(f => f.addEventListener('input', check));
