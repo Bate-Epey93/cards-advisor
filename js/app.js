@@ -26,7 +26,7 @@ if (backBtn) {
   };
 }
 
-// Depth switch in topbar (visible when reading an issue)
+// Topbar depth switch: removed from the markup, kept null-safe
 const depthSwitch = document.getElementById('depthSwitch');
 function syncTopbarDepth() {
   const d = store.pref('depth') || 'agent';
@@ -49,7 +49,7 @@ depthSwitch?.querySelectorAll('[data-depth]').forEach(b => {
   };
 });
 
-// Topbar policy sheet button
+// Topbar Policy button: opens the Policy for this issue sheet
 const topPolicyBtn = document.getElementById('topPolicyBtn');
 if (topPolicyBtn) {
   topPolicyBtn.onclick = () => {
@@ -111,6 +111,7 @@ function closePalette() {
   if (pReturn && document.contains(pReturn)) pReturn.focus({ preventScroll: true });
   pReturn = null;
 }
+document.getElementById('paletteClose')?.addEventListener('click', closePalette);
 function runSearch(q) {
   const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
   pHits = terms.length
@@ -181,96 +182,100 @@ function aboutView() {
   const D = data();
   const curDepth = store.pref('depth') || 'agent';
   const onePage = !!store.pref('onePage');
-  const gateMode = !!store.pref('gateMode');
-  const curTheme = store.pref('theme') || 'light';
+  const curTheme = store.pref('theme') || 'dark';
+  const notes = Object.keys(store.all.notes).length;
+  const seg = (attr, val, on, label) => `<button type="button" class="seg-btn${on ? ' on' : ''}" aria-pressed="${on}" ${attr}="${val}">${label}</button>`;
 
   main.innerHTML = `<section class="screen screen-active">
     <div class="screen-inner" style="max-width:860px">
       <header class="view-head">
         <div>
-          <span class="kicker">Settings · Corpus · Local Backup</span>
-          <h1 class="h-xl">Cards Advisor Workbench</h1>
-          <p class="lede">An interactive step-by-step call deconstructor and policy reference for bank cards advisors. Holds 44 real client issues, what the client wants underneath, the call anatomy map, and the statutory or bank rule behind every figure.</p>
+          <h1 class="h-xl">Settings</h1>
         </div>
       </header>
 
       <div class="b-warn">
-        <span class="lbl">Not affiliated with any bank</span>
-        <p>The corpus is compiled from public material: consumer reviews, news archives, public bank FAQ pages, and Canadian law and regulator guidance (Bank Act, FCAC, Quebec CPA, Visa/Mastercard Zero Liability), all dated. This app is a personal study tool, not an official bank source. Confirm every figure in your internal systems before quoting it to a client.</p>
-      </div>
-
-      <div class="b-key">
-        <span class="lbl">No client data, ever</span>
-        <p>There is no field in this app for a client's name, card number, account, phone, or address, and the Shift Debrief privacy guard blocks anything that looks like one. Everything you write stays in local storage on this device; zero network requests leave your browser.</p>
+        <span class="lbl">Before you use this</span>
+        <p style="margin:4px 0">Not affiliated with any bank. A personal study tool, not an official bank source.</p>
+        <p style="margin:4px 0">Confirm every figure in-system before you quote it.</p>
+        <p style="margin:4px 0">Never type client details. Nothing you write leaves this device, and the Debrief screen blocks anything that looks like client details.</p>
       </div>
 
       <div class="set-list" style="margin-top:24px">
         <div class="set-block">
           <div class="set-info">
-            <strong>Default Advisor Depth</strong>
-            <p>Controls which role lens is highlighted in step-by-step walkthroughs (New Advisor, Specialist, or Team Lead).</p>
+            <strong>Detail level</strong>
+            <p>How much detail each issue shows.</p>
           </div>
           <div class="seg-group">
-            <button type="button" class="seg-btn${curDepth === 'agent' ? ' on' : ''}" aria-pressed="${curDepth === 'agent'}" data-set-depth="agent">New Advisor</button>
-            <button type="button" class="seg-btn${curDepth === 'specialist' ? ' on' : ''}" aria-pressed="${curDepth === 'specialist'}" data-set-depth="specialist">Specialist</button>
-            <button type="button" class="seg-btn${curDepth === 'lead' ? ' on' : ''}" aria-pressed="${curDepth === 'lead'}" data-set-depth="lead">Team Lead</button>
+            ${seg('data-set-depth', 'agent', curDepth === 'agent', 'New advisor')}
+            ${seg('data-set-depth', 'specialist', curDepth === 'specialist', 'Specialist')}
+            ${seg('data-set-depth', 'lead', curDepth === 'lead', 'Team lead')}
           </div>
         </div>
 
         <div class="set-block">
           <div class="set-info">
-            <strong>Walkthrough Reader Mode</strong>
-            <p>Step-by-step mode pairs each call phase with the interactive Call Anatomy diagram and timeline scrubber.</p>
+            <strong>Issue layout</strong>
+            <p>Show a full guide one step at a time, or every step on one page.</p>
           </div>
           <div class="seg-group">
-            <button type="button" class="seg-btn${!onePage ? ' on' : ''}" aria-pressed="${!onePage}" data-set-onepage="0">Step-by-Step</button>
-            <button type="button" class="seg-btn${onePage ? ' on' : ''}" aria-pressed="${onePage}" data-set-onepage="1">All 11 on One Page</button>
+            ${seg('data-set-onepage', '0', !onePage, 'One step at a time')}
+            ${seg('data-set-onepage', '1', onePage, 'All on one page')}
           </div>
         </div>
 
         <div class="set-block">
           <div class="set-info">
-            <strong>15-Second Opener Sketch Gate</strong>
-            <p>Prompt yourself to draft or say your opening line before revealing the recommended script in Part 04.</p>
+            <strong>Theme</strong>
           </div>
           <div class="seg-group">
-            <button type="button" class="seg-btn${!gateMode ? ' on' : ''}" aria-pressed="${!gateMode}" data-set-gate="0">Instant Reveal</button>
-            <button type="button" class="seg-btn${gateMode ? ' on' : ''}" aria-pressed="${gateMode}" data-set-gate="1">Sketch Gate On</button>
+            ${seg('data-set-theme', 'light', curTheme === 'light', 'Light')}
+            ${seg('data-set-theme', 'dark', curTheme === 'dark', 'Dark')}
           </div>
         </div>
 
         <div class="set-block">
           <div class="set-info">
-            <strong>Appearance Theme</strong>
-            <p>Warm Editorial Paper (light) for daytime study or Slate Ink (dark) for low-light review.</p>
-          </div>
-          <div class="seg-group">
-            <button type="button" class="seg-btn${curTheme === 'light' ? ' on' : ''}" aria-pressed="${curTheme === 'light'}" data-set-theme="light">Warm Paper</button>
-            <button type="button" class="seg-btn${curTheme === 'dark' ? ' on' : ''}" aria-pressed="${curTheme === 'dark'}" data-set-theme="dark">Slate Ink</button>
-          </div>
-        </div>
-
-        <div class="set-block">
-          <div class="set-info">
-            <strong>Your Local Study Data</strong>
-            <p>${store.totalStepsRead} steps completed · ${Object.keys(store.all.notes).length} issue notes · ${store.highlightCount} highlights · ${store.drillCount} drill runs · ${store.debriefs.length} shift debriefs</p>
+            <strong>Your badge</strong>
+            <p>Your name and role on the advisor badge.</p>
           </div>
           <div class="row" style="gap:8px">
-            <button class="btn sec" id="exp">Export Backup</button>
-            <button class="btn sec" id="imp">Import Backup</button>
+            <a class="btn sec" href="#/id">Open badge</a>
+          </div>
+        </div>
+
+        <div class="set-block">
+          <div class="set-info">
+            <strong>Your saved work</strong>
+            <p>${store.totalStepsRead} steps, ${notes} notes, ${store.drillCount} practice tries, ${store.debriefs.length} debriefs</p>
+          </div>
+          <div class="row" style="gap:8px">
+            <button type="button" class="btn sec" id="exp">Save backup</button>
+            <button type="button" class="btn sec" id="imp">Restore backup</button>
             <input type="file" id="impFile" accept=".json,application/json" hidden>
           </div>
         </div>
 
         <div class="set-block">
           <div class="set-info">
-            <strong>Corpus &amp; App Version</strong>
-            <p>${D.issues.length} issues · ${D.breakdowns.length} full 11-part breakdowns · ${D.faq.items.length} bank FAQ pages · ${D.rules.mustKnow.length} statutory figures · Build <span class="mono">${esc(APP_VERSION)}</span></p>
+            <strong>Version</strong>
+            <p class="mono">${esc(APP_VERSION)}</p>
           </div>
           <div class="row" style="gap:8px">
-            <button class="btn sec" id="upd">Check for Update</button>
+            <button type="button" class="btn sec" id="upd">Check for updates</button>
           </div>
         </div>
+
+        <details class="set-block set-more">
+          <summary class="set-info"><strong>Where the content comes from</strong></summary>
+          <p style="flex:1 1 100%;margin:0;font-size:13.5px;color:var(--muted)">Public material, all dated: consumer reviews, news archives, public bank pages, and Canadian law and regulator guidance (the Bank Act, FCAC (the federal consumer regulator), the Quebec Consumer Protection Act, and Visa and Mastercard Zero Liability). Confirm every figure in-system before you quote it.</p>
+        </details>
+
+        <details class="set-block set-more">
+          <summary class="set-info"><strong>About this app</strong></summary>
+          <p style="flex:1 1 100%;margin:0;font-size:13.5px;color:var(--muted)">Cards Advisor is a study tool for bank cards advisors, with ${D.issues.length} card issues (${D.breakdowns.length} full guides), the policy behind each figure, practice calls and flashcards.</p>
+        </details>
       </div>
     </div>
   </section>`;
@@ -284,40 +289,38 @@ function aboutView() {
     store.pref('onePage', b.dataset.setOnepage === '1');
     aboutView();
   });
-  main.querySelectorAll('[data-set-gate]').forEach(b => b.onclick = () => {
-    store.pref('gateMode', b.dataset.setGate === '1');
-    aboutView();
-  });
   main.querySelectorAll('[data-set-theme]').forEach(b => b.onclick = () => {
     store.pref('theme', b.dataset.setTheme);
     applyTheme(b.dataset.setTheme);
     aboutView();
   });
 
-  main.querySelector('#exp').onclick = () => {
-    download(`cards-advisor-backup-${new Date().toISOString().slice(0, 10)}.json`, store.exportAll());
-    store.pref('lastBackup', Date.now());
-    toast({ msg: 'Backup exported.', icon: '✓' });
-  };
+  main.querySelector('#exp').onclick = saveBackup;
   const file = main.querySelector('#impFile');
   main.querySelector('#imp').onclick = () => file.click();
   file.onchange = async () => {
     const f = file.files[0]; if (!f) return;
     const text = await f.text();
-    if (!confirm('Replace all study data on this device with this backup?')) { file.value = ''; return; }
+    if (!confirm('Replace all your saved work on this device with this backup?')) { file.value = ''; return; }
     try {
       store.importAll(text);
       file.value = '';
       syncTopbarDepth();
-      applyTheme(store.pref('theme') || 'light');
-      toast({ msg: 'Backup imported.', icon: '✓' });
+      applyTheme(store.pref('theme') || 'dark');
+      toast({ msg: 'Backup restored.', icon: '✓' });
       aboutView();
     } catch {
       file.value = '';
-      toast({ msg: 'That file is not a valid Cards Advisor backup.', icon: '!' });
+      toast({ msg: "That file isn't a Cards Advisor backup.", icon: '!' });
     }
   };
   main.querySelector('#upd').onclick = () => checkForUpdate({ announce: true });
+}
+
+function saveBackup() {
+  download(`cards-advisor-backup-${new Date().toISOString().slice(0, 10)}.json`, store.exportAll());
+  store.pref('lastBackup', Date.now());
+  toast({ msg: 'Backup saved.', icon: '✓' });
 }
 
 function download(name, text) {
@@ -383,8 +386,7 @@ function route(ev) {
     if (active) tab.setAttribute('aria-current', 'page'); else tab.removeAttribute('aria-current');
   });
 
-  document.getElementById('badgeNavBtn')?.classList.toggle('active', seg === 'id' || seg === 'badge');
-  document.getElementById('aboutBtn')?.classList.toggle('active', seg === 'about');
+  document.getElementById('aboutBtn')?.classList.toggle('active', seg === 'about' || seg === 'id' || seg === 'badge');
   if (!main.contains(document.activeElement)) main.focus({ preventScroll: true });
 }
 
@@ -392,9 +394,9 @@ function route(ev) {
 function firstRun() {
   if (store.pref('privacyAck')) return;
   toast({
-    id: 'privacy', icon: '◆', timeout: 0,
-    msg: 'Study workbench, not an official bank source. Confirm figures in-system. Never type client details here.',
-    action: 'Understood',
+    id: 'privacy', icon: '!', timeout: 0,
+    msg: 'Study tool, not an official bank source. Confirm figures in-system. Never type client details here.',
+    action: 'Got it',
     onAction: () => { store.pref('privacyAck', Date.now()); dismissToast('privacy'); },
     onDismiss: () => store.pref('privacyAck', Date.now())
   });
@@ -402,8 +404,8 @@ function firstRun() {
 
 document.addEventListener('cards:storage-error', () => toast({
   id: 'quota', icon: '!', timeout: 0,
-  msg: 'This device refused to save. Export your notes from Settings.',
-  action: 'Open Settings', secondary: 'Dismiss',
+  msg: "Couldn't save on this device. Save a backup from Settings.",
+  action: 'Open settings', secondary: 'Not now',
   onAction: () => { dismissToast('quota'); go('#/about'); }
 }));
 
@@ -413,10 +415,10 @@ function maybeNagBackup() {
   if (risk < 10 || now - last < 14 * 864e5 || now - nag < 3 * 864e5) return;
   store.pref('backupNag', now);
   setTimeout(() => toast({
-    id: 'backup', icon: '↓', timeout: 0,
-    msg: `${risk} pieces of work are saved only on this device.`,
-    action: 'Back up', secondary: 'Not now',
-    onAction: () => { dismissToast('backup'); go('#/about'); }
+    id: 'backup', icon: '!', timeout: 0,
+    msg: `Your saved work (${risk} items) is only on this device. Save a backup?`,
+    action: 'Save backup', secondary: 'Not now',
+    onAction: () => { dismissToast('backup'); saveBackup(); }
   }), 4000);
 }
 
@@ -424,7 +426,7 @@ function maybeNagBackup() {
 (async () => {
   try { await loadData(); }
   catch (e) {
-    main.innerHTML = `<section class="screen screen-active"><div class="screen-inner"><div class="empty">Could not load the corpus (${esc(e.message)}). If you are offline, open the app once online first.</div></div></section>`;
+    main.innerHTML = `<section class="screen screen-active"><div class="screen-inner"><div class="empty" title="${esc(e.message)}">Couldn't load the study content. If you're offline, open the app once while online.</div></div></section>`;
     return;
   }
   INDEX = searchIndex();

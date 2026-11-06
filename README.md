@@ -1,21 +1,22 @@
 # Cards Advisor
 
-A study tool for a bank cards advisor. It holds the common card issues as clients describe them, what they want underneath, and a guided breakdown of how to engage, diagnose and resolve each one, with the rule behind every figure.
+A study tool for a bank cards advisor. It holds the common card issues as clients describe them, what the client needs, and how to handle each call step by step, with the rule behind every figure.
 
-**Not affiliated with any bank.** The corpus is public material (consumer reviews, news archives, the bank's own public pages, Canadian law and regulator guidance), all dated. Every bank figure renders with a *confirm in-system* badge. Nothing typed into the app leaves the device, and there is no field for a client's details anywhere; the debrief guard refuses them.
+**Not affiliated with any bank.** The study content is public material (consumer reviews, news archives, the bank's own public pages, Canadian law and regulator guidance), all dated. It is a personal study tool, not an official bank source. Every bank figure renders with a *confirm in-system* badge. Nothing typed into the app leaves the device, and there is no field for a client's details anywhere; the debrief guard blocks card numbers, names, emails, phone numbers and addresses.
 
 ## What is in v1
 
 | Surface | What it does |
 |---|---|
-| **Issue bank** | 44 issues in 13 categories, filterable by category, frequency, emotion and whether a guided breakdown exists. Full-text search across the quotes. |
-| **Guided breakdown** | The eleven-part walkthrough: surface request, underlying job, emotional read, psychological needs, risk flags, the first fifteen seconds, the questions in order, the resolution paths, say this / not this, after the call, prevent and feed back. Depth switch: agent, specialist, lead. |
-| **Policy lookup** | Ten must-know figures with statute citations, seven rule sections, 62 bank-page readings grouped by section, each with source, date, staleness and the verify badge. |
-| **Flashcards** | The figures, the say-this lines and the bank's numbers, in Leitner boxes with a weak-spot deck. |
-| **Role-play drills** | A real client opening, a three-minute clock, then the breakdown revealed and a four-line self-score. |
-| **Shift debrief** | Three pattern lines after a shift. Blocks card and account numbers, names, phones, emails and addresses, and says why. |
-| **Highlighter and notepad** | Select any passage to clip it into a notepad, filed by part. Ported from Praxis. |
-| **Offline, installable** | Service worker precache, update toast, export and import of your own notes. |
+| **Issues** | 44 card issues in 13 categories, filterable by category, frequency, how the caller feels, and full or short guide. Full-text search across the quotes. |
+| **Full guides (11 steps)** | Six issues, in four groups. Listen: what they say, what they need, how they feel, what they fear losing. Check and acknowledge: risk checks, the first 15 seconds. Solve: questions to ask, options, say this, not this. Wrap up: after the call, flag the cause. Detail level: new advisor, specialist, team lead. |
+| **Short guides (4 steps)** | The other issues: what callers report, what they need and feel, policy to check, how to handle it. |
+| **Policy** | Ten key figures (set by law or card network rules) with their citations, rules by topic, and 62 bank pages grouped by section, each with source, date, staleness and the confirm in-system badge. |
+| **Flashcards** | Key figures, say this, not this lines and bank page numbers. Missed cards come back sooner. |
+| **Practice** | A real client opening, a three-minute clock, then the model answer and a four-line self-score. |
+| **Shift debrief** | Three lines after a shift. Blocks card and account numbers, names, phone numbers, emails and addresses, and says why. |
+| **Highlighter and notepad** | Select any passage to clip it into a notepad, filed by step. Ported from Praxis. |
+| **Offline, installable** | Service worker precache, update toast, save and restore a backup of your own work. |
 
 ## Data
 
@@ -23,11 +24,11 @@ A study tool for a bank cards advisor. It holds the common card issues as client
 data/observed.json     44 issues from ~120 public complaints (Trustpilot, creditcardGenius, smartcustomer.com, news). Reddit was unreachable.
 data/faq.json          62 RBC public-page readings plus captured wording. verify:true on every item.
 data/rules.json        Bank Act, FCPF Regulations, FCAC, OBSI, Debit Code, networks, Seniors Code, PIPEDA, CAFC. flag:true where the source is secondary.
-data/breakdowns.json   Six authored eleven-part breakdowns for the highest-frequency issues, at three depths.
+data/breakdowns.json   Six authored full guides (11 steps) for the highest-frequency issues, at three detail levels.
 research/              The four briefs the data was built from, with exact wording.
 ```
 
-The breakdowns are authored, not scraped. The corpus supplies the demand signal, the quotes and the facts; the judgement layer is written and reviewed against the service craft in Praxis track 16.
+The full guides are written by hand, not scraped. The public material supplies what callers report, the quotes and the facts; the advice is written and reviewed against the service craft in Praxis track 16.
 
 ## Run it
 
@@ -47,4 +48,4 @@ The stamp fails if a watched file is missing from `ASSETS` in `sw.js`, or if `AS
 
 ## Roadmap
 
-See [PLAN.md](PLAN.md). Next: author breakdowns for the remaining very-common issues; multi-turn call simulations with a hidden twist; the lead layer (queue lens, coaching cards); a Reddit pass through a logged-in browser.
+See [PLAN.md](PLAN.md). Next: write full guides for the remaining very common issues; multi-turn practice calls with a hidden twist; more for team leads (queue view, coaching cards); a Reddit pass through a logged-in browser.

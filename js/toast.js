@@ -1,4 +1,4 @@
-// Glass toast — transient messages, and the "new version ready" prompt.
+// Glass toast: transient messages, and the "update ready" prompt.
 // Sits above the mobile tab bar and respects safe-area insets.
 
 let host = null;
@@ -16,7 +16,7 @@ function ensureHost() {
 /**
  * toast({ msg, action, onAction, secondary, onSecondary, onDismiss, timeout, id, icon })
  * timeout 0 keeps it until dismissed. Reusing an id replaces the existing toast.
- * onDismiss runs only when the user taps ×, not on timeout.
+ * onDismiss runs only when the user taps × (shown only when there is no secondary button), not on timeout.
  */
 export function toast(opts = {}) {
   const { msg = '', action, onAction, secondary, onSecondary, onDismiss, timeout = 3200, id, icon } = opts;
@@ -32,7 +32,7 @@ export function toast(opts = {}) {
     <span class="toast-msg"></span>
     ${secondary ? `<button class="toast-btn sec" data-sec>${secondary}</button>` : ''}
     ${action ? `<button class="toast-btn" data-act>${action}</button>` : ''}
-    <button class="toast-x" aria-label="Dismiss">×</button>`;
+    ${secondary ? '' : '<button class="toast-x" aria-label="Dismiss">×</button>'}`;
   el.querySelector('.toast-msg').textContent = msg;
 
   const close = () => {
@@ -42,7 +42,7 @@ export function toast(opts = {}) {
 
   el.querySelector('[data-act]')?.addEventListener('click', () => { onAction?.(el); });
   el.querySelector('[data-sec]')?.addEventListener('click', () => { onSecondary?.(); close(); });
-  el.querySelector('.toast-x').addEventListener('click', () => { onDismiss?.(); close(); });
+  el.querySelector('.toast-x')?.addEventListener('click', () => { onDismiss?.(); close(); });
 
   h.appendChild(el);
   requestAnimationFrame(() => el.classList.add('in'));

@@ -1,7 +1,7 @@
 {
-  "name": "Cards Advisor — card issues, read and resolved",
+  "name": "Cards Advisor",
   "short_name": "Cards Advisor",
-  "description": "Study tool for a bank cards advisor: the common card issues, what the client wants underneath, and a guided breakdown of how to engage, diagnose and resolve each one. Not affiliated with any bank.",
+  "description": "Study tool for a bank cards advisor: common card issues, what the client needs, and how to handle each call step by step. Not affiliated with any bank.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -15,10 +15,10 @@
     { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
-    { "name": "Issue bank", "url": "./#/" },
-    { "name": "Policy lookup", "url": "./#/policy" },
+    { "name": "Issues", "url": "./#/" },
+    { "name": "Policy", "url": "./#/policy" },
     { "name": "Flashcards", "url": "./#/cards" },
     { "name": "Debrief", "url": "./#/debrief" },
-    { "name": "ID Badge", "url": "./#/id" }
+    { "name": "Badge", "url": "./#/id" }
   ]
 }

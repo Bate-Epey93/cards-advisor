@@ -15,8 +15,8 @@ function promptUpdate(worker) {
   updateReady = true;
   toast({
     id: 'update',
-    icon: '↑',
-    msg: 'New version of Cards Advisor is ready.',
+    icon: '✓',
+    msg: 'Update ready.',
     action: 'Update now',
     secondary: 'Later',
     timeout: 0,
@@ -42,26 +42,26 @@ function hardReload() {
   location.reload();
 }
 
-/* ── manual check, used by the Progress screen and on resume ── */
+/* ── manual check, used by Settings and on resume ── */
 export async function checkForUpdate({ announce = false } = {}) {
   if (!reg) {
-    if (announce) toast({ msg: 'Offline updates are not available in this browser.', timeout: 3600 });
+    if (announce) toast({ msg: "Updates aren't supported in this browser.", timeout: 3600 });
     return 'unsupported';
   }
   const now = Date.now();
   if (now - lastCheck < MIN_GAP && !announce) return 'throttled';
   lastCheck = now;
 
-  if (announce) toast({ id: 'checking', msg: 'Checking for a new version…', timeout: 2400 });
+  if (announce) toast({ id: 'checking', msg: 'Checking for updates…', timeout: 2400 });
   try {
     await reg.update();
   } catch {
-    if (announce) { dismissToast('checking'); toast({ msg: 'Could not reach the server. You are offline.', timeout: 3600 }); }
+    if (announce) { dismissToast('checking'); toast({ msg: "Can't check right now. You may be offline.", timeout: 3600 }); }
     return 'offline';
   }
   if (reg.waiting) { dismissToast('checking'); promptUpdate(reg.waiting); return 'update'; }
-  if (reg.installing) { if (announce) { dismissToast('checking'); toast({ msg: 'Downloading an update…', timeout: 2600 }); } return 'installing'; }
-  if (announce) { dismissToast('checking'); toast({ msg: `Up to date — ${APP_VERSION}`, timeout: 3000 }); }
+  if (reg.installing) { if (announce) { dismissToast('checking'); toast({ msg: 'Downloading the update…', timeout: 2600 }); } return 'installing'; }
+  if (announce) { dismissToast('checking'); toast({ msg: `You're up to date (version ${APP_VERSION}).`, timeout: 3000 }); }
   return 'current';
 }
 
@@ -141,7 +141,7 @@ function installPrompt() {
       try { localStorage.setItem('cards:ios-hint', '1'); } catch {}
       toast({
         msg: 'Add Cards Advisor to your home screen: Share, then Add to Home Screen.',
-        timeout: 7000, icon: '⇪'
+        timeout: 7000, icon: '!'
       });
     }, 2600);
   }

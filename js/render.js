@@ -71,11 +71,11 @@ const B = {
       b.v.map(l => `<div class="ln ${l.tone || ''}"><span class="who">${esc(l.who)}</span><span>${md(l.line)}</span></div>`).join('')
     }</div>`,
 
-  drill: b => `<div class="b-drill"><div class="eyebrow">${esc(b.title || 'Drills — 5 minutes each')}</div>${
+  drill: b => `<div class="b-drill"><div class="eyebrow">${esc(b.title || 'Practice, 5 minutes each')}</div>${
       b.v.map(d => `<div class="it"><span>${md(d)}</span></div>`).join('')
     }</div>`,
 
-  rubric: b => `<div class="b-rubric"><div class="eyebrow">Self-assessment rubric</div>
+  rubric: b => `<div class="b-rubric"><div class="eyebrow">Score yourself</div>
       <div class="lv j"><div class="t">Junior signal</div><div>${md(b.j)}</div></div>
       <div class="lv c"><div class="t">Competent / mid</div><div>${md(b.c)}</div></div>
       <div class="lv s"><div class="t">Senior signal</div><div>${md(b.s)}</div></div>

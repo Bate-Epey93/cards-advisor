@@ -1,5 +1,6 @@
-// Policy lookup: the regulatory layer and the bank's public pages, each with its
-// source, its date, and the verify badge. Nothing here is the source of truth.
+// Policy: key figures and rules by topic (set by law or card network rules) and the
+// bank's public pages, each with its source, its date, and the verify badge.
+// Nothing here is the source of truth.
 import { data, policyById, ageDays, isStale, STALE_DAYS } from './data.js';
 import { esc, md } from './render.js';
 import { toast } from './toast.js';
@@ -10,28 +11,31 @@ export function verifyBadge() {
 
 function staleBadge(date) {
   const a = ageDays(date);
-  if (a === null) return '';
-  return a > STALE_DAYS
-    ? `<span class="stale" title="Older than ${STALE_DAYS} days; re-check the source">checked ${a}d ago</span>`
-    : `<span class="fresh">checked ${a === 0 ? 'today' : a + 'd ago'}</span>`;
+  if (a === null || a <= STALE_DAYS) return '';
+  return `<span class="stale" title="Older than ${STALE_DAYS} days. Check the source again.">checked ${a} days ago</span>`;
 }
 
-export function policyCard(p) {
+const UNOFFICIAL = '<span class="unofficial" title="Taken from an unofficial source, not the official rule">Unofficial source</span>';
+
+// "A. Lost, stolen…" → "Lost, stolen…"
+const secName = (sec = '') => String(sec).replace(/^[A-Z]\.\s*/, '');
+
+// Callers in issue.js pass policyCard straight to .map(), so the 2nd arg can be an index.
+export function policyCard(p, opts = {}) {
   if (!p) return '';
+  const inList = !!(opts && typeof opts === 'object' && opts.inList);
   if (p.kind === 'rule') {
     return `<a class="pol-card rule-pol-card" href="#/policy/${p.id}">
       <div class="pol-fig-col">
         <span class="fig">${esc(p.figure)}</span>
-        <span class="chip flagship">Statute / Rule</span>
+        ${inList ? '' : '<span class="chip flagship" title="Set by law or card network rules">Key figure</span>'}
       </div>
       <div class="pol-main">
         <div class="pol-rule-txt">${md(p.rule)}</div>
         ${p.clientLine ? `<div class="pol-client-line"><b>Say:</b> "${esc(p.clientLine)}"</div>` : ''}
         <div class="pol-meta">
-          <span>${esc(p.source)}</span>
-          <span>·</span>
-          <span>as of ${esc(p.asOf)}</span>
-          ${p.flag ? '<span class="stale">secondary source</span>' : ''}
+          <span>${esc(p.source)}, as of ${esc(p.asOf)}</span>
+          ${p.flag ? UNOFFICIAL : ''}
         </div>
       </div>
       <span class="bd-go" aria-hidden="true">→</span>
@@ -39,31 +43,32 @@ export function policyCard(p) {
   }
   if (p.kind === 'section') {
     return `<a class="pol-card sec-pol-card" href="#/policy/${p.id}">
-      <div class="pol-fig-col">
-        <span class="fig">§</span>
-        <span class="chip lab-chip">Framework</span>
-      </div>
       <div class="pol-main">
         <strong class="pol-q">${esc(p.title)}</strong>
         <span class="pol-sub">${esc(p.summary.slice(0, 175))}${p.summary.length > 175 ? '…' : ''}</span>
-        <div class="pol-meta"><span>as of ${esc(p.asOf)}</span> ${staleBadge(p.asOf)}</div>
+        <div class="pol-meta">
+          ${inList ? '' : '<span class="chip lab-chip">Rules by topic</span>'}
+          <span>as of ${esc(p.asOf)}</span> ${staleBadge(p.asOf)}
+        </div>
       </div>
       <span class="bd-go" aria-hidden="true">→</span>
     </a>`;
   }
+  const fig = (p.figures || [])[0] ? shortFig(p.figures[0]) : 'FAQ';
+  const showFig = fig !== 'FAQ' && fig !== '§';
+  const chip = inList ? '' : '<span class="chip design">Bank page</span>';
   return `<a class="pol-card faq-pol-card" href="#/policy/${p.id}">
-    <div class="pol-fig-col">
-      <span class="fig faq-fig">${(p.figures || [])[0] ? esc(shortFig(p.figures[0])) : 'FAQ'}</span>
-      <span class="chip design">Bank page</span>
-    </div>
+    ${showFig ? `<div class="pol-fig-col">
+      <span class="fig faq-fig">${esc(fig)}</span>
+      ${chip}
+    </div>` : ''}
     <div class="pol-main">
       <strong class="pol-q">${esc(p.question)}</strong>
       ${(p.figures || []).length ? `<span class="pol-sub"><strong>Key figure:</strong> ${md(p.figures[0])}</span>` : (() => { const lead = (p.answer || []).find(Boolean) || ''; return lead ? `<span class="pol-sub">${esc(lead.slice(0, 150))}${lead.length > 150 ? '…' : ''}</span>` : ''; })()}
-      <div class="row" style="gap:6px;flex-wrap:wrap;margin-top:4px">
-        ${verifyBadge()}
-        ${staleBadge(p.fetched)}
-        <span class="dim" style="font-size:11.5px">${esc(p.section)}</span>
-      </div>
+      ${(() => {
+        const bits = [showFig ? '' : chip, inList ? '' : verifyBadge(), staleBadge(p.fetched), inList ? '' : `<span class="dim" style="font-size:11.5px">${esc(secName(p.section))}</span>`].filter(Boolean);
+        return bits.length ? `<div class="row" style="gap:6px;flex-wrap:wrap;margin-top:4px">${bits.join('')}</div>` : '';
+      })()}
     </div>
     <span class="bd-go" aria-hidden="true">→</span>
   </a>`;
@@ -73,6 +78,9 @@ function shortFig(f = '') {
   const m = String(f).match(/(\$[\d,]+|\d+\s*(?:to\s*\d+\s*)?(?:business\s*)?(?:days?|hours?|months?|years?|%)|1-8\d\d-[\d-]+)/i);
   return m ? m[1] : 'FAQ';
 }
+
+const host = u => { try { return new URL(u).hostname.replace(/^www\./, ''); } catch { return u; } };
+const srcLink = u => `<a href="${esc(u)}" target="_blank" rel="noopener" title="${esc(u)}">${esc(host(u))} ↗</a>`;
 
 export function policyView(main, id) {
   document.body.classList.remove('reading');
@@ -84,23 +92,22 @@ export function policyView(main, id) {
   const compiledAge = ageDays(D.compiled);
 
   main.innerHTML = `<section class="screen screen-active"><div class="screen-inner">
-    <div class="kicker">Policy &amp; Regulatory Lookup · Compiled ${esc(D.compiled)}</div>
-    <h1 class="title">The rule, its source, its date.</h1>
-    <p class="subtitle">Two distinct layers: Canadian law & network rules bind every issuer; the bank's public FAQ pages are policy that can change without notice and always carry ${verifyBadge()}. ${compiledAge > STALE_DAYS ? `<span class="stale">${compiledAge} days old — re-verify sources</span>` : ''}</p>
+    <h1 class="title">Policy</h1>
+    <p class="subtitle">Laws and card network rules apply to every bank. Bank pages can change without notice, so ${verifyBadge()} before you quote them. ${compiledAge > STALE_DAYS ? `<span class="stale">Sources are ${compiledAge} days old. Check them again.</span>` : ''}</p>
 
     <div class="deconstruct-bar">
       <label class="db-field" for="polQ">
         <svg class="ico db-ico" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4"/></svg>
-        <input id="polQ" type="search" aria-label="Search policy and figures" placeholder="Search figures, statutes, questions… (e.g. $50, 56 days, OBSI, lock, PIN, foreign)" autocomplete="off" spellcheck="false">
+        <input id="polQ" type="search" aria-label="Search policy" placeholder="Search a figure or topic, like $50 or 56 days" autocomplete="off" spellcheck="false">
       </label>
     </div>
 
     <div class="lib-subbar" style="margin-bottom:22px">
-      <div class="lib-filters" role="group" aria-label="Policy layers">
-        <button class="lib-fchip on" data-ptab="all" type="button" aria-pressed="true">All (${D.rules.mustKnow.length + D.rules.sections.length + D.faq.items.length})</button>
-        <button class="lib-fchip" data-ptab="rules" type="button" aria-pressed="false">${D.rules.mustKnow.length} Must-Know Figures</button>
-        <button class="lib-fchip" data-ptab="sections" type="button" aria-pressed="false">${D.rules.sections.length} Regulatory Sections</button>
-        <button class="lib-fchip" data-ptab="faq" type="button" aria-pressed="false">${D.faq.items.length} Bank FAQ Readings</button>
+      <div class="lib-filters" role="group" aria-label="Show">
+        <button class="lib-fchip on" data-ptab="all" type="button" aria-pressed="true">All</button>
+        <button class="lib-fchip" data-ptab="rules" type="button" aria-pressed="false">Key figures</button>
+        <button class="lib-fchip" data-ptab="sections" type="button" aria-pressed="false">Rules by topic</button>
+        <button class="lib-fchip" data-ptab="faq" type="button" aria-pressed="false">Bank pages</button>
       </div>
     </div>
 
@@ -125,39 +132,48 @@ export function policyView(main, id) {
     const bySec = {};
     faq.forEach(f => (bySec[f.section] = bySec[f.section] || []).push(f));
 
+    const fold = activeTab === 'all' && !terms.length;
+    const unver = D.rules.unverifiable || [];
+
     body.innerHTML = `
       ${rules.length ? `
         <div class="lib-section-head" style="margin-top:24px">
-          <h2 class="lib-section-title">Figures to Know Cold</h2>
-          <span class="lib-section-sub">${rules.length} statutory & network caps</span>
+          <h2 class="lib-section-title">Key figures</h2>
+          <span class="lib-section-sub">Set by law or card network rules</span>
         </div>
-        <div class="pol-list">${rules.map(r => policyCard(policyById(r.id))).join('')}</div>
+        <div class="pol-list">${rules.map(r => policyCard(policyById(r.id), { inList: true })).join('')}</div>
+      ` : ''}
+
+      ${!terms.length && (activeTab === 'all' || activeTab === 'rules') && unver.length ? `
+        <details class="disc" style="margin-top:14px" ${activeTab === 'rules' ? 'open' : ''}>
+          <summary>Not confirmed with an official source (${unver.length})</summary>
+          <div class="body"><ul class="b-list" style="margin:0">${unver.map(u => `<li>${md(u)}</li>`).join('')}</ul></div>
+        </details>
       ` : ''}
 
       ${secs.length ? `
         <div class="lib-section-head">
-          <h2 class="lib-section-title">Regulatory Framework by Topic</h2>
-          <span class="lib-section-sub">${secs.length} sections</span>
+          <h2 class="lib-section-title">Rules by topic</h2>
         </div>
-        <div class="pol-list">${secs.map(s => policyCard(policyById(s.id))).join('')}</div>
+        <div class="pol-list">${secs.map(s => policyCard(policyById(s.id), { inList: true })).join('')}</div>
       ` : ''}
 
-      ${Object.keys(bySec).length ? Object.entries(bySec).map(([sec, items]) => `
+      ${faq.length ? `
         <div class="lib-section-head">
-          <h2 class="lib-section-title">${esc(sec)}</h2>
-          <span class="lib-section-sub">${items.length} bank page readings</span>
+          <h2 class="lib-section-title">Bank pages</h2>
+          <span class="lib-section-sub">${verifyBadge()}</span>
         </div>
-        <div class="pol-list">${items.map(f => policyCard(policyById(f.id))).join('')}</div>
-      `).join('') : ''}
-
-      ${!rules.length && !secs.length && !faq.length ? `<div class="empty-panel"><strong>Nothing matches "${esc(query)}".</strong><p>Try searching for a number ("50", "56", "120", "10") or keyword ("dispute", "lock", "abroad", "senior").</p></div>` : ''}
-
-      ${!terms.length && activeTab === 'all' && D.rules.unverifiable?.length ? `
-        <div class="problem-card" style="margin-top:32px">
-          <div class="pc-label">Could not be verified against a primary source</div>
-          <ul class="b-list">${D.rules.unverifiable.map(u => `<li>${md(u)}</li>`).join('')}</ul>
-        </div>
+        ${Object.entries(bySec).map(([sec, items]) => {
+          const list = `<div class="pol-list">${items.map(f => policyCard(policyById(f.id), { inList: true })).join('')}</div>`;
+          return fold
+            ? `<details class="disc"><summary>${esc(secName(sec))} (${items.length})</summary><div class="body">${list}</div></details>`
+            : `<h3 class="lib-section-title" style="font-size:15px;margin:18px 0 8px">${esc(secName(sec))}</h3>${list}`;
+        }).join('')}
       ` : ''}
+
+      ${!rules.length && !secs.length && !faq.length ? `<div class="empty-panel"><strong>Nothing matches "${esc(query)}".</strong><p>Try a number like 50, 56, 120 or 10, or a word like dispute, lock, abroad or senior.</p></div>` : ''}
+
+      <p class="dim" style="font-size:12px;margin-top:28px">Compiled ${esc(D.compiled)}</p>
     `;
   };
 
@@ -178,85 +194,91 @@ export function policyView(main, id) {
 function policyDetail(main, id) {
   const p = policyById(id);
   if (!p) {
-    main.innerHTML = `<div class="screen-inner"><div class="empty-panel">No such policy item. <a href="#/policy">Back to Policy lookup</a></div></div>`;
+    main.innerHTML = `<div class="screen-inner"><div class="empty-panel">Not found. <a href="#/policy">← Policy</a></div></div>`;
     return;
   }
   const D = data();
   const usedBy = D.breakdowns.filter(b => (b.policyRefs || []).includes(id));
-  const back = `<a class="back-inline" href="#/policy">← Policy lookup</a>`;
+  const back = `<a class="back-inline" href="#/policy">← Policy</a>`;
   let html = '';
 
   if (p.kind === 'rule') {
     html = `
       ${back}
-      <div class="kicker" style="margin-top:14px">Statutory / Network Rule · ${esc(p.source)}</div>
+      <div class="kicker" style="margin-top:14px" title="Set by law or card network rules">Key figure, ${esc(p.source)}</div>
       <div class="rule-hero-card">
         <div class="fig big">${esc(p.figure)}</div>
         <p class="subtitle" style="margin:8px 0 0;color:var(--ink)">${md(p.rule)}</p>
       </div>
       ${p.clientLine ? `
         <div class="solution-card">
-          <div class="sc-label">Say it to a client like this</div>
+          <div class="sc-label">What to say</div>
           <p class="engage-script">"${md(p.clientLine)}"</p>
           <div class="row" style="margin-top:10px;justify-content:flex-end">
-            <button type="button" class="gbtn" id="copyClientLine" data-copy="${esc(p.clientLine)}">Copy client line</button>
+            <button type="button" class="gbtn" id="copyClientLine" data-copy="${esc(p.clientLine)}">Copy</button>
           </div>
         </div>
       ` : ''}
-      ${p.flag ? `<div class="problem-card"><div class="pc-label">Secondary source</div><p>${md(p.flagReason || 'Not verified against a primary source; treat as directional.')}</p></div>` : ''}
+      ${p.flag ? `<div class="model-card"><div class="mc-kick">${UNOFFICIAL}</div><p>${md(p.flagReason || 'Not checked against the official rule. Use as a guide only.')}</p></div>` : ''}
       <div class="model-card">
-        <div class="mc-kick">Provenance & Verification</div>
+        <div class="mc-kick">Source</div>
         <p>Checked as of <strong>${esc(p.asOf)}</strong> ${staleBadge(p.asOf)}</p>
-        ${p.url ? `<p style="margin-top:6px"><a href="${esc(p.url)}" target="_blank" rel="noopener">${esc(p.url)} ↗</a></p>` : ''}
+        ${p.url ? `<p style="margin-top:6px">${srcLink(p.url)}</p>` : ''}
       </div>
     `;
   } else if (p.kind === 'section') {
     html = `
       ${back}
-      <div class="kicker" style="margin-top:14px">Regulatory Framework</div>
-      <h1 class="title">${esc(p.title)}</h1>
+      <h1 class="title" style="margin-top:14px">${esc(p.title)}</h1>
       <div class="model-card">
-        <div class="mc-kick">Summary of Rules</div>
+        <div class="mc-kick">Rules by topic</div>
         <p style="font-size:15.5px;line-height:1.65;color:var(--ink)">${md(p.summary)}</p>
       </div>
-      ${p.flag ? `<div class="problem-card"><div class="pc-label">Partly secondary source</div><p>One or more figures here come from a search snippet or acquirer documentation rather than the primary rule.</p></div>` : ''}
+      ${p.flag ? `<div class="model-card"><div class="mc-kick">${UNOFFICIAL}</div><p>Some figures here come from unofficial sources, not the official rule. Use them as a guide.</p></div>` : ''}
       <div class="sd-block">
-        <h3>Primary Sources (${staleBadge(p.asOf)})</h3>
+        <h3>Source</h3>
+        <p class="dim" style="font-size:13px;margin:0 0 6px">Checked as of ${esc(p.asOf)} ${staleBadge(p.asOf)}</p>
         <div class="sd-list">
-          ${(p.sources || []).map(u => `<div class="sd-item"><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)} ↗</a></div>`).join('')}
+          ${(p.sources || []).map(u => `<div class="sd-item">${srcLink(u)}</div>`).join('')}
         </div>
       </div>
     `;
   } else {
+    const dated = p.dateTag && !(/undated/i.test(p.dateTag) && !/\d/.test(p.dateTag));
+    // Source notes minus the bare URLs, which are listed once under "Source pages" below.
+    const srcNotes = String(p.sourceText || '').replace(/^\s*Sources?:\s*/i, '').split(/\s*;\s*/)
+      .map(x => x.trim()).filter(x => x && !/^https?:\/\/\S+$/.test(x))
+      .map(x => x.replace(/https?:\/\/[^\s)]+/g, u => host(u)));
+    const srcs = p.sources || [];
     html = `
       ${back}
-      <div class="kicker" style="margin-top:14px">${esc(p.section)} · ${esc(p.dateTag || 'undated')}</div>
+      <div class="kicker" style="margin-top:14px">${esc(secName(p.section))}</div>
       <h1 class="title" style="font-size:clamp(24px,3.2vw,36px)">${esc(p.question)}</h1>
-      <div class="row" style="gap:8px;flex-wrap:wrap;margin:10px 0 16px">${verifyBadge()}${staleBadge(p.fetched)}</div>
+      ${dated ? `<p class="dim" style="font-size:12.5px;margin:4px 0 12px">Page dated: ${esc(p.dateTag)}</p>` : ''}
       <div class="scale-band">
-        <div class="sb-label">Public page reading — not an official internal source</div>
-        <p>Condensed reading of a public bank page, fetched ${esc(p.fetched || '')}. Bank policy changes without notice. Confirm the figure in your internal systems before quoting it.</p>
+        <div class="sb-label">${verifyBadge()} Public bank page, not an official source</div>
+        <p>Saved from the bank's public site on ${esc(p.fetched || 'an unknown date')}. It can change without notice. Confirm in-system before you quote it. ${staleBadge(p.fetched)}</p>
       </div>
       ${(p.figures || []).length ? `
         <div class="solution-card">
-          <div class="sc-label">Key figures on the page</div>
+          <div class="sc-label">Key figures</div>
           <ul class="b-list" style="margin:0">${p.figures.map(f => `<li><strong>${md(f)}</strong></li>`).join('')}</ul>
         </div>
       ` : ''}
       ${(p.answer || []).length ? `<div class="model-card">
-        <div class="mc-kick">Condensed reading</div>
+        <div class="mc-kick">What the page says</div>
         ${p.answer.map(a => `<p style="font-size:15px;color:var(--ink);line-height:1.65;margin-bottom:10px">${md(a)}</p>`).join('')}
       </div>` : ''}
-      ${p.sourceText ? `<div class="b-quote">${md(p.sourceText)}<cite>Source notes</cite></div>` : ''}
+      ${srcNotes.length ? `<div class="b-quote">${md(srcNotes.join('; '))}<cite>Source</cite></div>` : ''}
       ${(p.situations || []).length ? `
         <div class="sd-block">
-          <h3>Call situations this answers</h3>
+          <h3>When this comes up</h3>
           <div class="row" style="gap:6px;flex-wrap:wrap">${p.situations.map(s => `<span class="chip tone-ink">${md(s)}</span>`).join('')}</div>
         </div>
       ` : ''}
-      ${(p.sources || []).length ? `<div class="sd-block">
-        <h3>Public URLs</h3>
-        <div class="sd-list">${p.sources.map(u => `<div class="sd-item"><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)} ↗</a></div>`).join('')}</div>
+      ${srcs.length ? `<div class="sd-block">
+        <h3>${srcs.length === 1 ? 'Source page' : 'Source pages'}</h3>
+        <div class="sd-list">${srcs.map(u => `<div class="sd-item">${srcLink(u)}</div>`).join('')}</div>
       </div>` : ''}
     `;
   }
@@ -264,10 +286,10 @@ function policyDetail(main, id) {
   if (usedBy.length) {
     html += `
       <div class="sd-block">
-        <h3>Referenced in ${usedBy.length} Guided Breakdown${usedBy.length === 1 ? '' : 's'}</h3>
+        <h3>Used in ${usedBy.length} issue${usedBy.length === 1 ? '' : 's'}</h3>
         <div class="pol-list">
           ${usedBy.map(b => `<a class="pol-card" href="#/issue/${b.observed}/0">
-            <div class="pol-main"><strong>${esc(b.title)}</strong><span class="dim" style="font-size:12.5px">Open 11-part call walkthrough</span></div>
+            <div class="pol-main"><strong>${esc(b.title)}</strong><span class="dim" style="font-size:12.5px">Open guide</span></div>
             <span class="bd-go">→</span>
           </a>`).join('')}
         </div>
@@ -281,9 +303,9 @@ function policyDetail(main, id) {
     copyBtn.onclick = async () => {
       try {
         await navigator.clipboard.writeText(copyBtn.dataset.copy);
-        toast({ msg: 'Client line copied.', icon: '✓', timeout: 1800 });
+        toast({ msg: 'Copied.', icon: '✓', timeout: 1800 });
       } catch {
-        toast({ msg: 'Clipboard unavailable.', icon: '!' });
+        toast({ msg: 'Could not copy.', icon: '!' });
       }
     };
   }

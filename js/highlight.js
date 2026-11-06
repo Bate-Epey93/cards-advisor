@@ -17,7 +17,7 @@ const KINDS = {
 };
 const KIND_LABEL = {
   key: 'Key insight', pitfall: 'Pitfall', case: 'Case', example: 'Example', formula: 'Formula',
-  quote: 'Quote', drill: 'Drill', rubric: 'Rubric', script: 'Script', code: 'Block',
+  quote: 'Quote', drill: 'Practice', rubric: 'Score', script: 'What to say', code: 'Block',
   table: 'Table', list: 'List', steps: 'Steps', text: '' 
 };
 
@@ -236,8 +236,8 @@ export function renderPanel() {
   });
 
   p.querySelector('[data-hl-copy]')?.addEventListener('click', async () => {
-    try { await navigator.clipboard.writeText(asMarkdown(ctx.sectionTitle, groups)); toast({ msg: 'Summary copied.', icon: '❐', timeout: 2000 }); }
-    catch { toast({ msg: 'Clipboard blocked by the browser.', timeout: 3200 }); }
+    try { await navigator.clipboard.writeText(asMarkdown(ctx.sectionTitle, groups)); toast({ msg: 'Copied.', icon: '✓', timeout: 2000 }); }
+    catch { toast({ msg: "Couldn't copy. The browser blocked it.", icon: '!', timeout: 3200 }); }
   });
   p.querySelector('[data-hl-note]')?.addEventListener('click', () => {
     // sectionId is issueId:part; the reader's notes box is keyed by the issue id

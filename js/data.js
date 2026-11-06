@@ -3,23 +3,23 @@
 // rules) so provenance is never lost; this module only indexes them.
 
 export const PARTS = [
-  ['surfaceRequest', 'Surface request', 'What the client says, in their words'],
-  ['underlyingJob', 'Underlying job', 'What they are actually trying to get back to'],
-  ['emotionalRead', 'Emotional read', 'The dominant state and the tell for it on the phone'],
-  ['psychologicalNeeds', 'Psychological needs', 'Which of control, fairness, competence, safety and being believed is threatened'],
-  ['riskFlags', 'Risk and compliance flags', 'What changes the conversation'],
-  ['engage', 'Engage: the first fifteen seconds', 'Prove you heard the specific thing, then say what happens next'],
-  ['diagnose', 'Diagnose: the questions, in order', 'The shortest path to the fork'],
-  ['resolve', 'Resolve: the paths', 'Realistic outcomes, including the no'],
-  ['sayThisNotThis', 'Say this, not this', 'Paired lines, with why'],
-  ['afterCall', 'After the call', 'What is documented, what the client receives, what you own'],
-  ['preventAndFeedBack', 'Prevent and feed back', 'The upstream fix, and how a lead reports it']
+  ['surfaceRequest', 'What they say', 'In their own words'],
+  ['underlyingJob', 'What they need', 'What they are trying to get back to'],
+  ['emotionalRead', 'How they feel', 'The main feeling, and how it sounds on the phone'],
+  ['psychologicalNeeds', 'What they fear losing', 'Control, fairness, dignity, safety or being believed'],
+  ['riskFlags', 'Risk checks', 'Check these before you act'],
+  ['engage', 'First 15 seconds', 'Show you heard the exact problem, then say what happens next'],
+  ['diagnose', 'Questions to ask', 'Ask these in order'],
+  ['resolve', 'Options', 'Realistic outcomes, including no'],
+  ['sayThisNotThis', 'Say this, not this', 'Lines to use and avoid, and why'],
+  ['afterCall', 'After the call', 'What you note, what the client gets, what you own'],
+  ['preventAndFeedBack', 'Flag the cause', 'Tell your lead what caused it']
 ];
 
 export const DEPTHS = [
-  ['agent', 'Agent', 'Handle it'],
+  ['agent', 'New advisor', 'Handle it'],
   ['specialist', 'Specialist', 'Own the edge cases'],
-  ['lead', 'Lead', 'Fix the system that creates it']
+  ['lead', 'Team lead', 'Fix what causes it']
 ];
 
 export const STALE_DAYS = 90;
@@ -101,7 +101,7 @@ export function searchIndex() {
     kind: 'Bank page', title: f.question, sub: f.section, href: `#/policy/${f.id}`,
     text: [f.question, f.section, ...(f.answer || []), ...(f.figures || []), ...(f.situations || [])].join(' ').toLowerCase()
   }));
-  D.rules.mustKnow.forEach(r => idx.push({ kind: 'Rule', title: `${r.figure}: ${r.rule}`, sub: r.source, href: `#/policy/${r.id}`, text: (r.figure + ' ' + r.rule + ' ' + r.source + ' ' + (r.clientLine || '')).toLowerCase() }));
-  D.rules.sections.forEach(s => idx.push({ kind: 'Rule', title: s.title, sub: 'Regulatory layer', href: `#/policy/${s.id}`, text: (s.title + ' ' + s.summary).toLowerCase() }));
+  D.rules.mustKnow.forEach(r => idx.push({ kind: 'Key figure', title: `${r.figure}: ${r.rule}`, sub: r.source, href: `#/policy/${r.id}`, text: (r.figure + ' ' + r.rule + ' ' + r.source + ' ' + (r.clientLine || '')).toLowerCase() }));
+  D.rules.sections.forEach(s => idx.push({ kind: 'Rules by topic', title: s.title, sub: 'Rules by topic', href: `#/policy/${s.id}`, text: (s.title + ' ' + s.summary).toLowerCase() }));
   return idx;
 }

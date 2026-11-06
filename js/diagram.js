@@ -1,7 +1,6 @@
-// Interactive Call Anatomy & Decision Map (Vitruvian-style visual architecture
-// with Rough.js hand-drawn geometry and two-pass liquid-glass node rendering).
-// Renders both the miniature topological header for issue cards and the live,
-// step-synchronized SVG diagram inside the split-pane Issue Reader.
+// Call map: Rough.js hand-drawn geometry with two-pass liquid-glass boxes.
+// Renders the small thumbnail for the home Continue card and the live,
+// step-synchronised map inside the split-pane step reader.
 import { esc } from './render.js';
 import { PARTS } from './data.js';
 import { store } from './store.js';
@@ -163,22 +162,6 @@ export function renderRoughBadgeChipSvg({ width = 48, height = 36, seed = 'emp-c
   </svg>`;
 }
 
-// Hand-drawn 12×12 node kind glyphs (Vitruvian corner marks)
-const KIND_GLYPHS = {
-  quote:   [circleD(6, 6, 4.5), 'M 4 5.5 H 8 M 4 7.5 H 6.5'],
-  job:     [roundRectD(1, 2, 10, 8, 2), 'M 4 6 H 8'],
-  emotion: [diamondD(6, 6, 5, 5), 'M 6 4 V 8'],
-  psych:   [circleD(6, 6, 4.8), circleD(6, 6, 1.8)],
-  flag:    ['M 6 1 L 11 10.5 H 1 Z', 'M 6 4.5 V 7.5'],
-  engage:  [circleD(6, 6, 4.8), 'M 6 3.2 V 6 L 8.2 7.4'],
-  fork:    [diamondD(6, 6, 5.2, 5.2), 'M 3.8 6 H 8.2'],
-  resolve: [roundRectD(1, 1.5, 10, 9, 2), 'M 3.5 6.2 L 5.2 7.9 L 8.6 4.3'],
-  script:  [roundRectD(1, 2, 10, 8, 2), 'M 3.2 4.8 H 8.8 M 3.2 7.2 H 6.6'],
-  policy:  [roundRectD(1.5, 1, 9, 10, 1.5), 'M 3.8 4 H 8.2 M 3.8 6.5 H 8.2 M 3.8 9 H 6.2'],
-  after:   [circleD(6, 6, 4.8), 'M 3.6 6.2 L 5.3 7.9 L 8.5 4.4'],
-  lead:    [diamondD(6, 6, 5, 5), 'M 4 6 H 8 M 6 4 V 8']
-};
-
 // Map issue categories to semantic domain accents
 const CAT_DOMAIN = {
   'declined transactions': 'operations',
@@ -208,12 +191,10 @@ function shortText(str = '', max = 28) {
 /* ═════════ Miniature Rough.js Topological Blueprint for Library Cards ═════════ */
 export function renderMiniTopo(issue) {
   const hasBd = !!issue.breakdown;
-  const total = hasBd ? 11 : 4;
   const prog = store.prog(issue.id);
   const readSet = new Set(prog.read || []);
-  const pct = store.issuePct(issue.id, total);
 
-  // 6 canonical nodes representing the call anatomy
+  // 6 boxes summarising the call map
   const nodes = [
     { x: 24, y: 20, w: 38, h: 16, rx: 4, step: 0 },
     { x: 24, y: 44, w: 38, h: 16, rx: 4, step: hasBd ? 2 : 1 },
@@ -253,18 +234,15 @@ export function renderMiniTopo(issue) {
     </g>`;
   }).join('');
 
-  const badgeLabel = hasBd ? `11 STEPS · ${pct}%` : `4 STEPS · ${pct}%`;
-
   return `<div class="bd-topo-header">
     <svg class="bd-topo-svg" viewBox="0 0 300 76" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
       ${edgeSvg}
       ${nodeSvg}
     </svg>
-    <span class="bd-topo-badge">${badgeLabel}</span>
   </div>`;
 }
 
-/* ═════════ Full Interactive Call Anatomy Diagram ═════════ */
+/* ═════════ Full interactive call map ═════════ */
 export function buildCallGraph(issue) {
   const bd = issue.breakdown;
   if (bd) {
@@ -275,43 +253,43 @@ export function buildCallGraph(issue) {
     const polCount = (bd.policyRefs || []).length;
 
     const lanes = [
-      { idx: 0, label: 'I · CLIENT SIGNAL', x: 16, w: 204 },
-      { idx: 1, label: 'II · GUARD & OPEN', x: 236, w: 204 },
-      { idx: 2, label: 'III · RUN THE CALL', x: 456, w: 214 },
-      { idx: 3, label: 'IV · RESOLVE & FIX', x: 686, w: 218 }
+      { idx: 0, label: 'Listen', x: 16, w: 204 },
+      { idx: 1, label: 'Check and acknowledge', x: 236, w: 204 },
+      { idx: 2, label: 'Solve', x: 456, w: 214 },
+      { idx: 3, label: 'Wrap up', x: 686, w: 218 }
     ];
 
     const nodes = [
-      { id: 'part-0', part: '0', stepIdx: 0, lane: 0, x: 28, y: 52, w: 180, h: 58, kind: 'quote', num: '01', title: 'Surface request', sub: shortText(bd.surfaceRequest, 30), tone: 'red' },
-      { id: 'part-1', part: '1', stepIdx: 1, lane: 0, x: 28, y: 132, w: 180, h: 58, kind: 'job', num: '02', title: 'Underlying job', sub: jobShort, tone: 'red' },
-      { id: 'part-2', part: '2', stepIdx: 2, lane: 0, x: 28, y: 212, w: 180, h: 58, kind: 'emotion', num: '03', title: 'Emotional read', sub: emoShort, tone: 'red' },
-      { id: 'part-3', part: '3', stepIdx: 3, lane: 0, x: 28, y: 292, w: 180, h: 58, kind: 'psych', num: '04', title: 'Psych needs', sub: 'Dignity · Control · Safety', tone: 'red' },
+      { id: 'part-0', part: '0', stepIdx: 0, lane: 0, x: 28, y: 52, w: 180, h: 58, kind: 'quote', num: '01', title: PARTS[0][1], sub: shortText(bd.surfaceRequest, 30), tone: 'red' },
+      { id: 'part-1', part: '1', stepIdx: 1, lane: 0, x: 28, y: 132, w: 180, h: 58, kind: 'job', num: '02', title: PARTS[1][1], sub: jobShort, tone: 'red' },
+      { id: 'part-2', part: '2', stepIdx: 2, lane: 0, x: 28, y: 212, w: 180, h: 58, kind: 'emotion', num: '03', title: PARTS[2][1], sub: emoShort, tone: 'red' },
+      { id: 'part-3', part: '3', stepIdx: 3, lane: 0, x: 28, y: 292, w: 180, h: 58, kind: 'psych', num: '04', title: PARTS[3][1], sub: '', tone: 'red' },
 
-      { id: 'part-4', part: '4', stepIdx: 4, lane: 1, x: 248, y: 92, w: 180, h: 64, kind: 'flag', num: '05', title: 'Risk & compliance', sub: `${flagCount} guardrail flag${flagCount === 1 ? '' : 's'}`, tone: 'vio' },
-      { id: 'part-5', part: '5', stepIdx: 5, lane: 1, x: 248, y: 212, w: 180, h: 66, kind: 'engage', num: '06', title: 'First 15 seconds', sub: 'Acknowledge + time-box', tone: 'vio' },
+      { id: 'part-4', part: '4', stepIdx: 4, lane: 1, x: 248, y: 92, w: 180, h: 64, kind: 'flag', num: '05', title: PARTS[4][1], sub: `${flagCount} check${flagCount === 1 ? '' : 's'}`, tone: 'vio' },
+      { id: 'part-5', part: '5', stepIdx: 5, lane: 1, x: 248, y: 212, w: 180, h: 66, kind: 'engage', num: '06', title: PARTS[5][1], sub: '', tone: 'vio' },
 
-      { id: 'part-6', part: '6', stepIdx: 6, lane: 2, x: 468, y: 74, w: 190, h: 64, kind: 'fork', num: '07', title: 'Diagnose fork', sub: `${qCount} questions in order`, tone: 'teal' },
-      { id: 'part-7', part: '7', stepIdx: 7, lane: 2, x: 468, y: 168, w: 190, h: 64, kind: 'resolve', num: '08', title: 'Resolution paths', sub: 'Decision tree & outcomes', tone: 'teal' },
-      { id: 'part-8', part: '8', stepIdx: 8, lane: 2, x: 468, y: 262, w: 190, h: 64, kind: 'script', num: '09', title: 'Say this / not this', sub: `${(bd.sayThisNotThis || []).length} paired scripts`, tone: 'teal' },
+      { id: 'part-6', part: '6', stepIdx: 6, lane: 2, x: 468, y: 74, w: 190, h: 64, kind: 'fork', num: '07', title: PARTS[6][1], sub: `${qCount} question${qCount === 1 ? '' : 's'}`, tone: 'teal' },
+      { id: 'part-7', part: '7', stepIdx: 7, lane: 2, x: 468, y: 168, w: 190, h: 64, kind: 'resolve', num: '08', title: PARTS[7][1], sub: '', tone: 'teal' },
+      { id: 'part-8', part: '8', stepIdx: 8, lane: 2, x: 468, y: 262, w: 190, h: 64, kind: 'script', num: '09', title: PARTS[8][1], sub: `${(bd.sayThisNotThis || []).length} lines`, tone: 'teal' },
 
-      { id: 'part-p', part: 'p', stepIdx: -2, lane: 3, x: 698, y: 56, w: 194, h: 58, kind: 'policy', num: '§', title: 'Policy & rules', sub: `${polCount} linked citations`, tone: 'amber' },
-      { id: 'part-9', part: '9', stepIdx: 9, lane: 3, x: 698, y: 152, w: 194, h: 62, kind: 'after', num: '10', title: 'After the call', sub: 'Notes & written confirm', tone: 'amber' },
-      { id: 'part-10', part: '10', stepIdx: 10, lane: 3, x: 698, y: 248, w: 194, h: 62, kind: 'lead', num: '11', title: 'Prevent & feed back', sub: 'Upstream system fix', tone: 'amber' }
+      { id: 'part-p', part: 'p', stepIdx: -2, lane: 3, x: 698, y: 56, w: 194, h: 58, kind: 'policy', num: '§', title: 'Policy', sub: `${polCount} source${polCount === 1 ? '' : 's'}`, tone: 'amber' },
+      { id: 'part-9', part: '9', stepIdx: 9, lane: 3, x: 698, y: 152, w: 194, h: 62, kind: 'after', num: '10', title: PARTS[9][1], sub: '', tone: 'amber' },
+      { id: 'part-10', part: '10', stepIdx: 10, lane: 3, x: 698, y: 248, w: 194, h: 62, kind: 'lead', num: '11', title: PARTS[10][1], sub: '', tone: 'amber' }
     ];
 
     const edges = [
       { id: 'e-0-1', from: 'part-0', to: 'part-1', kind: 'signal' },
       { id: 'e-1-2', from: 'part-1', to: 'part-2', kind: 'signal' },
       { id: 'e-2-3', from: 'part-2', to: 'part-3', kind: 'signal' },
-      { id: 'e-1-4', from: 'part-1', to: 'part-4', kind: 'guard', label: 'triage' },
-      { id: 'e-3-5', from: 'part-3', to: 'part-5', kind: 'flow', label: 'empathy' },
-      { id: 'e-4-5', from: 'part-4', to: 'part-5', kind: 'guard', label: 'safe open' },
-      { id: 'e-5-6', from: 'part-5', to: 'part-6', kind: 'flow', label: '90s check' },
-      { id: 'e-6-7', from: 'part-6', to: 'part-7', kind: 'flow', label: 'fork' },
+      { id: 'e-1-4', from: 'part-1', to: 'part-4', kind: 'guard' },
+      { id: 'e-3-5', from: 'part-3', to: 'part-5', kind: 'flow' },
+      { id: 'e-4-5', from: 'part-4', to: 'part-5', kind: 'guard' },
+      { id: 'e-5-6', from: 'part-5', to: 'part-6', kind: 'flow' },
+      { id: 'e-6-7', from: 'part-6', to: 'part-7', kind: 'flow' },
       { id: 'e-7-8', from: 'part-7', to: 'part-8', kind: 'flow' },
-      { id: 'e-7-p', from: 'part-7', to: 'part-p', kind: 'policy', label: 'verify' },
-      { id: 'e-7-9', from: 'part-7', to: 'part-9', kind: 'flow', label: 'commit' },
-      { id: 'e-9-10', from: 'part-9', to: 'part-10', kind: 'lead', label: 'root cause' }
+      { id: 'e-7-p', from: 'part-7', to: 'part-p', kind: 'policy' },
+      { id: 'e-7-9', from: 'part-7', to: 'part-9', kind: 'flow' },
+      { id: 'e-9-10', from: 'part-9', to: 'part-10', kind: 'lead' }
     ];
 
     return { width: 920, height: 376, lanes, nodes, edges, totalSteps: 11 };
@@ -319,21 +297,21 @@ export function buildCallGraph(issue) {
 
   // Observed-only 4-step graph
   const lanes = [
-    { idx: 0, label: '1 · CLIENT SIGNAL', x: 18, w: 204 },
-    { idx: 1, label: '2 · UNDERNEATH', x: 240, w: 204 },
-    { idx: 2, label: '3 · RULES & FAQ', x: 462, w: 204 },
-    { idx: 3, label: '4 · PLAYBOOK', x: 684, w: 214 }
+    { idx: 0, label: 'What callers report', x: 18, w: 204 },
+    { idx: 1, label: 'What they need and feel', x: 240, w: 204 },
+    { idx: 2, label: 'Policy to check', x: 462, w: 204 },
+    { idx: 3, label: 'How to handle it', x: 684, w: 214 }
   ];
   const nodes = [
-    { id: 'obs-0', part: '0', stepIdx: 0, lane: 0, x: 32, y: 115, w: 176, h: 72, kind: 'quote', num: '01', title: 'Observed signal', sub: (issue.quotes || []).length ? `${issue.quotes.length} client quotes` : 'No verbatim quotes', tone: 'red' },
-    { id: 'obs-1', part: '1', stepIdx: 1, lane: 1, x: 254, y: 115, w: 176, h: 72, kind: 'emotion', num: '02', title: 'Job & emotion', sub: shortText(issue.emotion || issue.underlyingJob || 'Read the caller', 26), tone: 'vio' },
-    { id: 'obs-2', part: '2', stepIdx: 2, lane: 2, x: 476, y: 115, w: 176, h: 72, kind: 'policy', num: '03', title: 'Policy & rules', sub: shortText(issue.category, 26), tone: 'teal' },
-    { id: 'obs-3', part: '3', stepIdx: 3, lane: 3, x: 698, y: 115, w: 186, h: 72, kind: 'resolve', num: '04', title: 'Call playbook', sub: 'Resolution & notes', tone: 'amber' }
+    { id: 'obs-0', part: '0', stepIdx: 0, lane: 0, x: 32, y: 115, w: 176, h: 72, kind: 'quote', num: '01', title: 'What callers report', sub: (issue.quotes || []).length ? `${issue.quotes.length} quote${issue.quotes.length === 1 ? '' : 's'}` : 'No quotes yet', tone: 'red' },
+    { id: 'obs-1', part: '1', stepIdx: 1, lane: 1, x: 254, y: 115, w: 176, h: 72, kind: 'emotion', num: '02', title: 'What they need and feel', sub: shortText(issue.emotion || issue.underlyingJob || 'Listen first', 26), tone: 'vio' },
+    { id: 'obs-2', part: '2', stepIdx: 2, lane: 2, x: 476, y: 115, w: 176, h: 72, kind: 'policy', num: '03', title: 'Policy to check', sub: shortText(issue.category, 26), tone: 'teal' },
+    { id: 'obs-3', part: '3', stepIdx: 3, lane: 3, x: 698, y: 115, w: 186, h: 72, kind: 'resolve', num: '04', title: 'How to handle it', sub: '', tone: 'amber' }
   ];
   const edges = [
-    { id: 'eo-0-1', from: 'obs-0', to: 'obs-1', kind: 'signal', label: 'read' },
-    { id: 'eo-1-2', from: 'obs-1', to: 'obs-2', kind: 'policy', label: 'verify' },
-    { id: 'eo-2-3', from: 'obs-2', to: 'obs-3', kind: 'flow', label: 'resolve' }
+    { id: 'eo-0-1', from: 'obs-0', to: 'obs-1', kind: 'signal' },
+    { id: 'eo-1-2', from: 'obs-1', to: 'obs-2', kind: 'policy' },
+    { id: 'eo-2-3', from: 'obs-2', to: 'obs-3', kind: 'flow' }
   ];
   return { width: 920, height: 290, lanes, nodes, edges, totalSteps: 4 };
 }
@@ -368,7 +346,6 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
   // Pane narrower than READABLE_FIT of the map's width means FIT would make the text unreadable.
   const isNarrow = () => scrollEl.clientWidth > 0 && scrollEl.clientWidth < graph.width * READABLE_FIT;
   const capStateEl = paneEl.querySelector('.diagram-cap-state');
-  const originEl = paneEl.querySelector('.dg-origin');
 
   const arrowRoughD = sketch('M 0.8 1.6 L 8.5 5 L 0.8 8.4 Z', 'dg-arrow-head', { roughness: 0.55, bowing: 0.45 });
 
@@ -439,16 +416,11 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
         : '';
       const badgeD = sketch(roundRectD(10, 10, 25, 18, 5), `${issue.id}:${n.id}:badge`, { roughness: 0.72, bowing: 0.6 });
 
-      const glyphParts = KIND_GLYPHS[n.kind] || KIND_GLYPHS.quote;
-      const glyphSvg = glyphParts.map((gd, gi) =>
-        `<path d="${sketch(gd, `${issue.id}:${n.id}:g:${gi}`, { roughness: 0.6, bowing: 0.5 })}"/>`
-      ).join('');
-
       const doneCheckD = isDone
         ? sketch(`M ${n.w - 17} 16 L ${n.w - 14.8} 18.2 L ${n.w - 11} 14`, `${issue.id}:${n.id}:chk`, { roughness: 0.5, bowing: 0.4 })
         : '';
 
-      return `<g class="dg-node ${stateCls} tone-${n.tone}" data-node="${n.id}" data-part="${n.part}" transform="translate(${n.x},${n.y})" role="button" tabindex="0" aria-label="${esc(n.num + ' ' + n.title)}">
+      return `<g class="dg-node ${stateCls} tone-${n.tone}" data-node="${n.id}" data-part="${n.part}" transform="translate(${n.x},${n.y})" role="button" tabindex="0" aria-label="${esc((n.stepIdx >= 0 ? `Step ${n.stepIdx + 1}: ` : '') + n.title)}">
         ${haloD ? `<path class="dg-halo" d="${haloD}" fill="none"/>` : ''}
         <rect class="dg-fill" x="0" y="0" width="${n.w}" height="${n.h}" rx="10"/>
         ${hachD ? `<path class="dg-hachure" d="${hachD}" fill="none"/>` : ''}
@@ -456,7 +428,6 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
         <rect class="dg-badge-fill" x="10" y="10" width="25" height="18" rx="5"/>
         <path class="dg-badge-bg" d="${badgeD}" fill="none"/>
         <text class="dg-badge-txt" x="22.5" y="22.5" text-anchor="middle">${esc(n.num)}</text>
-        <g class="dg-kmark" transform="translate(${n.w - (isDone ? 34 : 22)}, 12)">${glyphSvg}</g>
         ${isDone ? `<circle class="dg-done-dot" cx="${n.w - 14}" cy="16" r="5.5"/><path d="${doneCheckD}" fill="none" stroke="var(--bg)" stroke-width="1.6" stroke-linecap="round"/>` : ''}
         <text class="dg-title" x="41" y="23">${esc(n.title)}</text>
         <text class="dg-sub" x="12" y="44">${esc(n.sub)}</text>
@@ -489,8 +460,6 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
       el.addEventListener('click', ev => {
         ev.stopPropagation();
         const p = el.dataset.part;
-        const node = graph.nodes.find(x => x.part === p);
-        if (node) showOriginCard(node);
         if (opts.onSelectPart) opts.onSelectPart(p);
       });
       el.addEventListener('keydown', ev => {
@@ -511,44 +480,23 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
     updateCaption();
   }
 
-  function showOriginCard(node) {
-    if (!originEl) return;
-    const partMeta = /^\d+$/.test(node.part) && PARTS[+node.part] ? PARTS[+node.part][2] : node.sub;
-    originEl.hidden = false;
-    originEl.innerHTML = `
-      <div class="org-head">
-        <span class="org-name">${esc(node.num)} · ${esc(node.title)}</span>
-        <button class="org-close" aria-label="Close">×</button>
-      </div>
-      <div class="org-when">${esc(partMeta)}</div>
-      <div class="org-does">${esc(node.sub)}</div>
-    `;
-    originEl.querySelector('.org-close').onclick = e => {
-      e.stopPropagation();
-      originEl.hidden = true;
-    };
-  }
-
   function updateCaption() {
     if (!capStateEl) return;
     const prog = store.prog(issue.id);
     const readCount = (prog.read || []).filter(x => x >= 0 && x < graph.totalSteps).length;
     if (activePart === 'all') {
-      capStateEl.textContent = `Complete Call Architecture · ${readCount} of ${graph.totalSteps} steps completed`;
+      capStateEl.textContent = `All steps: ${readCount} of ${graph.totalSteps} done`;
     } else if (activePart === 'o') {
-      capStateEl.textContent = `Observed Evidence · ${(issue.quotes || []).length} verbatim client reports`;
+      { const qn = (issue.quotes || []).length; capStateEl.textContent = `What callers report: ${qn} quote${qn === 1 ? '' : 's'}`; }
     } else if (activePart === 'p') {
-      capStateEl.textContent = `Policy & Regulatory Layer · Confirm in-system before quoting`;
+      capStateEl.textContent = 'Policy for this issue. Confirm in-system before quoting.';
     } else if (/^\d+$/.test(activePart)) {
-      const idx = +activePart;
-      const node = graph.nodes.find(n => n.stepIdx === idx);
-      capStateEl.textContent = `Step ${idx + 1} of ${graph.totalSteps} · ${node ? node.title : ''} (${readCount}/${graph.totalSteps} read)`;
+      capStateEl.textContent = `${readCount} of ${graph.totalSteps} steps done`;
     }
   }
 
   function setPart(part) {
     activePart = String(part);
-    if (originEl) originEl.hidden = true;
     renderSvg();
     requestAnimationFrame(centerActive);
   }
@@ -575,7 +523,7 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
   function syncFit() {
     const fitBtn = paneEl.querySelector('[data-zoom="fit"]');
     if (fitBtn) {
-      fitBtn.textContent = zoom === 1 ? 'FIT' : `${Math.round(zoom * 100)}% ↺`;
+      fitBtn.textContent = zoom === 1 ? 'Fit' : `${Math.round(zoom * 100)}% ↺`;
       fitBtn.classList.toggle('on', zoom === 1);
     }
   }
@@ -598,10 +546,6 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
   paneEl.querySelector('[data-zoom="out"]')?.addEventListener('click', () => stepZoom(-1));
   paneEl.querySelector('[data-zoom="in"]')?.addEventListener('click', () => stepZoom(1));
   paneEl.querySelector('[data-zoom="fit"]')?.addEventListener('click', () => setZoom(1));
-
-  scrollEl.addEventListener('click', () => {
-    if (originEl) originEl.hidden = true;
-  });
 
   renderSvg();
   syncFit();

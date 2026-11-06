@@ -1,4 +1,5 @@
-// Flashcards over the figures, the say-this lines and the bank's own numbers. Leitner boxes.
+// Flashcards over the key figures, the say-this lines and the bank's own numbers. Five boxes,
+// shown to the advisor as New, Learning and Known.
 import { buildDeck } from './data.js';
 import { store } from './store.js';
 import { esc, md } from './render.js';
@@ -21,116 +22,112 @@ export function cardsView(main, mode = 'due', kindFilter = '') {
 
   if (mode === 'due') pool = pool.sort(() => Math.random() - 0.5);
 
-  const dueCount = all.filter(c => store.card(c.id).due <= now).length;
-  const masteredCount = all.filter(c => store.card(c.id).box >= 4).length;
 
-  // Count cards per Leitner box (1..5)
+  // Count cards per box (1..5), shown as three levels: New, Learning, Known
   const boxCounts = [0, 0, 0, 0, 0];
   all.forEach(c => {
     const b = Math.min(5, Math.max(1, store.card(c.id).box || 1));
     boxCounts[b - 1]++;
   });
+  const fresh = boxCounts[0], learning = boxCounts[1] + boxCounts[2], known = boxCounts[3] + boxCounts[4];
+  const levels = [[known, 'var(--teal)'], [learning, 'var(--accent)'], [fresh, 'var(--hair-strong)']];
 
   let idx = 0, flipped = false;
 
   const draw = () => {
     const c = pool[idx];
-    const segStart = Math.max(0, Math.min(idx - 14, pool.length - 28));
-    const progressSegs = pool.slice(segStart, segStart + 28); // visual cap for progress segments, windowed around idx
+    const box = c ? (store.card(c.id).box || 1) : 1;
+    const nextDays = [1, 2, 4, 8, 16][Math.min(5, box + 1) - 1];
 
     main.innerHTML = `<section class="screen screen-active"><div class="screen-inner" style="max-width:780px">
-      <div class="kicker">Spaced Repetition · ${all.length} cards · ${dueCount} due now · ${weak.size} weak spots</div>
-      <h1 class="title">The figures and lines, until they are reflex.</h1>
-      <p class="subtitle">Leitner 5-box spaced repetition over statutory liability caps, complaint timelines, paired "Say this / Not this" lines, and public bank figures.</p>
-
-      <!-- Leitner Box Distribution -->
-      <div class="leitner-bar" aria-label="Leitner box distribution">
-        ${boxCounts.map((cnt, i) => `
-          <div class="leitner-box ${i >= 3 ? 'mastered' : i === 0 ? 'box-1' : ''}">
-            <span class="lb-num">Box ${i + 1}</span>
-            <strong class="lb-cnt">${cnt}</strong>
-            <span class="lb-days">${[1, 2, 4, 8, 16][i]}d interval</span>
-          </div>
-        `).join('')}
+      <div class="lib-hero">
+        <h1 class="title">Flashcards</h1>
+        <p class="subtitle">Rules, numbers and what to say. Missed cards come back sooner.</p>
       </div>
 
-      <div class="lib-subbar" style="margin:18px 0 14px">
-        <div class="lib-filters" role="group" aria-label="Deck mode">
-          <button class="lib-fchip ${mode === 'due' ? 'on' : ''}" data-mode="due" type="button" aria-pressed="${mode === 'due'}">Due now (${dueInKind})</button>
-          <button class="lib-fchip ${mode === 'weak' ? 'on' : ''}" data-mode="weak" type="button" aria-pressed="${mode === 'weak'}">Weak spots (${weakInKind})</button>
-          <button class="lib-fchip ${mode === 'all' ? 'on' : ''}" data-mode="all" type="button" aria-pressed="${mode === 'all'}">All cards (${byKind.length})</button>
+      <div class="fc-levels" role="img" aria-label="How well you know the deck" style="display:flex;gap:2px;height:6px;border-radius:999px;overflow:hidden;background:var(--line)">
+        ${levels.filter(([n]) => n > 0).map(([n, col]) => `<span style="flex:${n} 1 0;background:${col}"></span>`).join('')}
+      </div>
+      <p class="dim" style="font-size:12.5px;margin:6px 0 0">${known} known, ${learning} learning, ${fresh} new</p>
+      <details class="disc" style="margin-top:10px">
+        <summary>How it works</summary>
+        <div class="body">Back in 1 day, 2 days, 4 days, 8 days, 16 days as you get a card right.</div>
+      </details>
+
+      <div class="lib-subbar" style="margin:14px 0 14px">
+        <div class="lib-filters" role="group" aria-label="Which cards">
+          <button class="lib-fchip ${mode === 'due' ? 'on' : ''}" data-mode="due" type="button" aria-pressed="${mode === 'due'}">Due (${dueInKind})</button>
+          <button class="lib-fchip ${mode === 'weak' ? 'on' : ''}" data-mode="weak" type="button" aria-pressed="${mode === 'weak'}">Missed (${weakInKind})</button>
+          <button class="lib-fchip ${mode === 'all' ? 'on' : ''}" data-mode="all" type="button" aria-pressed="${mode === 'all'}">All</button>
         </div>
-        <div class="lib-filters" role="group" aria-label="Card type filter">
+        <select id="fcKind" class="sel-pill" aria-label="Card type">
           ${[
             ['', 'All types'],
-            ['figure', 'Statutes'],
-            ['say this', 'Say This'],
-            ['bank figure', 'Bank FAQ']
-          ].map(([k, lbl]) => `<button class="lib-fchip ${kindFilter === k ? 'on' : ''}" data-kind="${k}" type="button" aria-pressed="${kindFilter === k}">${lbl}</button>`).join('')}
-        </div>
+            ['figure', 'Key figures'],
+            ['say this', 'Say this, not this'],
+            ['bank figure', 'Bank pages']
+          ].map(([k, lbl]) => `<option value="${k}" ${kindFilter === k ? 'selected' : ''}>${lbl}</option>`).join('')}
+        </select>
       </div>
 
       ${!c ? `
         <div class="empty-panel" style="text-align:center;padding:36px 24px">
           <img class="enso-stamp complete stamped" src="assets/enso-complete.svg" alt="" style="margin:0 auto 12px;display:block">
-          <strong style="font-size:18px;display:block">${mode === 'weak' ? 'No weak cards right now.' : 'All caught up for today.'}</strong>
-          <p style="margin:8px auto 16px">${mode === 'weak' ? 'Keep grading honestly as you study and any missed cards will collect here.' : 'You have cleared every due card in this filter. Switch to All Cards to keep drilling.'}</p>
-          <button class="big-btn" data-mode="all" type="button">Browse all ${all.length} cards</button>
+          <strong style="font-size:18px;display:block">${mode === 'weak' ? 'No missed cards right now.' : 'All caught up.'}</strong>
+          <p style="margin:8px auto 16px">${mode === 'weak' ? 'Cards you miss will show up here.' : 'Nothing is due here. Tap All to keep going.'}</p>
+          <button class="big-btn" data-mode="all" type="button">See all ${byKind.length} cards</button>
         </div>
       ` : `
-        <!-- Session Progress Bar -->
-        <div class="rv-progress" aria-label="Card ${idx + 1} of ${pool.length}">
-          ${progressSegs.map((_, k) => { const p = segStart + k; return `<span class="${p < idx ? 'done' : p === idx ? 'on' : ''}"></span>`; }).join('')}
+        <div class="trk-bar" aria-hidden="true" style="margin:4px 0 8px">
+          <div class="trk-bar-fill" style="width:${Math.round(idx / pool.length * 100)}%"></div>
         </div>
 
-        <div class="between" style="margin-bottom:10px">
-          <span class="mono-label">Card ${idx + 1} of ${pool.length} · ${esc(c.kind)}</span>
-          <span class="chip flagship">Leitner Box ${store.card(c.id).box} of 5</span>
+        <div style="margin-bottom:10px">
+          <span class="mono-label">${idx + 1} of ${pool.length}</span>
         </div>
 
         <div class="rv-card fc-stage" id="fc" role="button" tabindex="0" aria-pressed="${flipped}">
-          <div class="rv-type">${c.kind === 'figure' ? 'Statutory / Network Figure' : c.kind === 'say this' ? 'Say This, Not This' : 'Bank Public Page Figure'}</div>
+          <div class="rv-type">${c.kind === 'figure' ? 'Key figure' : c.kind === 'say this' ? 'Say this, not this' : 'Bank page'}</div>
           <div class="fc-prompt">${md(c.q)}</div>
 
           ${flipped ? `
             <div class="fc-answer">
-              <div class="sc-label" style="color:var(--accent-deep);margin-bottom:6px">Answer</div>
               <div class="fc-ans-main">${md(c.a)}</div>
               ${c.note ? `<div class="fc-ans-note">${md(c.note)}</div>` : ''}
-              ${c.extra ? `<div class="fc-ans-extra"><strong>Client line / context:</strong> ${md(c.extra)}</div>` : ''}
+              ${c.extra ? `<div class="fc-ans-extra"><strong>${c.kind === 'figure' ? 'What to say:' : c.kind === 'say this' ? 'From the issue:' : 'Page dated:'}</strong> ${md(c.extra)}</div>` : ''}
             </div>
           ` : `
-            <div class="fc-tap-hint">Tap card or press <kbd>Space</kbd> to reveal answer</div>
+            <div class="fc-tap-hint">Tap to flip<span class="kbd-hint"> or press Space</span></div>
           `}
         </div>
 
-        <div class="rv-rate" style="margin-top:14px">
-          <button type="button" class="rv-rate-btn rate-miss" data-grade="0" ${flipped ? '' : 'disabled'}>
-            <b>Missed it</b>
-            <span>Reset to Box 1 (1d) · Key 1</span>
-          </button>
-          <button type="button" class="rv-rate-btn rate-flip" id="flipBtn">
-            <b>${flipped ? 'Hide answer' : 'Reveal answer'}</b>
-            <span>Space / Enter</span>
-          </button>
-          <button type="button" class="rv-rate-btn rate-hit" data-grade="1" ${flipped ? '' : 'disabled'}>
-            <b>Knew it cold</b>
-            <span>Advance to Box ${Math.min(5, store.card(c.id).box + 1)} · Key 2</span>
-          </button>
-        </div>
+        ${flipped ? `
+          <div class="rv-rate" style="margin-top:14px;grid-template-columns:repeat(2,minmax(0,1fr))">
+            <button type="button" class="rv-rate-btn rate-miss" data-grade="0">
+              <b>Missed it</b>
+              <span>Back tomorrow<span class="kbd-hint"> · key 1</span></span>
+            </button>
+            <button type="button" class="rv-rate-btn rate-hit" data-grade="1">
+              <b>Got it</b>
+              <span>Back in ${nextDays} days<span class="kbd-hint"> · key 2</span></span>
+            </button>
+          </div>
+        ` : `
+          <button type="button" class="big-btn" id="flipBtn" style="width:100%;justify-content:center;margin-top:14px">Show answer</button>
+        `}
 
-        <p class="fine">Bank figures are public-page readings dated in the corpus; always confirm in-system before quoting to a client.</p>
+        <p class="fine" style="margin-top:12px">Bank numbers come from public pages. Confirm in-system before you quote one.</p>
       `}
     </div></section>`;
 
     main.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => cardsView(main, b.dataset.mode, kindFilter));
-    main.querySelectorAll('[data-kind]').forEach(b => b.onclick = () => cardsView(main, mode, b.dataset.kind));
+    main.querySelector('#fcKind').onchange = e => cardsView(main, mode, e.target.value);
 
     const fc = main.querySelector('#fc');
     if (fc) {
       const flip = () => { flipped = !flipped; draw(); };
       fc.onclick = flip;
-      main.querySelector('#flipBtn').onclick = flip;
+      main.querySelector('#flipBtn')?.addEventListener('click', flip);
       const grade = ok => {
         if (!flipped) return;
         store.gradeCard(c.id, ok);
