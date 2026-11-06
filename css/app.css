@@ -633,8 +633,8 @@ body.reading .tb-tab span {
 }
 @media (pointer: coarse) {
   body.reading .tb-tab {
-    min-width: 40px;
-    min-height: 40px;
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 
@@ -3707,7 +3707,7 @@ a.pol-card:hover { border-color: var(--accent); box-shadow: var(--sh-2); text-de
 }
 .leitner-n, .lb-num {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--muted);
   text-transform: uppercase;
@@ -4404,8 +4404,18 @@ body.hl-open .hl-handle {
   }
 }
 @media (min-width: 761px) and (max-width: 960px) {
-  .tb-tab { position: relative; padding: 8px 10px; }
-  .tb-tab span { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  /* Tablet portrait: no room for icon-and-label side by side, so stack them
+     rather than dropping the labels. */
+  body:not(.reading) .tb-tab {
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-height: 44px;
+    min-width: 52px;
+    padding: 4px 8px;
+    font-size: 11px;
+    line-height: 1.1;
+  }
 }
 @media (min-width: 761px) and (max-width: 1120px) {
   body.reading .brand-text,
@@ -5024,7 +5034,7 @@ body.hl-open .hl-handle {
 }
 .badge-subcorp {
   font-family: var(--mono);
-  font-size: 9px;
+  font-size: 10.5px;
   color: var(--b-accent, var(--gold));
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -5172,7 +5182,7 @@ body.hl-open .hl-handle {
 }
 .badge-emp-lbl {
   font-family: var(--mono);
-  font-size: 8.5px;
+  font-size: 10.5px;
   color: rgba(255, 255, 255, 0.5);
   letter-spacing: 0.06em;
 }
@@ -5206,7 +5216,7 @@ body.hl-open .hl-handle {
 }
 .b-cell-lbl {
   font-family: var(--mono);
-  font-size: 8px;
+  font-size: 10.5px;
   letter-spacing: 0.08em;
   color: rgba(255, 255, 255, 0.45);
   margin-bottom: 2px;
@@ -5274,7 +5284,7 @@ body.hl-open .hl-handle {
 }
 .b-stat-lbl {
   font-family: var(--sans);
-  font-size: 8.5px;
+  font-size: 10.5px;
   color: rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
 }
@@ -5626,7 +5636,7 @@ body.hl-open .hl-handle {
   .theme-choice-btn { min-height: 44px; padding: 10px 14px; }
   .photo-ctrls { flex-wrap: wrap; gap: 10px; }
   .photo-ctrls .btn, .badge-actions-bar .btn.sm { min-height: 44px; }
-  .badge-subcorp, .badge-status-pill, .badge-seal, .badge-emp-lbl, .b-cell-lbl, .b-stat-lbl { font-size: 10px; }
+  .badge-subcorp, .badge-status-pill, .badge-seal, .badge-emp-lbl, .b-cell-lbl, .b-stat-lbl { font-size: 11px; }
   .b-clearance-txt { font-size: 11px; }
   .b-cell-val { font-size: 12px; }
 }

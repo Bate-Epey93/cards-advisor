@@ -356,6 +356,7 @@ function edgePath(na, nb) {
 
 let lastZoom = 1;
 const ZOOMS = [0.75, 1, 1.25, 1.5, 1.85];
+const READABLE_FIT = 0.9;
 
 export function mountCallDiagram(paneEl, issue, opts = {}) {
   const graph = buildCallGraph(issue);
@@ -364,6 +365,8 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
   let activePart = String(opts.part ?? '0');
 
   const scrollEl = paneEl.querySelector('.diagram-scroll');
+  // Pane narrower than READABLE_FIT of the map's width means FIT would make the text unreadable.
+  const isNarrow = () => scrollEl.clientWidth > 0 && scrollEl.clientWidth < graph.width * READABLE_FIT;
   const capStateEl = paneEl.querySelector('.diagram-cap-state');
   const originEl = paneEl.querySelector('.dg-origin');
 
@@ -460,7 +463,12 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
       </g>`;
     }).join('');
 
-    scrollEl.innerHTML = `<svg class="dg-svg" viewBox="0 0 ${graph.width} ${graph.height}" style="--z:${zoom};width:${Math.round(graph.width * zoom)}px;max-width:${zoom === 1 ? '100%' : 'none'};height:auto">
+    // FIT shrinks the map to the pane, but a phone pane is about 350px against a
+    // 920-unit map, which renders the labels at about 4px. Below the readable
+    // floor FIT keeps the map at 1:1 and pans to the current step instead.
+    const narrow = isNarrow();
+    const fitMax = zoom === 1 && !narrow ? '100%' : 'none';
+    scrollEl.innerHTML = `<svg class="dg-svg" viewBox="0 0 ${graph.width} ${graph.height}" style="--z:${zoom};width:${Math.round(graph.width * zoom)}px;max-width:${fitMax};height:auto">
       <defs>
         <marker id="dg-arrow" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
           <path d="${arrowRoughD}" class="dg-arrow-muted"/>
@@ -598,6 +606,19 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
   renderSvg();
   syncFit();
   requestAnimationFrame(centerActive);
+
+  // Re-render only when the pane crosses the readable floor (rotation, split drag, resize).
+  let wasNarrow = isNarrow();
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(() => {
+      if (!scrollEl.isConnected) return;
+      const n = isNarrow();
+      if (n === wasNarrow) return;
+      wasNarrow = n;
+      renderSvg();
+      requestAnimationFrame(centerActive);
+    }).observe(scrollEl);
+  }
 
   return {
     setPart,
