@@ -69,7 +69,8 @@ export function bankView(main, cat) {
   const completedFlagships = flagships.filter(i => store.issuePct(i.id, 11) >= 100).length;
   const streakCount = store.all.streak?.count || 0;
 
-  main.innerHTML = `<div class="screen-inner">
+  main.innerHTML = `<section class="screen screen-active">
+    <div class="screen-inner">
     <!-- Top Bento: Continue + Readiness -->
     <div class="home-top">
       <div class="home-card home-continue" data-domain="${domainForCategory(heroIssue.category)}">
@@ -170,7 +171,7 @@ export function bankView(main, cat) {
     <div id="bankGridWrap"></div>
 
     <p class="fine">Not affiliated with any bank. Every figure in this app is public material with its source and verification date; confirm in your own systems before quoting to a client. Nothing typed here leaves this device.</p>
-  </div>`;
+  </div></section>`;
 
   const gridWrap = main.querySelector('#bankGridWrap');
   const qInput = main.querySelector('#bankQ');

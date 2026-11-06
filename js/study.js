@@ -35,7 +35,7 @@ export function cardsView(main, mode = 'due', kindFilter = '') {
     const c = pool[idx];
     const progressSegs = pool.slice(0, 28); // visual cap for progress segments
 
-    main.innerHTML = `<div class="screen-inner" style="max-width:780px">
+    main.innerHTML = `<section class="screen screen-active"><div class="screen-inner" style="max-width:780px">
       <div class="kicker">Spaced Repetition · ${all.length} cards · ${dueCount} due now · ${weak.size} weak spots</div>
       <h1 class="title">The figures and lines, until they are reflex.</h1>
       <p class="subtitle">Leitner 5-box spaced repetition over statutory liability caps, complaint timelines, paired "Say this / Not this" lines, and public bank figures.</p>
@@ -118,7 +118,7 @@ export function cardsView(main, mode = 'due', kindFilter = '') {
 
         <p class="fine">Bank figures are public-page readings dated in the corpus; always confirm in-system before quoting to a client.</p>
       `}
-    </div>`;
+    </div></section>`;
 
     main.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => cardsView(main, b.dataset.mode, kindFilter));
     main.querySelectorAll('[data-kind]').forEach(b => b.onclick = () => cardsView(main, mode, b.dataset.kind));

@@ -27,7 +27,7 @@ export function practiceView(main) {
   const completedDrills = drills.filter(i => store.drill(i.id)?.runs?.length > 0).length;
   const masteredDrills = drills.filter(i => (store.drill(i.id)?.best || 0) >= 10).length;
 
-  main.innerHTML = `<div class="screen-inner">
+  main.innerHTML = `<section class="screen screen-active"><div class="screen-inner">
     <div class="kicker">Practice · ${drills.length} role-play call simulations</div>
     <h1 class="title">Ten minutes between calls that feels like a call.</h1>
     <p class="subtitle">The opening is a real client's words. You get ${MINUTES} minutes to write your first fifteen seconds, your diagnostic questions in order, and the resolution. Then the breakdown is revealed side-by-side and you score yourself on four criteria.</p>
@@ -74,7 +74,7 @@ export function practiceView(main) {
         </a>`;
       }).join('')}
     </div>
-  </div>`;
+  </div></section>`;
 }
 
 function parseDraftParts(raw = '') {
@@ -118,7 +118,7 @@ export function drillView(main, id) {
     const total = Object.values(scores).reduce((a, b) => a + b, 0);
     const scoredCount = Object.keys(scores).length;
 
-    main.innerHTML = `<div class="screen-inner" style="max-width:820px">
+    main.innerHTML = `<section class="screen screen-active"><div class="screen-inner" style="max-width:820px">
       <a class="back-inline" href="#/practice">← All practice drills</a>
 
       <!-- Visual Step Progress Bar -->
@@ -222,7 +222,7 @@ export function drillView(main, id) {
           </button>
         </div>
       `}
-    </div>`;
+    </div></section>`;
 
     if (phase === 'write') {
       const bindInput = (sel, key) => {

@@ -83,8 +83,8 @@ export function policyView(main, id) {
   let query = '';
   const compiledAge = ageDays(D.compiled);
 
-  main.innerHTML = `<div class="screen-inner">
-    <div class="kicker">Policy & Regulatory Lookup · Compiled ${esc(D.compiled)}</div>
+  main.innerHTML = `<section class="screen screen-active"><div class="screen-inner">
+    <div class="kicker">Policy &amp; Regulatory Lookup · Compiled ${esc(D.compiled)}</div>
     <h1 class="title">The rule, its source, its date.</h1>
     <p class="subtitle">Two distinct layers: Canadian law & network rules bind every issuer; the bank's public FAQ pages are policy that can change without notice and always carry ${verifyBadge()}. ${compiledAge > STALE_DAYS ? `<span class="stale">${compiledAge} days old — re-verify sources</span>` : ''}</p>
 
@@ -105,7 +105,7 @@ export function policyView(main, id) {
     </div>
 
     <div id="polBody"></div>
-  </div>`;
+  </div></section>`;
 
   const body = main.querySelector('#polBody');
   const render = () => {
@@ -275,7 +275,7 @@ function policyDetail(main, id) {
     `;
   }
 
-  main.innerHTML = `<div class="screen-inner">${html}</div>`;
+  main.innerHTML = `<section class="screen screen-active"><div class="screen-inner">${html}</div></section>`;
   const copyBtn = main.querySelector('#copyClientLine');
   if (copyBtn) {
     copyBtn.onclick = async () => {

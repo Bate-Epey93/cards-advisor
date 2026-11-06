@@ -300,6 +300,7 @@ function route() {
   const [, seg, a, b] = (location.hash || '#/').split('/');
   stopTimers();
   window.scrollTo(0, 0);
+  main.scrollTo(0, 0);
   if (seg !== 'issue') {
     unmountHighlighter();
     document.getElementById('policySheetScrim')?.remove();
