@@ -5680,3 +5680,9 @@ body.hl-open .hl-handle {
     scroll-behavior: auto !important;
   }
 }
+
+/* Diagram zoom and legend controls: full touch size on touch screens */
+@media (pointer: coarse) {
+  .zbtn { min-width: 44px; min-height: 44px; }
+  .dgl-tog { min-height: 44px; }
+}

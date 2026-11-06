@@ -1,6 +1,6 @@
 // Cards Advisor service worker. Offline-first for a fully static app.
 // VERSION is stamped by tools/stamp-version.mjs; run it before every commit.
-const VERSION = 'cards-cd5a16bb21';
+const VERSION = 'cards-b538b6172a';
 const BASE = self.registration.scope;
 const DEV = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(self.location.hostname);
 
