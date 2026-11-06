@@ -1,6 +1,6 @@
 // Cards Advisor service worker. Offline-first for a fully static app.
 // VERSION is stamped by tools/stamp-version.mjs; run it before every commit.
-const VERSION = 'cards-161bb79780';
+const VERSION = 'cards-b844b7d523';
 const BASE = self.registration.scope;
 const DEV = /^(localhost|127\.0\.0\.1|\[::1\])$/.test(self.location.hostname);
 
@@ -9,19 +9,28 @@ const ASSETS = [
   'css/app.css',
   'js/app.js', 'js/store.js', 'js/data.js', 'js/render.js', 'js/diagram.js', 'js/issue.js', 'js/policy.js',
   'js/study.js', 'js/practice.js', 'js/debrief.js', 'js/badge.js', 'js/highlight.js', 'js/pwa.js', 'js/toast.js', 'js/version.js',
-  'data/observed.json', 'data/faq.json', 'data/rules.json', 'data/breakdowns.json', 'data/brush.js',
+  'data/observed.json', 'data/faq.json', 'data/rules.json', 'data/breakdowns.json',
   'vendor/rough.js',
   'fonts/CormorantGaramond.woff2', 'fonts/CormorantGaramond-Italic.woff2',
   'fonts/SourceSerif4.woff2', 'fonts/SourceSerif4-Italic.woff2',
-  'fonts/BricolageGrotesque.woff2', 'fonts/HankenGrotesk.woff2', 'fonts/JetBrainsMono.woff2',
+  'fonts/HankenGrotesk.woff2', 'fonts/JetBrainsMono.woff2',
   'assets/enso-complete.svg', 'assets/enso-gate.svg',
   'icons/icon-192.png', 'icons/icon-512.png', 'icons/maskable-512.png'
 ].map(p => new URL(p, BASE).toString());
 
+// addAll is all-or-nothing: if any file fails, install rejects and the previous
+// worker keeps its complete cache, so a partial build never activates. The
+// version.js check also rejects a cache filled from a CDN that still serves the
+// previous build's files; the browser retries on its next update check.
 self.addEventListener('install', e => {
-  e.waitUntil(caches.open(VERSION).then(cache =>
-    Promise.allSettled(ASSETS.map(u => cache.add(new Request(u, { cache: 'reload' }))))
-  ));
+  e.waitUntil((async () => {
+    const cache = await caches.open(VERSION);
+    await cache.addAll(ASSETS.map(u => new Request(u, { cache: 'reload' })));
+    const v = await cache.match(new URL('js/version.js', BASE).toString());
+    if (!v || !(await v.text()).includes(`'${VERSION}'`)) {
+      throw new Error('precache does not match ' + VERSION);
+    }
+  })());
 });
 
 self.addEventListener('message', e => {
@@ -32,44 +41,46 @@ self.addEventListener('message', e => {
 
 self.addEventListener('activate', e => {
   e.waitUntil((async () => {
+    // CacheStorage is shared by every app on this origin (github.io), so only
+    // delete this app's own old caches.
     const keys = await caches.keys();
-    await Promise.all(keys.filter(k => k !== VERSION).map(k => caches.delete(k)));
+    await Promise.all(keys.filter(k => k.startsWith('cards-') && k !== VERSION).map(k => caches.delete(k)));
     await self.clients.claim();
   })());
 });
 
+// Each build is atomic: in production the shell and precached files come only
+// from this version's cache, with no background revalidation, so new code
+// arrives only through a new service worker and its update toast. Only the
+// scope root and index.html count as the shell; other page loads pass through.
+const SHELL = new URL('index.html', BASE).toString();
+const isShell = u => {
+  const p = new URL(u).href.split(/[?#]/)[0];
+  return p === BASE || p === SHELL;
+};
+
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET' || new URL(req.url).origin !== location.origin) return;
-
-  if (req.mode === 'navigate') {
-    e.respondWith((async () => {
-      try {
-        const fresh = await fetch(req);
-        const cache = await caches.open(VERSION);
-        cache.put(new URL('index.html', BASE).toString(), fresh.clone());
-        return fresh;
-      } catch {
-        return (await caches.match(new URL('index.html', BASE).toString())) || Response.error();
-      }
-    })());
-    return;
-  }
+  const nav = req.mode === 'navigate';
+  if (nav && !isShell(req.url)) return;
+  const key = nav ? SHELL : req;
 
   e.respondWith((async () => {
+    const cache = await caches.open(VERSION);
     if (DEV) {
-      try { return await fetch(req, { cache: 'no-store' }); }
-      catch { return (await caches.match(req)) || Response.error(); }
+      try {
+        const r = await fetch(req, { cache: 'no-store' });
+        if (nav && r.ok && r.type === 'basic') e.waitUntil(cache.put(SHELL, r.clone()));
+        return r;
+      } catch { return (await cache.match(key)) || Response.error(); }
     }
-    const cached = await caches.match(req);
-    if (cached) {
-      fetch(req).then(r => { if (r.ok) caches.open(VERSION).then(c => c.put(req, r)); }).catch(() => {});
-      return cached;
-    }
+    const hit = await cache.match(key);
+    if (hit) return hit;
     try {
-      const fresh = await fetch(req);
-      if (fresh.ok) (await caches.open(VERSION)).put(req, fresh.clone());
-      return fresh;
+      const r = await fetch(req);
+      if (r.ok && r.type === 'basic') e.waitUntil(cache.put(key, r.clone()));
+      return r;
     } catch { return Response.error(); }
   })());
 });

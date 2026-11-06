@@ -498,8 +498,10 @@
    "n": 21,
    "section": "C. Disputes and unrecognized transactions",
    "question": "Regional note (Caribbean knowledge base, not Canada):",
-   "dateTag": "\"If you do not report fraudulent activity on your card within 30 days of your statement date\" you will be held responsible for the transaction. Mark as regional; do not quote for Canadian clients.",
-   "answer": [],
+   "dateTag": "[undated]",
+   "answer": [
+    "If you do not report fraudulent activity on your card within 30 days of your statement date, you will be held responsible for the transaction. Mark as regional; do not quote for Canadian clients."
+   ],
    "figures": [],
    "sourceText": "Source: https://www.rbcroyalbank.com/caribbean/credit-cards/knowledgebase/personal/maarten/index.page [undated]",
    "sources": [
@@ -514,10 +516,11 @@
    "n": 22,
    "section": "D. Declined cards and credit limits",
    "question": "Why is my card being declined?",
-   "dateTag": "- RBC's dedicated FAQ page (search-public id=3319) would not render (see failures). Official RBC statements that bear on declines: a locked card declines purchases, cash advances and withdrawals (lock-card page); exceeding your limit: \"a purchase may be declined\" (payments FAQ); a balance transfer exceeding available credit \"will not be completed\" (balance transfer page); RBC's fraud detection may temporarily restrict the card if RBC cannot reach you to verify a transaction, so keep contact details current (using-cards-abroad, May 13, 2026); RBC can block a card without notice if it suspects fraud (Agreement s.5); overseas terminals may reject PINs longer than 4 digits (protecting-my-card FAQ).",
+   "dateTag": "[undated]",
    "answer": [
     "RBC's dedicated FAQ page (search-public id=3319) would not render (see failures). Official RBC statements that bear on declines: a locked card declines purchases, cash advances and withdrawals (lock-card page); exceeding your limit: \"a purchase may be declined\" (payments FAQ); a balance transfer exceeding available credit \"will not be completed\" (balance transfer page); RBC's fraud detection may temporarily restrict the card if RBC cannot reach you to verify a transaction, so keep contact details current (using-cards-abroad, May 13, 2026); RBC can block a card without notice if it suspects fraud (Agreement s.5); overseas terminals may reject PINs longer than 4 digits (protecting-my-card FAQ).",
-    "Commercial cards only (RBC NextLogic, 11/2023): decline codes 9024 Visa Payment Controls; 0134 card not activated (cardholder calls 1-888-769-2575); 0805/0808 single-purchase or MCC limit exceeded; 0814/0817 transaction-count limit; 0813/0818/0820 amount limit per cycle; 0207 wrong expiry date. Support: Program Administrators 1-877-334-9938; cardholders 1-888-769-2534."
+    "Commercial cards only (RBC NextLogic, 11/2023): decline codes 9024 Visa Payment Controls; 0134 card not activated (cardholder calls 1-888-769-2575); 0805/0808 single-purchase or MCC limit exceeded; 0814/0817 transaction-count limit; 0813/0818/0820 amount limit per cycle; 0207 wrong expiry date. Support: Program Administrators 1-877-334-9938; cardholders 1-888-769-2534.",
+    "RBC's dedicated FAQ page (search-public id=3319) would not render (see failures). Official RBC statements that bear on declines: a locked card declines purchases, cash advances and withdrawals (lock-card page); exceeding your limit: \"a purchase may be declined\" (payments FAQ); a balance transfer exceeding available credit \"will not be completed\" (balance transfer page); RBC's fraud detection may temporarily restrict the card if RBC cannot reach you to verify a transaction, so keep contact details current (using-cards-abroad, May 13, 2026); RBC can block a card without notice if it suspects fraud (Agreement s.5); overseas terminals may reject PINs longer than 4 digits (protecting-my-card FAQ)."
    ],
    "figures": [
     "1-877-334-9938",
@@ -1238,8 +1241,9 @@
    "n": 54,
    "section": "I. Rewards (Avion)",
    "question": "Avion Rewards contact and hours",
-   "dateTag": "- Credit card customer service 1-800-769-2512 (business FAQ: 24-hr, 7 days). Avion Rewards Travel 1-877-636-2870: business manage page lists Mon-Fri 7 a.m. to Midnight, weekends 7 a.m. to 9 p.m.; the same page's text elsewhere says Mon-Fri 8 a.m. to 9 p.m. EST, Sat 9 a.m. to 5 p.m. EST (conflict on RBC's own page; flag to trainees). Commercial cardholders 1-888-769-2534; commercial Avion Travel 1-888-773-7057.",
+   "dateTag": "[undated]",
    "answer": [
+    "Credit card customer service 1-800-769-2512 (business FAQ: 24-hr, 7 days). Avion Rewards Travel 1-877-636-2870: business manage page lists Mon-Fri 7 a.m. to Midnight, weekends 7 a.m. to 9 p.m.; the same page's text elsewhere says Mon-Fri 8 a.m. to 9 p.m. EST, Sat 9 a.m. to 5 p.m. EST (conflict on RBC's own page; flag to trainees). Commercial cardholders 1-888-769-2534; commercial Avion Travel 1-888-773-7057.",
     "Credit card customer service 1-800-769-2512 (business FAQ: 24-hr, 7 days). Avion Rewards Travel 1-877-636-2870: business manage page lists Mon-Fri 7 a.m. to Midnight, weekends 7 a.m. to 9 p.m.; the same page's text elsewhere says Mon-Fri 8 a.m. to 9 p.m. EST, Sat 9 a.m. to 5 p.m. EST (conflict on RBC's own page; flag to trainees). Commercial cardholders 1-888-769-2534; commercial Avion Travel 1-888-773-7057."
    ],
    "figures": [

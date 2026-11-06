@@ -32,14 +32,19 @@ function renderBarcodeSvg(code, width = 260, height = 50) {
   bars.push({ x, w: 1.2 }); x += 3.5;
   bars.push({ x, w: 2.2 }); x += 4.5;
 
-  const totalW = Math.max(x + 12, width);
-  const rects = bars.map(b => `<rect x="${b.x.toFixed(1)}" y="4" width="${b.w.toFixed(1)}" height="${height - 20}" fill="currentColor" />`).join('');
+  const contentW = x + 12;
+  const totalW = Math.max(contentW, width);
+  const off = (totalW - contentW) / 2;
+  const rects = bars.map(b => `<rect x="${(b.x + off).toFixed(1)}" y="4" width="${b.w.toFixed(1)}" height="${height - 20}" fill="currentColor" />`).join('');
 
   return `<svg class="badge-barcode-svg" viewBox="0 0 ${totalW} ${height}" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
     ${rects}
     <text x="${(totalW / 2).toFixed(1)}" y="${height - 3}" text-anchor="middle" class="badge-barcode-txt">*${esc(clean)}*</text>
   </svg>`;
 }
+
+const BADGE_THEMES = ['gold', 'cyan', 'sapphire', 'emerald'];
+const PHOTO_RE = /^data:image\/[a-z0-9.+-]+;base64,[A-Za-z0-9+/=]+$/i;
 
 function getInitials(name, role) {
   const src = String(name || role || 'Advisor').trim();
@@ -54,12 +59,18 @@ export function badgeView(main) {
   document.body.classList.remove('reading');
   const prof = store.profile;
   const totalCompleted = store.completedIssuesCount;
-  const streakDays = store.all.streak?.count || 0;
+  // Prefer the store getter; otherwise count the streak only if the last study day is today or yesterday.
+  const streakDays = store.currentStreak ?? (() => {
+    const s = store.all.streak, last = s?.days?.[s.days.length - 1];
+    const today = new Date().toISOString().slice(0, 10), yest = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+    return (last === today || last === yest) ? (s.count || 0) : 0;
+  })();
   const debriefCount = store.all.debriefs?.length || 0;
   const dueCards = Object.values(store.all.cards || {}).filter(c => !c.due || c.due <= Date.now()).length;
 
   const initials = getInitials(prof.name, prof.role);
-  const currentTheme = prof.badgeTheme || 'gold';
+  const currentTheme = BADGE_THEMES.includes(prof.badgeTheme) ? prof.badgeTheme : 'gold';
+  const photo = PHOTO_RE.test(prof.photo || '') ? prof.photo : '';
 
   main.innerHTML = `<section class="screen screen-active badge-screen">
     <div class="screen-inner" style="max-width:1080px">
@@ -125,8 +136,8 @@ export function badgeView(main) {
               <!-- Advisor Portrait & Name Section -->
               <div class="badge-portrait-section">
                 <div class="badge-photo-wrapper">
-                  <div class="badge-photo-frame" id="badgePhotoFrame" style="${prof.photo ? `background-image:url(${prof.photo});background-size:cover;background-position:center;` : ''}">
-                    <span class="badge-monogram" id="badgeMonogram" ${prof.photo ? 'hidden' : ''}>${esc(initials)}</span>
+                  <div class="badge-photo-frame" id="badgePhotoFrame" style="${photo ? `background-image:url('${photo}');background-size:cover;background-position:center;` : ''}">
+                    <span class="badge-monogram" id="badgeMonogram" ${photo ? 'hidden' : ''}>${esc(initials)}</span>
                   </div>
                   <span class="badge-verified-badge" title="Identity Verified">✓</span>
                 </div>
@@ -286,21 +297,21 @@ export function badgeView(main) {
               <!-- 5. Badge Accent Theme & Photo -->
               <div class="form-row two-col">
                 <div class="form-field">
-                  <label>Badge Accent Theme</label>
-                  <div class="theme-picker" id="badgeThemePicker">
-                    <button type="button" class="theme-choice-btn${currentTheme === 'gold' ? ' on' : ''}" data-badge-theme="gold" title="Midnight Sapphire &amp; Burnished Gold">
+                  <label id="badgeThemeLbl">Badge Accent Theme</label>
+                  <div class="theme-picker" id="badgeThemePicker" role="group" aria-labelledby="badgeThemeLbl">
+                    <button type="button" class="theme-choice-btn${currentTheme === 'gold' ? ' on' : ''}" data-badge-theme="gold" aria-pressed="${currentTheme === 'gold'}" title="Midnight Sapphire &amp; Burnished Gold">
                       <span class="theme-swatch gold-swatch"></span>
                       <span>Gold</span>
                     </button>
-                    <button type="button" class="theme-choice-btn${currentTheme === 'cyan' ? ' on' : ''}" data-badge-theme="cyan" title="Electric Cobalt &amp; Arctic Cyan">
+                    <button type="button" class="theme-choice-btn${currentTheme === 'cyan' ? ' on' : ''}" data-badge-theme="cyan" aria-pressed="${currentTheme === 'cyan'}" title="Electric Cobalt &amp; Arctic Cyan">
                       <span class="theme-swatch cyan-swatch"></span>
                       <span>Cyan</span>
                     </button>
-                    <button type="button" class="theme-choice-btn${currentTheme === 'sapphire' ? ' on' : ''}" data-badge-theme="sapphire" title="Deep Obsidian &amp; Royal Sapphire">
+                    <button type="button" class="theme-choice-btn${currentTheme === 'sapphire' ? ' on' : ''}" data-badge-theme="sapphire" aria-pressed="${currentTheme === 'sapphire'}" title="Deep Obsidian &amp; Royal Sapphire">
                       <span class="theme-swatch sapphire-swatch"></span>
                       <span>Sapphire</span>
                     </button>
-                    <button type="button" class="theme-choice-btn${currentTheme === 'emerald' ? ' on' : ''}" data-badge-theme="emerald" title="Dark Forest &amp; Jade Gold">
+                    <button type="button" class="theme-choice-btn${currentTheme === 'emerald' ? ' on' : ''}" data-badge-theme="emerald" aria-pressed="${currentTheme === 'emerald'}" title="Dark Forest &amp; Jade Gold">
                       <span class="theme-swatch emerald-swatch"></span>
                       <span>Emerald</span>
                     </button>
@@ -310,11 +321,11 @@ export function badgeView(main) {
                 <div class="form-field">
                   <label>Advisor Portrait Photo</label>
                   <div class="photo-ctrls">
-                    <label class="btn sm sec photo-upload-btn">
+                    <label class="btn sm sec photo-upload-btn" style="position:relative">
                       <span>Upload Photo</span>
-                      <input type="file" id="f_photoFile" accept="image/*" hidden>
+                      <input type="file" id="f_photoFile" class="vh-input" accept="image/*" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0">
                     </label>
-                    <button type="button" class="btn sm ghost" id="clearPhotoBtn" ${!prof.photo ? 'hidden' : ''}>Remove Photo</button>
+                    <button type="button" class="gbtn ghost sm" id="clearPhotoBtn" ${!photo ? 'hidden' : ''}>Remove Photo</button>
                   </div>
                   <span class="field-hint">Compressed and kept strictly in local storage on this device.</span>
                 </div>
@@ -330,7 +341,7 @@ export function badgeView(main) {
                   <svg width="15" height="15" viewBox="0 0 16 16" fill="none"><path d="M4 6V2h8v4M4 11h8v3H4v-3z" stroke="currentColor" stroke-width="1.4"/><path d="M3 6h10a1.5 1.5 0 011.5 1.5v3.5a1 1 0 01-1 1H2.5a1 1 0 01-1-1V7.5A1.5 1.5 0 013 6z" stroke="currentColor" stroke-width="1.4"/></svg>
                   <span>Print Badge</span>
                 </button>
-                <button type="button" class="btn ghost sm" id="resetBadgeBtn" style="margin-left:auto">Reset to Demo</button>
+                <button type="button" class="gbtn ghost sm" id="resetBadgeBtn" style="margin-left:auto">Reset to Demo</button>
               </div>
             </form>
           </div>
@@ -366,7 +377,7 @@ export function badgeView(main) {
   const fPhotoFile = document.getElementById('f_photoFile');
 
   let activeTheme = currentTheme;
-  let activePhoto = prof.photo || '';
+  let activePhoto = photo;
 
   function syncLive() {
     const emp = fEmpNumber.value.trim() || 'EMP-84291';
@@ -428,7 +439,7 @@ export function badgeView(main) {
     const btn = e.target.closest('[data-badge-theme]');
     if (!btn) return;
     activeTheme = btn.dataset.badgeTheme;
-    document.querySelectorAll('.theme-choice-btn').forEach(b => b.classList.toggle('on', b === btn));
+    document.querySelectorAll('.theme-choice-btn').forEach(b => { b.classList.toggle('on', b === btn); b.setAttribute('aria-pressed', String(b === btn)); });
     card.className = `badge-card theme-${activeTheme}`;
     store.setProfile({ badgeTheme: activeTheme });
   });
@@ -437,14 +448,28 @@ export function badgeView(main) {
   fPhotoFile?.addEventListener('change', e => {
     const file = e.target.files?.[0];
     if (!file) return;
-    if (file.size > 2 * 1024 * 1024) {
-      toast({ msg: 'Please select an image under 2MB', icon: '!' });
+    if (!file.type.startsWith('image/') || file.size > 20 * 1024 * 1024) {
+      toast({ msg: 'Please select an image file under 20MB', icon: '!' });
+      fPhotoFile.value = '';
       return;
     }
-    const reader = new FileReader();
-    reader.onload = ev => {
-      activePhoto = ev.target.result;
-      badgePhotoFrame.style.backgroundImage = `url(${activePhoto})`;
+    // Decode, cover-crop to 256x256 and re-encode as JPEG so the stored photo stays small.
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      const S = 256, c = document.createElement('canvas');
+      c.width = c.height = S;
+      const k = Math.max(S / img.naturalWidth, S / img.naturalHeight), w = img.naturalWidth * k, h = img.naturalHeight * k;
+      c.getContext('2d').drawImage(img, (S - w) / 2, (S - h) / 2, w, h);
+      URL.revokeObjectURL(url);
+      const data = c.toDataURL('image/jpeg', 0.85);
+      if (!PHOTO_RE.test(data)) {
+        fPhotoFile.value = '';
+        toast({ msg: 'That image could not be read', icon: '!' });
+        return;
+      }
+      activePhoto = data;
+      badgePhotoFrame.style.backgroundImage = `url('${activePhoto}')`;
       badgePhotoFrame.style.backgroundSize = 'cover';
       badgePhotoFrame.style.backgroundPosition = 'center';
       badgeMonogram.hidden = true;
@@ -452,12 +477,19 @@ export function badgeView(main) {
       store.setProfile({ photo: activePhoto });
       toast({ msg: 'Advisor portrait photo updated', icon: '✓' });
     };
-    reader.readAsDataURL(file);
+    img.onerror = () => {
+      URL.revokeObjectURL(url);
+      fPhotoFile.value = '';
+      toast({ msg: 'That image could not be read', icon: '!' });
+    };
+    img.src = url;
   });
 
   clearPhotoBtn?.addEventListener('click', () => {
     activePhoto = '';
-    badgePhotoFrame.style.backgroundImage = 'none';
+    badgePhotoFrame.style.backgroundImage = '';
+    badgePhotoFrame.style.backgroundSize = '';
+    badgePhotoFrame.style.backgroundPosition = '';
     badgeMonogram.hidden = false;
     clearPhotoBtn.hidden = true;
     fPhotoFile.value = '';
@@ -485,7 +517,7 @@ export function badgeView(main) {
   });
 
   // 3D Tilt & Holographic liquid-glass sheen on card pointer movement
-  if (card) {
+  if (card && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     const onMove = e => {
       const rect = card.getBoundingClientRect();
       const x = e.clientX - rect.left;

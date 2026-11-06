@@ -43,6 +43,8 @@ Before every commit, stamp the service worker so installed devices see the updat
 node tools/stamp-version.mjs
 ```
 
+The stamp fails if a watched file is missing from `ASSETS` in `sw.js`, or if `ASSETS` names a file that does not exist. Every build is atomic: installed devices serve only that build's cache and get new code through the update toast, so a file left out of `ASSETS` is missing offline.
+
 ## Roadmap
 
 See [PLAN.md](PLAN.md). Next: author breakdowns for the remaining very-common issues; multi-turn call simulations with a hidden twist; the lead layer (queue lens, coaching cards); a Reddit pass through a logged-in browser.

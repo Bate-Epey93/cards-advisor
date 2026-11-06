@@ -22,6 +22,8 @@ const KIND_LABEL = {
 };
 
 let ctx = null;   // { sectionId, sectionTitle, blocksEl }
+// the notepad docks beside the text only on wide screens; on narrower ones it covers it
+const wide = () => window.matchMedia('(min-width:1100px)').matches;
 
 /* ═════════ offsets ═════════ */
 // Character offset of a (node, offset) position within root's textContent.
@@ -115,7 +117,7 @@ function capture() {
   sel.removeAllRanges();
   paintHighlights();
   renderPanel();
-  if (!store.pref('hlPanel')) openPanel(true);
+  if (!store.pref('hlPanel') && wide()) openPanel(true);
   store.touchStreak();
 }
 
@@ -163,7 +165,7 @@ function panelEl() {
   handle.className = 'hl-handle';
   handle.setAttribute('aria-label', 'Open the summary notepad');
   handle.innerHTML = `<span class="hl-handle-grip"></span><span class="hl-handle-n" data-n>0</span>`;
-  handle.onclick = () => openPanel(!store.pref('hlPanel'));
+  handle.onclick = () => openPanel(!document.body.classList.contains('hl-open'));
   document.body.appendChild(handle);
 
   return p;
@@ -238,11 +240,13 @@ export function renderPanel() {
     catch { toast({ msg: 'Clipboard blocked by the browser.', timeout: 3200 }); }
   });
   p.querySelector('[data-hl-note]')?.addEventListener('click', () => {
-    const existing = store.note(ctx.sectionId);
-    store.note(ctx.sectionId, (existing ? existing.trimEnd() + '\n\n' : '') + asMarkdown(null, groups));
-    toast({ msg: 'Added to your notes for this section.', icon: '✓', timeout: 2600 });
-    const ta = document.querySelector(`textarea[data-note="${ctx.sectionId}"]`);
-    if (ta) ta.value = store.note(ctx.sectionId);
+    // sectionId is issueId:part; the reader's notes box is keyed by the issue id
+    const noteKey = ctx.sectionId.slice(0, ctx.sectionId.lastIndexOf(':')) || ctx.sectionId;
+    const existing = store.note(noteKey);
+    store.note(noteKey, (existing ? existing.trimEnd() + '\n\n' : '') + asMarkdown(ctx.sectionTitle, groups));
+    toast({ msg: 'Added to your notes for this issue.', icon: '✓', timeout: 2600 });
+    const ta = document.querySelector(`textarea[data-note="${noteKey}"]`);
+    if (ta) ta.value = store.note(noteKey);
   });
   p.querySelector('[data-hl-clear]')?.addEventListener('click', () => {
     if (!confirm('Remove every clipping from this section?')) return;
@@ -279,7 +283,9 @@ export function mountHighlighter({ sectionId, sectionTitle, blocksEl, toolbarEl 
   paintHighlights();
   panelEl();
   renderPanel();
-  document.body.classList.toggle('hl-open', !!store.pref('hlPanel'));
+  const open = !!store.pref('hlPanel') && wide();
+  document.body.classList.toggle('hl-open', open);
+  panelEl().setAttribute('aria-hidden', String(!open));
   document.body.classList.toggle('hl-armed', !!store.pref('hlOn'));
 
   if (toolbarEl) {
@@ -300,9 +306,10 @@ export function mountHighlighter({ sectionId, sectionTitle, blocksEl, toolbarEl 
         msg: on ? 'Highlighter on. Select any passage to clip it.' : 'Highlighter off.',
         icon: on ? '▨' : '○', timeout: 2400
       });
-      if (on && !store.pref('hlPanel') && window.matchMedia('(min-width:1100px)').matches) openPanel(true);
+      if (on && !store.pref('hlPanel') && wide()) openPanel(true);
     };
-    toolbarEl.querySelector('[data-hl-open]').onclick = () => openPanel(!store.pref('hlPanel'));
+    // toggle on what is shown: on narrow screens the pref can say open while the panel is closed
+    toolbarEl.querySelector('[data-hl-open]').onclick = () => openPanel(!document.body.classList.contains('hl-open'));
   }
 
   // capture after the selection settles; touch needs a beat for the handles to finish

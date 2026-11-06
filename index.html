@@ -6,6 +6,7 @@
 <title>Cards Advisor — Call Deconstructor &amp; Policy Workbench</title>
 <meta name="description" content="Step-by-step interactive call deconstructor and policy workbench for bank cards advisors: client psychology, call anatomy maps, regulatory rules, role-play drills, and spaced repetition. Not affiliated with any bank.">
 <meta name="theme-color" content="#070913">
+<script>try{var t=((JSON.parse(localStorage.getItem('cards-advisor:v1')||'{}').prefs||{}).theme==='light')?'light':'dark';document.documentElement.dataset.theme=t;document.querySelector('meta[name=theme-color]').content=t==='light'?'#f5f2eb':'#070913';}catch(e){}</script>
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Cards Advisor">
@@ -64,7 +65,7 @@
       <div class="reader-ctrls" id="readerCtrls">
         <div class="depth-switch" id="depthSwitch" role="group" aria-label="Advisor depth level">
           <button class="depth-btn" data-depth="agent" title="New advisor — plain language, first 15s, what to say">Agent</button>
-          <button class="depth-btn" data-depth="spec" title="Specialist — edge cases, policy citations, workarounds">Spec</button>
+          <button class="depth-btn" data-depth="specialist" title="Specialist — edge cases, policy citations, workarounds">Spec</button>
           <button class="depth-btn" data-depth="lead" title="Team lead — systemic fixes, metrics, coaching">Lead</button>
         </div>
         <button class="tb-btn tb-pol-btn" id="topPolicyBtn" title="Open Policy &amp; Figures drawer">
@@ -104,10 +105,10 @@
   <div class="palette-box">
     <div class="palette-head">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" class="palette-ico"><circle cx="7" cy="7" r="4.6" stroke="currentColor" stroke-width="1.5"/><path d="M10.5 10.5L14 14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-      <input id="paletteInput" type="search" placeholder="Search issues, client quotes, bank FAQ pages, statutory rules…" autocomplete="off" spellcheck="false">
+      <input id="paletteInput" type="search" aria-label="Search everything" role="combobox" aria-controls="paletteResults" aria-expanded="true" aria-autocomplete="list" placeholder="Search issues, client quotes, bank FAQ pages, statutory rules…" autocomplete="off" spellcheck="false">
       <kbd class="kbd">ESC</kbd>
     </div>
-    <div class="palette-results" id="paletteResults"></div>
+    <div class="palette-results" id="paletteResults" role="listbox" aria-label="Results"></div>
     <div class="palette-hint">
       <span><kbd class="kbd">↑</kbd> <kbd class="kbd">↓</kbd> to navigate</span>
       <span><kbd class="kbd">↵</kbd> to open</span>

@@ -58,7 +58,7 @@ export function policyCard(p) {
     </div>
     <div class="pol-main">
       <strong class="pol-q">${esc(p.question)}</strong>
-      ${(p.figures || []).length ? `<span class="pol-sub"><strong>Key figure:</strong> ${md(p.figures[0])}</span>` : `<span class="pol-sub">${esc(((p.answer || [])[0] || '').slice(0, 150))}…</span>`}
+      ${(p.figures || []).length ? `<span class="pol-sub"><strong>Key figure:</strong> ${md(p.figures[0])}</span>` : (() => { const lead = (p.answer || []).find(Boolean) || ''; return lead ? `<span class="pol-sub">${esc(lead.slice(0, 150))}${lead.length > 150 ? '…' : ''}</span>` : ''; })()}
       <div class="row" style="gap:6px;flex-wrap:wrap;margin-top:4px">
         ${verifyBadge()}
         ${staleBadge(p.fetched)}
@@ -91,16 +91,16 @@ export function policyView(main, id) {
     <div class="deconstruct-bar">
       <label class="db-field" for="polQ">
         <svg class="ico db-ico" viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="M13 13l4 4"/></svg>
-        <input id="polQ" type="search" placeholder="Search figures, statutes, questions… (e.g. $50, 56 days, OBSI, lock, PIN, foreign)" autocomplete="off" spellcheck="false">
+        <input id="polQ" type="search" aria-label="Search policy and figures" placeholder="Search figures, statutes, questions… (e.g. $50, 56 days, OBSI, lock, PIN, foreign)" autocomplete="off" spellcheck="false">
       </label>
     </div>
 
     <div class="lib-subbar" style="margin-bottom:22px">
-      <div class="lib-filters" role="tablist" aria-label="Policy layers">
-        <button class="lib-fchip on" data-ptab="all" type="button">All (${D.rules.mustKnow.length + D.rules.sections.length + D.faq.items.length})</button>
-        <button class="lib-fchip" data-ptab="rules" type="button">10 Must-Know Figures</button>
-        <button class="lib-fchip" data-ptab="sections" type="button">7 Regulatory Sections</button>
-        <button class="lib-fchip" data-ptab="faq" type="button">62 Bank FAQ Readings</button>
+      <div class="lib-filters" role="group" aria-label="Policy layers">
+        <button class="lib-fchip on" data-ptab="all" type="button" aria-pressed="true">All (${D.rules.mustKnow.length + D.rules.sections.length + D.faq.items.length})</button>
+        <button class="lib-fchip" data-ptab="rules" type="button" aria-pressed="false">${D.rules.mustKnow.length} Must-Know Figures</button>
+        <button class="lib-fchip" data-ptab="sections" type="button" aria-pressed="false">${D.rules.sections.length} Regulatory Sections</button>
+        <button class="lib-fchip" data-ptab="faq" type="button" aria-pressed="false">${D.faq.items.length} Bank FAQ Readings</button>
       </div>
     </div>
 
@@ -169,7 +169,7 @@ export function policyView(main, id) {
   main.querySelectorAll('[data-ptab]').forEach(btn => {
     btn.onclick = () => {
       activeTab = btn.dataset.ptab;
-      main.querySelectorAll('[data-ptab]').forEach(b => b.classList.toggle('on', b.dataset.ptab === activeTab));
+      main.querySelectorAll('[data-ptab]').forEach(b => { b.classList.toggle('on', b.dataset.ptab === activeTab); b.setAttribute('aria-pressed', String(b.dataset.ptab === activeTab)); });
       render();
     };
   });
@@ -243,10 +243,10 @@ function policyDetail(main, id) {
           <ul class="b-list" style="margin:0">${p.figures.map(f => `<li><strong>${md(f)}</strong></li>`).join('')}</ul>
         </div>
       ` : ''}
-      <div class="model-card">
+      ${(p.answer || []).length ? `<div class="model-card">
         <div class="mc-kick">Condensed reading</div>
-        ${(p.answer || []).map(a => `<p style="font-size:15px;color:var(--ink);line-height:1.65;margin-bottom:10px">${md(a)}</p>`).join('')}
-      </div>
+        ${p.answer.map(a => `<p style="font-size:15px;color:var(--ink);line-height:1.65;margin-bottom:10px">${md(a)}</p>`).join('')}
+      </div>` : ''}
       ${p.sourceText ? `<div class="b-quote">${md(p.sourceText)}<cite>Source notes</cite></div>` : ''}
       ${(p.situations || []).length ? `
         <div class="sd-block">
@@ -254,10 +254,10 @@ function policyDetail(main, id) {
           <div class="row" style="gap:6px;flex-wrap:wrap">${p.situations.map(s => `<span class="chip tone-ink">${md(s)}</span>`).join('')}</div>
         </div>
       ` : ''}
-      <div class="sd-block">
+      ${(p.sources || []).length ? `<div class="sd-block">
         <h3>Public URLs</h3>
-        <div class="sd-list">${(p.sources || []).map(u => `<div class="sd-item"><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)} ↗</a></div>`).join('')}</div>
-      </div>
+        <div class="sd-list">${p.sources.map(u => `<div class="sd-item"><a href="${esc(u)}" target="_blank" rel="noopener">${esc(u)} ↗</a></div>`).join('')}</div>
+      </div>` : ''}
     `;
   }
 

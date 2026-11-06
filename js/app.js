@@ -1,19 +1,20 @@
 import { loadData, data, searchIndex } from './data.js';
 import { store } from './store.js';
 import { esc } from './render.js';
-import { bankView, issueView } from './issue.js';
+import { bankView, issueView, cleanupIssueReader } from './issue.js';
 import { policyView } from './policy.js';
 import { cardsView } from './study.js';
 import { practiceView, drillView, stopTimers } from './practice.js';
 import { debriefView } from './debrief.js';
 import { badgeView } from './badge.js';
-import { unmountHighlighter } from './highlight.js';
+import { unmountHighlighter, openPanel } from './highlight.js';
 import { renderRoughCardLogo } from './diagram.js';
 import { initPWA, checkForUpdate } from './pwa.js';
-import { toast } from './toast.js';
+import { toast, dismissToast } from './toast.js';
 import { APP_VERSION } from './version.js';
 
 const main = document.getElementById('main');
+document.querySelector('.skip')?.addEventListener('click', e => { e.preventDefault(); main.focus(); });
 const brandMark = document.getElementById('brandMark');
 if (brandMark) brandMark.innerHTML = renderRoughCardLogo();
 
@@ -31,16 +32,20 @@ function syncTopbarDepth() {
   const d = store.pref('depth') || 'agent';
   depthSwitch?.querySelectorAll('[data-depth]').forEach(b => {
     b.classList.toggle('on', b.dataset.depth === d);
+    b.setAttribute('aria-pressed', String(b.dataset.depth === d));
   });
 }
 syncTopbarDepth();
+// the reader's own depth pills fire this on window; keep the topbar in step
+window.addEventListener('cards:depth-changed', syncTopbarDepth);
 
 depthSwitch?.querySelectorAll('[data-depth]').forEach(b => {
   b.onclick = () => {
     const d = b.dataset.depth;
     store.pref('depth', d);
     syncTopbarDepth();
-    document.dispatchEvent(new CustomEvent('cards:topbar-depth', { detail: d }));
+    // bubbles: reaches the reader whether it listens on document or window
+    document.dispatchEvent(new CustomEvent('cards:topbar-depth', { detail: d, bubbles: true }));
   };
 });
 
@@ -48,25 +53,26 @@ depthSwitch?.querySelectorAll('[data-depth]').forEach(b => {
 const topPolicyBtn = document.getElementById('topPolicyBtn');
 if (topPolicyBtn) {
   topPolicyBtn.onclick = () => {
-    document.dispatchEvent(new CustomEvent('cards:open-policy-sheet'));
+    document.dispatchEvent(new CustomEvent('cards:open-policy-sheet', { bubbles: true }));
   };
 }
 
 /* ─────────── theme ─────────── */
-const applyTheme = t => {
-  document.documentElement.classList.add('theme-transitioning');
+const applyTheme = (t, animate = true) => {
+  if (animate) document.documentElement.classList.add('theme-transitioning');
   document.documentElement.dataset.theme = t;
   const meta = document.querySelector('meta[name=theme-color]');
   if (meta) meta.content = t === 'light' ? '#f5f2eb' : '#070913';
   setTimeout(() => document.documentElement.classList.remove('theme-transitioning'), 240);
 };
-applyTheme(store.pref('theme') || 'dark');
+applyTheme(store.pref('theme') || 'dark', false);
 
 document.getElementById('themeBtn')?.addEventListener('click', () => {
   const cur = document.documentElement.dataset.theme || store.pref('theme') || 'dark';
   const t = cur === 'light' ? 'dark' : 'light';
   store.pref('theme', t);
   applyTheme(t);
+  if ((location.hash || '#/').startsWith('#/about')) aboutView();
 });
 
 /* ─────────── palette ─────────── */
@@ -75,15 +81,35 @@ const palette = document.getElementById('palette');
 const pInput = document.getElementById('paletteInput');
 const pResults = document.getElementById('paletteResults');
 let pSel = 0, pHits = [];
+let pReturn = null;
+// leaves alone anything already inert (e.g. #app while the Policy sheet is open) so closing the palette does not undo it
+let pInerted = [];
+const setBehindInert = on => {
+  if (on) {
+    pInerted = [...document.body.children].filter(el => el !== palette && el.tagName !== 'SCRIPT' && !el.inert);
+    pInerted.forEach(el => { el.inert = true; });
+  } else {
+    pInerted.forEach(el => { el.inert = false; });
+    pInerted = [];
+  }
+};
 
 function openPalette() {
+  if (!palette.hidden) return;
+  pReturn = document.activeElement;
+  setBehindInert(true);
   palette.hidden = false;
   pInput.value = '';
   pInput.focus();
   runSearch('');
 }
 function closePalette() {
+  if (palette.hidden) return;
   palette.hidden = true;
+  setBehindInert(false);
+  pInput.removeAttribute('aria-activedescendant');
+  if (pReturn && document.contains(pReturn)) pReturn.focus({ preventScroll: true });
+  pReturn = null;
 }
 function runSearch(q) {
   const terms = q.toLowerCase().split(/\s+/).filter(Boolean);
@@ -92,7 +118,7 @@ function runSearch(q) {
     : INDEX.filter(x => x.kind === 'Issue').slice(0, 12);
   pSel = 0;
   pResults.innerHTML = pHits.length
-    ? pHits.map((h, i) => `<button class="pr${i === 0 ? ' sel' : ''}" data-i="${i}">
+    ? pHits.map((h, i) => `<button class="pr${i === 0 ? ' sel' : ''}" role="option" id="pr-${i}" aria-selected="${i === 0}" data-i="${i}">
         <span class="k">${esc(h.kind)}</span>
         <span class="pr-main">
           <strong>${esc(h.title)}</strong>
@@ -100,6 +126,7 @@ function runSearch(q) {
         </span>
       </button>`).join('')
     : `<div class="empty" style="margin:12px">Nothing found. Try "abroad", "lock", "56 days", "spouse", or "$50".</div>`;
+  pHits.length ? pInput.setAttribute('aria-activedescendant', 'pr-0') : pInput.removeAttribute('aria-activedescendant');
   pResults.querySelectorAll('.pr').forEach(b => {
     b.onclick = () => {
       go(pHits[+b.dataset.i].href);
@@ -118,7 +145,8 @@ document.addEventListener('keydown', e => {
     if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
       pSel = Math.max(0, Math.min(pHits.length - 1, pSel + (e.key === 'ArrowDown' ? 1 : -1)));
-      pResults.querySelectorAll('.pr').forEach((b, i) => b.classList.toggle('sel', i === pSel));
+      pResults.querySelectorAll('.pr').forEach((b, i) => { b.classList.toggle('sel', i === pSel); b.setAttribute('aria-selected', String(i === pSel)); });
+      if (pHits.length) pInput.setAttribute('aria-activedescendant', 'pr-' + pSel);
       pResults.querySelector('.sel')?.scrollIntoView({ block: 'nearest' });
     }
     if (e.key === 'Enter' && pHits[pSel]) {
@@ -136,6 +164,11 @@ document.addEventListener('keydown', e => {
   }
 
   const typing = /^(INPUT|TEXTAREA|SELECT)$/.test(document.activeElement?.tagName) || document.activeElement?.isContentEditable;
+  // Esc: the open Policy sheet is handled by the reader's own key handler
+  if (e.key === 'Escape' && !document.querySelector('.sheet-scrim')) {
+    if (document.body.classList.contains('hl-open')) { e.preventDefault(); openPanel(false); return; }
+    if (document.body.classList.contains('reading') && !typing) { e.preventDefault(); go('#/'); return; }
+  }
   if (e.key === '/' && !typing) {
     e.preventDefault();
     openPalette();
@@ -178,9 +211,9 @@ function aboutView() {
             <p>Controls which role lens is highlighted in step-by-step walkthroughs (New Advisor, Specialist, or Team Lead).</p>
           </div>
           <div class="seg-group">
-            <button class="seg-btn${curDepth === 'agent' ? ' on' : ''}" data-set-depth="agent">New Advisor</button>
-            <button class="seg-btn${curDepth === 'spec' ? ' on' : ''}" data-set-depth="spec">Specialist</button>
-            <button class="seg-btn${curDepth === 'lead' ? ' on' : ''}" data-set-depth="lead">Team Lead</button>
+            <button type="button" class="seg-btn${curDepth === 'agent' ? ' on' : ''}" aria-pressed="${curDepth === 'agent'}" data-set-depth="agent">New Advisor</button>
+            <button type="button" class="seg-btn${curDepth === 'specialist' ? ' on' : ''}" aria-pressed="${curDepth === 'specialist'}" data-set-depth="specialist">Specialist</button>
+            <button type="button" class="seg-btn${curDepth === 'lead' ? ' on' : ''}" aria-pressed="${curDepth === 'lead'}" data-set-depth="lead">Team Lead</button>
           </div>
         </div>
 
@@ -190,8 +223,8 @@ function aboutView() {
             <p>Step-by-step mode pairs each call phase with the interactive Call Anatomy diagram and timeline scrubber.</p>
           </div>
           <div class="seg-group">
-            <button class="seg-btn${!onePage ? ' on' : ''}" data-set-onepage="0">Step-by-Step</button>
-            <button class="seg-btn${onePage ? ' on' : ''}" data-set-onepage="1">All 11 on One Page</button>
+            <button type="button" class="seg-btn${!onePage ? ' on' : ''}" aria-pressed="${!onePage}" data-set-onepage="0">Step-by-Step</button>
+            <button type="button" class="seg-btn${onePage ? ' on' : ''}" aria-pressed="${onePage}" data-set-onepage="1">All 11 on One Page</button>
           </div>
         </div>
 
@@ -201,8 +234,8 @@ function aboutView() {
             <p>Prompt yourself to draft or say your opening line before revealing the recommended script in Part 04.</p>
           </div>
           <div class="seg-group">
-            <button class="seg-btn${!gateMode ? ' on' : ''}" data-set-gate="0">Instant Reveal</button>
-            <button class="seg-btn${gateMode ? ' on' : ''}" data-set-gate="1">Sketch Gate On</button>
+            <button type="button" class="seg-btn${!gateMode ? ' on' : ''}" aria-pressed="${!gateMode}" data-set-gate="0">Instant Reveal</button>
+            <button type="button" class="seg-btn${gateMode ? ' on' : ''}" aria-pressed="${gateMode}" data-set-gate="1">Sketch Gate On</button>
           </div>
         </div>
 
@@ -212,8 +245,8 @@ function aboutView() {
             <p>Warm Editorial Paper (light) for daytime study or Slate Ink (dark) for low-light review.</p>
           </div>
           <div class="seg-group">
-            <button class="seg-btn${curTheme === 'light' ? ' on' : ''}" data-set-theme="light">Warm Paper</button>
-            <button class="seg-btn${curTheme === 'dark' ? ' on' : ''}" data-set-theme="dark">Slate Ink</button>
+            <button type="button" class="seg-btn${curTheme === 'light' ? ' on' : ''}" aria-pressed="${curTheme === 'light'}" data-set-theme="light">Warm Paper</button>
+            <button type="button" class="seg-btn${curTheme === 'dark' ? ' on' : ''}" aria-pressed="${curTheme === 'dark'}" data-set-theme="dark">Slate Ink</button>
           </div>
         </div>
 
@@ -225,7 +258,7 @@ function aboutView() {
           <div class="row" style="gap:8px">
             <button class="btn sec" id="exp">Export Backup</button>
             <button class="btn sec" id="imp">Import Backup</button>
-            <input type="file" id="impFile" accept="application/json" hidden>
+            <input type="file" id="impFile" accept=".json,application/json" hidden>
           </div>
         </div>
 
@@ -270,13 +303,17 @@ function aboutView() {
   main.querySelector('#imp').onclick = () => file.click();
   file.onchange = async () => {
     const f = file.files[0]; if (!f) return;
+    const text = await f.text();
+    if (!confirm('Replace all study data on this device with this backup?')) { file.value = ''; return; }
     try {
-      store.importAll(await f.text());
+      store.importAll(text);
+      file.value = '';
       syncTopbarDepth();
       applyTheme(store.pref('theme') || 'light');
       toast({ msg: 'Backup imported.', icon: '✓' });
       aboutView();
     } catch {
+      file.value = '';
       toast({ msg: 'That file is not a valid Cards Advisor backup.', icon: '!' });
     }
   };
@@ -296,21 +333,28 @@ export function go(hash) {
   else location.hash = hash;
 }
 
-function route() {
-  const [, seg, a, b] = (location.hash || '#/').split('/');
+const scrollMem = new Map();
+
+function route(ev) {
+  closePalette();
+  const from = ev?.oldURL ? (new URL(ev.oldURL).hash || '#/') : null;
+  if (from) scrollMem.set(from, main.scrollTop);
+  // a stray non-route hash (e.g. '#main' from a bookmark) resolves to the bank
+  if (location.hash && !location.hash.startsWith('#/')) history.replaceState(null, '', '#/');
+  let [seg = '', a, b] = (location.hash || '#/').replace(/^#\/?/, '').replace(/\/+$/, '').split('/');
+  a = a || undefined; b = b || undefined;
   stopTimers();
   window.scrollTo(0, 0);
-  main.scrollTo(0, 0);
   if (seg !== 'issue') {
+    cleanupIssueReader();
     unmountHighlighter();
-    document.getElementById('policySheetScrim')?.remove();
   }
   syncTopbarDepth();
 
   switch (seg) {
     case '': case undefined: bankView(main); break;
     case 'issue': issueView(main, a, b); break;
-    case 'cat': bankView(main, decodeURIComponent(a || '')); break;
+    case 'cat': { let c = ''; try { c = decodeURIComponent(a || ''); } catch { c = ''; } bankView(main, c); break; }
     case 'policy': policyView(main, a); break;
     case 'cards': cardsView(main); break;
     case 'practice': practiceView(main); break;
@@ -318,8 +362,14 @@ function route() {
     case 'debrief': debriefView(main); break;
     case 'id': case 'badge': badgeView(main); break;
     case 'about': aboutView(); break;
-    default: bankView(main);
+    default: history.replaceState(null, '', '#/'); seg = ''; bankView(main);
   }
+
+  // Back from an issue to the bank returns to the list position; everything else starts at the top
+  const toBank = seg === '' || seg === undefined || seg === 'cat';
+  const fromIssue = !!from && from.startsWith('#/issue/');
+  // 'instant' overrides the CSS scroll-behavior: smooth on #main, so the reset does not animate
+  main.scrollTo({ top: (toBank && fromIssue) ? (scrollMem.get(location.hash || '#/') || 0) : 0, behavior: 'instant' });
 
   // Highlight active tab in top/bottom nav pill
   document.querySelectorAll('#tbNav .tb-tab').forEach(tab => {
@@ -330,12 +380,12 @@ function route() {
     const isExact = seg === navKey;
     const active = isIssues || isPractice || isId || isExact;
     tab.classList.toggle('active', active);
-    tab.toggleAttribute('aria-current', active);
+    if (active) tab.setAttribute('aria-current', 'page'); else tab.removeAttribute('aria-current');
   });
 
   document.getElementById('badgeNavBtn')?.classList.toggle('active', seg === 'id' || seg === 'badge');
   document.getElementById('aboutBtn')?.classList.toggle('active', seg === 'about');
-  main.focus({ preventScroll: true });
+  if (!main.contains(document.activeElement)) main.focus({ preventScroll: true });
 }
 
 /* ─────────── first run and backups ─────────── */
@@ -345,7 +395,8 @@ function firstRun() {
     id: 'privacy', icon: '◆', timeout: 0,
     msg: 'Study workbench, not an official bank source. Confirm figures in-system. Never type client details here.',
     action: 'Understood',
-    onAction: () => { store.pref('privacyAck', Date.now()); document.querySelector('[data-toast-id=privacy]')?.remove(); }
+    onAction: () => { store.pref('privacyAck', Date.now()); dismissToast('privacy'); },
+    onDismiss: () => store.pref('privacyAck', Date.now())
   });
 }
 
@@ -353,10 +404,11 @@ document.addEventListener('cards:storage-error', () => toast({
   id: 'quota', icon: '!', timeout: 0,
   msg: 'This device refused to save. Export your notes from Settings.',
   action: 'Open Settings', secondary: 'Dismiss',
-  onAction: () => { go('#/about'); }
+  onAction: () => { dismissToast('quota'); go('#/about'); }
 }));
 
 function maybeNagBackup() {
+  if (!store.pref('privacyAck')) return;
   const risk = store.valueAtRisk(), last = store.pref('lastBackup') || 0, nag = store.pref('backupNag') || 0, now = Date.now();
   if (risk < 10 || now - last < 14 * 864e5 || now - nag < 3 * 864e5) return;
   store.pref('backupNag', now);
@@ -364,7 +416,7 @@ function maybeNagBackup() {
     id: 'backup', icon: '↓', timeout: 0,
     msg: `${risk} pieces of work are saved only on this device.`,
     action: 'Back up', secondary: 'Not now',
-    onAction: () => go('#/about')
+    onAction: () => { dismissToast('backup'); go('#/about'); }
   }), 4000);
 }
 
@@ -378,6 +430,8 @@ function maybeNagBackup() {
   INDEX = searchIndex();
   window.addEventListener('hashchange', route);
   window.addEventListener('beforeunload', () => store.flushNow());
+  window.addEventListener('pagehide', () => store.flushNow());
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') store.flushNow(); });
   route();
   initPWA();
   firstRun();

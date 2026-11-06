@@ -13,6 +13,8 @@ export function cardsView(main, mode = 'due', kindFilter = '') {
   const weak = new Set(store.weakCards);
 
   const byKind = kindFilter ? all.filter(c => c.kind === kindFilter) : all;
+  const dueInKind = byKind.filter(c => store.card(c.id).due <= now).length;
+  const weakInKind = byKind.filter(c => weak.has(c.id)).length;
   let pool = mode === 'weak' ? byKind.filter(c => weak.has(c.id))
     : mode === 'all' ? [...byKind]
     : byKind.filter(c => store.card(c.id).due <= now);
@@ -33,7 +35,8 @@ export function cardsView(main, mode = 'due', kindFilter = '') {
 
   const draw = () => {
     const c = pool[idx];
-    const progressSegs = pool.slice(0, 28); // visual cap for progress segments
+    const segStart = Math.max(0, Math.min(idx - 14, pool.length - 28));
+    const progressSegs = pool.slice(segStart, segStart + 28); // visual cap for progress segments, windowed around idx
 
     main.innerHTML = `<section class="screen screen-active"><div class="screen-inner" style="max-width:780px">
       <div class="kicker">Spaced Repetition · ${all.length} cards · ${dueCount} due now · ${weak.size} weak spots</div>
@@ -52,10 +55,10 @@ export function cardsView(main, mode = 'due', kindFilter = '') {
       </div>
 
       <div class="lib-subbar" style="margin:18px 0 14px">
-        <div class="lib-filters" role="tablist" aria-label="Deck mode">
-          <button class="lib-fchip ${mode === 'due' ? 'on' : ''}" data-mode="due" type="button">Due now (${dueCount})</button>
-          <button class="lib-fchip ${mode === 'weak' ? 'on' : ''}" data-mode="weak" type="button">Weak spots (${weak.size})</button>
-          <button class="lib-fchip ${mode === 'all' ? 'on' : ''}" data-mode="all" type="button">All cards (${all.length})</button>
+        <div class="lib-filters" role="group" aria-label="Deck mode">
+          <button class="lib-fchip ${mode === 'due' ? 'on' : ''}" data-mode="due" type="button" aria-pressed="${mode === 'due'}">Due now (${dueInKind})</button>
+          <button class="lib-fchip ${mode === 'weak' ? 'on' : ''}" data-mode="weak" type="button" aria-pressed="${mode === 'weak'}">Weak spots (${weakInKind})</button>
+          <button class="lib-fchip ${mode === 'all' ? 'on' : ''}" data-mode="all" type="button" aria-pressed="${mode === 'all'}">All cards (${byKind.length})</button>
         </div>
         <div class="lib-filters" role="group" aria-label="Card type filter">
           ${[
@@ -63,7 +66,7 @@ export function cardsView(main, mode = 'due', kindFilter = '') {
             ['figure', 'Statutes'],
             ['say this', 'Say This'],
             ['bank figure', 'Bank FAQ']
-          ].map(([k, lbl]) => `<button class="lib-fchip ${kindFilter === k ? 'on' : ''}" data-kind="${k}" type="button">${lbl}</button>`).join('')}
+          ].map(([k, lbl]) => `<button class="lib-fchip ${kindFilter === k ? 'on' : ''}" data-kind="${k}" type="button" aria-pressed="${kindFilter === k}">${lbl}</button>`).join('')}
         </div>
       </div>
 
@@ -77,7 +80,7 @@ export function cardsView(main, mode = 'due', kindFilter = '') {
       ` : `
         <!-- Session Progress Bar -->
         <div class="rv-progress" aria-label="Card ${idx + 1} of ${pool.length}">
-          ${progressSegs.map((_, k) => `<span class="${k < idx ? 'done' : k === idx ? 'on' : ''}"></span>`).join('')}
+          ${progressSegs.map((_, k) => { const p = segStart + k; return `<span class="${p < idx ? 'done' : p === idx ? 'on' : ''}"></span>`; }).join('')}
         </div>
 
         <div class="between" style="margin-bottom:10px">

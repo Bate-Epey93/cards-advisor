@@ -106,7 +106,7 @@ export function drillView(main, id) {
     return;
   }
   const bd = i.breakdown;
-  const opening = i.quotes?.[0]?.text || bd.surfaceRequest;
+  const opening = i.quotes?.[0]?.text || bd.surfaceRequest || i.title;
   const prev = store.drill(id);
 
   let phase = 'write';   // 'write' | 'score'
@@ -148,19 +148,19 @@ export function drillView(main, id) {
           <div class="gate-card" style="margin:0">
             <div class="gate-kick" style="color:var(--proposal)">Move 1 · The first fifteen seconds</div>
             <div class="gate-q" style="font-size:16px;margin-bottom:8px">Acknowledge the specific situation and time-box your check:</div>
-            <textarea id="drEngage" rows="3" placeholder="e.g. Declined at the pharmacy for the prescription, and you have already waited. I can see the restriction and deal with it on this call…">${esc(parts.engage)}</textarea>
+            <textarea id="drEngage" rows="3" aria-label="Move 1, the first fifteen seconds" placeholder="e.g. Declined at the pharmacy for the prescription, and you have already waited. I can see the restriction and deal with it on this call…">${esc(parts.engage)}</textarea>
           </div>
 
           <div class="gate-card" style="margin:0">
             <div class="gate-kick" style="color:var(--accent)">Move 2 · Diagnostic questions, in order</div>
             <div class="gate-q" style="font-size:16px;margin-bottom:8px">What are the 2–3 shortest questions to reach the decision fork?</div>
-            <textarea id="drDiagnose" rows="3" placeholder="1. Was the flagged transaction yours?\n2. Is the number we have for alerts the phone in your hand?…">${esc(parts.diagnose)}</textarea>
+            <textarea id="drDiagnose" rows="3" aria-label="Move 2, diagnostic questions in order" placeholder="1. Was the flagged transaction yours?\n2. Is the number we have for alerts the phone in your hand?…">${esc(parts.diagnose)}</textarea>
           </div>
 
           <div class="gate-card" style="margin:0">
             <div class="gate-kick" style="color:var(--money)">Move 3 · Resolution, liability & timing</div>
             <div class="gate-q" style="font-size:16px;margin-bottom:8px">State the outcome, the exact statutory liability/timing figures, and written confirmation:</div>
-            <textarea id="drResolve" rows="4" placeholder="If theirs: lift restriction, update number. If not theirs: block, $0 liability after report ($50 cap before), replacement in 7–10 business days or emergency in 3…">${esc(parts.resolve)}</textarea>
+            <textarea id="drResolve" rows="4" aria-label="Move 3, resolution, liability and timing" placeholder="If theirs: lift restriction, update number. If not theirs: block, $0 liability after report ($50 cap before), replacement in 7–10 business days or emergency in 3…">${esc(parts.resolve)}</textarea>
           </div>
         </div>
 
@@ -185,7 +185,7 @@ export function drillView(main, id) {
             <div class="sc-label">The Breakdown Benchmark</div>
             <div class="drill-review-sec"><strong>1. First 15s:</strong><p>${md(bd.engage)}</p></div>
             <div class="drill-review-sec"><strong>2. Questions in order:</strong>
-              <ol class="diag-steps" style="margin:6px 0">${bd.diagnose.map((q, k) => `<li><span class="diag-num">${k + 1}</span><div class="diag-body">${md(q)}</div></li>`).join('')}</ol>
+              <ol class="diag-steps" style="margin:6px 0">${(bd.diagnose || []).map((q, k) => `<li><span class="diag-num">${k + 1}</span><div class="diag-body">${md(q)}</div></li>`).join('')}</ol>
             </div>
             <div class="drill-review-sec"><strong>3. Resolution:</strong><p>${md(bd.resolve)}</p></div>
           </div>
@@ -193,7 +193,7 @@ export function drillView(main, id) {
 
         <div class="sd-block">
           <h3>Say this, not this — check your phrasing</h3>
-          ${bd.sayThisNotThis.map(s => `<div class="b-ge"><div class="hd">Say this, not this</div><div class="g"><b>✓ Say</b> <div>${md(s.say)}</div></div><div class="b"><b>✗ Not</b> <div>${md(s.not)}</div></div><div class="w"><strong>Why:</strong> ${md(s.why)}</div></div>`).join('')}
+          ${(bd.sayThisNotThis || []).map(s => `<div class="b-ge"><div class="hd">Say this, not this</div><div class="g"><b>✓ Say</b> <div>${md(s.say)}</div></div><div class="b"><b>✗ Not</b> <div>${md(s.not)}</div></div><div class="w"><strong>Why:</strong> ${md(s.why)}</div></div>`).join('')}
         </div>
 
         <div class="rv-card" style="margin-top:24px">
@@ -251,7 +251,7 @@ export function drillView(main, id) {
         store.draft(id, serializeDraftParts(parts));
         phase = 'score';
         draw();
-        window.scrollTo(0, 0);
+        main.scrollTo({ top: 0, behavior: 'instant' });
       };
     } else {
       main.querySelector('#backToEdit')?.addEventListener('click', () => {
@@ -260,8 +260,10 @@ export function drillView(main, id) {
       });
       main.querySelectorAll('[data-crit]').forEach(b => {
         b.onclick = () => {
-          scores[b.dataset.crit] = +b.dataset.n;
+          const k = b.dataset.crit, n = b.dataset.n;
+          scores[k] = +n;
           draw();
+          main.querySelector(`[data-crit="${k}"][data-n="${n}"]`)?.focus({ preventScroll: true });
         };
       });
       const save = main.querySelector('#save');

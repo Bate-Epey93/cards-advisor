@@ -32,6 +32,7 @@ function actForPart(pi) {
 }
 
 let filters = { q: '', cat: '', freq: '', emo: '', chip: 'all' };
+let catFromRoute = false;
 let activeReaderCleanup = null;
 
 export function cleanupIssueReader() {
@@ -47,9 +48,16 @@ export function cleanupIssueReader() {
 export function bankView(main, cat) {
   cleanupIssueReader();
   document.body.classList.remove('reading');
-  if (cat !== undefined) filters = { ...filters, cat, chip: 'all' };
-
   const D = data();
+  if (cat !== undefined) {
+    const nextCat = D.categories.includes(cat) ? cat : '';
+    if (nextCat !== filters.cat) filters = { ...filters, cat: nextCat, chip: 'all' };
+    catFromRoute = !!nextCat;
+  } else if (catFromRoute) {
+    filters = { ...filters, cat: '' };
+    catFromRoute = false;
+  }
+
   const flagships = D.issues.filter(i => i.breakdown);
 
   // Determine the "Continue / Up Next" flagship issue
@@ -61,13 +69,14 @@ export function bankView(main, cat) {
   const heroProg = store.prog(heroIssue.id);
   const heroTotal = heroIssue.breakdown ? 11 : 4;
   const heroPct = store.issuePct(heroIssue.id, heroTotal);
-  const heroNextStep = typeof heroProg.pos === 'number' && heroProg.pos < heroTotal ? heroProg.pos : 0;
+  const heroDone = heroPct >= 100;
+  const heroNextStep = !heroDone && typeof heroProg.pos === 'number' && heroProg.pos < heroTotal ? heroProg.pos : 0;
   const heroStepTitle = heroIssue.breakdown
     ? (PARTS[heroNextStep]?.[1] || PARTS[0][1])
     : OBS_STEPS[heroNextStep]?.[1] || OBS_STEPS[0][1];
 
   const completedFlagships = flagships.filter(i => store.issuePct(i.id, 11) >= 100).length;
-  const streakCount = store.all.streak?.count || 0;
+  const streakCount = store.currentStreak ?? 0;
 
   main.innerHTML = `<section class="screen screen-active">
     <div class="screen-inner">
@@ -75,7 +84,7 @@ export function bankView(main, cat) {
     <div class="home-top">
       <div class="home-card home-continue" data-domain="${domainForCategory(heroIssue.category)}">
         <div class="home-cont-text">
-          <span class="eyebrow-sm">${heroPct > 0 ? 'Continue walkthrough' : 'Start here · Flagship breakdown'}</span>
+          <span class="eyebrow-sm">${heroDone ? 'Review walkthrough' : heroPct > 0 ? 'Continue walkthrough' : 'Start here · Flagship breakdown'}</span>
           <h2 class="home-sys">${esc(heroIssue.title)}</h2>
           <div class="home-where">Step ${heroNextStep + 1} of ${heroTotal} · ${esc(heroStepTitle)}</div>
           <div class="bd-strata" aria-label="${heroPct}% complete">
@@ -83,7 +92,7 @@ export function bankView(main, cat) {
           </div>
           <div class="row" style="gap:8px;margin-top:4px">
             <a class="big-btn" href="#/issue/${heroIssue.id}/${heroNextStep}">
-              <span>${heroPct > 0 ? 'Continue step ' + (heroNextStep + 1) : 'Begin walkthrough'}</span>
+              <span>${heroDone ? 'Review from step 1' : heroPct > 0 ? 'Continue step ' + (heroNextStep + 1) : 'Begin walkthrough'}</span>
               <span class="btn-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 20 20"><path d="M5 10h10M11 6l4 4-4 4"/></svg></span>
             </a>
             <a class="gbtn" href="#/drill/${heroIssue.id}">Practise call</a>
@@ -154,7 +163,7 @@ export function bankView(main, cat) {
           ['progress', 'In progress'],
           ['done', 'Completed'],
           ['very-common', 'Very common']
-        ].map(([k, label]) => `<button class="lib-fchip ${filters.chip === k ? 'on' : ''}" data-chip="${k}" type="button">${label}</button>`).join('')}
+        ].map(([k, label]) => `<button class="lib-fchip ${filters.chip === k ? 'on' : ''}" data-chip="${k}" type="button" aria-pressed="${filters.chip === k}">${label}</button>`).join('')}
       </div>
       <div class="row" style="gap:8px">
         <select id="bankCat" class="sel-pill" aria-label="Filter by category">
@@ -176,6 +185,7 @@ export function bankView(main, cat) {
   const gridWrap = main.querySelector('#bankGridWrap');
   const qInput = main.querySelector('#bankQ');
   const clearBtn = main.querySelector('#clearQBtn');
+  let qTimer = 0;
 
   function renderGrid() {
     const list = D.issues
@@ -213,7 +223,9 @@ export function bankView(main, cat) {
         clearBtn.hidden = true;
         main.querySelector('#bankCat').value = '';
         main.querySelector('#bankEmo').value = '';
-        main.querySelectorAll('[data-chip]').forEach(b => b.classList.toggle('on', b.dataset.chip === 'all'));
+        main.querySelectorAll('[data-chip]').forEach(b => { b.classList.toggle('on', b.dataset.chip === 'all'); b.setAttribute('aria-pressed', String(b.dataset.chip === 'all')); });
+        catFromRoute = false;
+        if (location.hash.startsWith('#/cat/')) history.replaceState(null, '', '#/');
         renderGrid();
       });
       return;
@@ -230,6 +242,7 @@ export function bankView(main, cat) {
       const pct = store.issuePct(i.id, total);
       const dom = domainForCategory(i.category);
       const nextStep = typeof prog.pos === 'number' && prog.pos < total ? prog.pos : 0;
+      const essence = i.underlyingJob || i.breakdown?.underlyingJob || i.trainingPoint || '';
 
       return `<a class="bd-card" data-domain="${dom}" href="#/issue/${i.id}/${pct > 0 && pct < 100 ? nextStep : 0}">
         ${renderMiniTopo(i)}
@@ -240,7 +253,7 @@ export function bankView(main, cat) {
           <span class="bd-go" aria-hidden="true"><svg class="ico" viewBox="0 0 20 20"><path d="M6 14L14 6M8 6h6v6"/></svg></span>
         </div>
         <div class="bd-name">${esc(i.title)}</div>
-        <div class="bd-essence">${esc(i.underlyingJob || i.breakdown?.underlyingJob || '')}</div>
+        ${essence ? `<div class="bd-essence">${esc(essence)}</div>` : ''}
         ${i.emotion ? `<div class="bd-meta"><span class="chip tone-ink">State: ${esc(i.emotion.split(/[.;]/)[0])}</span></div>` : ''}
         <div class="bd-strata" aria-hidden="true">
           ${Array.from({ length: total }, (_, k) => `<span class="${readSet.has(k) ? 'on' : ''}"></span>`).join('')}
@@ -275,21 +288,30 @@ export function bankView(main, cat) {
   qInput.addEventListener('input', e => {
     filters.q = e.target.value.trim().toLowerCase();
     clearBtn.hidden = !filters.q;
-    renderGrid();
+    clearTimeout(qTimer);
+    qTimer = setTimeout(renderGrid, 120);
   });
   clearBtn.addEventListener('click', () => {
     filters.q = '';
     qInput.value = '';
     clearBtn.hidden = true;
+    clearTimeout(qTimer);
     renderGrid();
     qInput.focus();
   });
-  main.querySelector('#bankCat').onchange = e => { filters.cat = e.target.value; renderGrid(); };
+  main.querySelector('#bankCat').onchange = e => {
+    filters.cat = e.target.value;
+    const onCatRoute = location.hash.startsWith('#/cat/');
+    // On a #/cat/ route the hash follows the select, so the category stays route-supplied
+    catFromRoute = onCatRoute && !!filters.cat;
+    if (onCatRoute) history.replaceState(null, '', filters.cat ? '#/cat/' + encodeURIComponent(filters.cat) : '#/');
+    renderGrid();
+  };
   main.querySelector('#bankEmo').onchange = e => { filters.emo = e.target.value; renderGrid(); };
   main.querySelectorAll('[data-chip]').forEach(b => {
     b.onclick = () => {
       filters.chip = b.dataset.chip;
-      main.querySelectorAll('[data-chip]').forEach(x => x.classList.toggle('on', x.dataset.chip === filters.chip));
+      main.querySelectorAll('[data-chip]').forEach(x => { x.classList.toggle('on', x.dataset.chip === filters.chip); x.setAttribute('aria-pressed', String(x.dataset.chip === filters.chip)); });
       renderGrid();
     };
   });
@@ -458,9 +480,11 @@ function renderBreakdownPart(issue, bd, pi) {
       ${refs.length ? `<div class="defends-row defends-full">
         <span class="mono-label">Backed by ${refs.length} policy rules (tap to open Policy sheet)</span>
         <div class="row" style="gap:6px;flex-wrap:wrap">
-          ${refs.map(p => `<button type="button" class="inv-badge inv-tap" data-open-policy="${p.id}">
-            ${esc(p.kind === 'rule' ? `${p.figure} · ${p.source.split(';')[0]}` : p.question?.slice(0, 38) + '…')}
-          </button>`).join('')}
+          ${refs.map(p => {
+            const t = p.kind === 'rule' ? `${p.figure} · ${String(p.source || '').split(';')[0]}` : String(p.question || p.title || p.id);
+            const label = p.kind !== 'rule' && t.length > 38 ? t.slice(0, 38).trimEnd() + '…' : t;
+            return `<button type="button" class="inv-badge inv-tap" data-open-policy="${p.id}">${esc(label)}</button>`;
+          }).join('')}
         </div>
       </div>` : ''}
     `;
@@ -533,8 +557,7 @@ function renderObservedStep(issue, stepIdx) {
         <p>${md(issue.frequencyEvidence || 'Documented across public consumer complaints and cardholder reviews.')}</p>
       </div>
       <div class="sd-block">
-        <h3>Verbatim client quotes</h3>
-        ${(issue.quotes || []).map(q => `<div class="b-quote">${md(q.text)}<cite>${q.url ? `<a href="${esc(q.url)}" target="_blank" rel="noopener">Source page ↗</a>` : ''}${q.snippetOnly ? ' · search snippet only' : ''}</cite></div>`).join('')}
+        ${(issue.quotes || []).length ? `<h3>Verbatim client quotes</h3>${issue.quotes.map(q => `<div class="b-quote">${md(q.text)}<cite>${q.url ? `<a href="${esc(q.url)}" target="_blank" rel="noopener">Source page ↗</a>` : ''}${q.snippetOnly ? ' · search snippet only' : ''}</cite></div>`).join('')}` : `<h3>Verbatim client quotes</h3><p class="dim">No verbatim quotes were captured for this issue; the pattern comes from the frequency evidence above.</p>`}
       </div>
     `;
   }
@@ -610,6 +633,7 @@ export function issueView(main, id, partArg) {
 
   // Determine current part: '0'..'10' (or '0'..'3' for observed), 'all', 'o', 'p'
   const savedPos = store.prog(i.id).pos;
+  if (partArg !== undefined && !/^(\d+|all|o|p)$/.test(String(partArg))) partArg = undefined;
   let part = partArg !== undefined ? String(partArg) : (onePage && bd ? 'all' : String(savedPos ?? 0));
   if (!bd && (part === 'all' || (+part >= 4))) part = '0';
 
@@ -624,9 +648,10 @@ export function issueView(main, id, partArg) {
   const readSet = new Set(prog.read || []);
   const pct = store.issuePct(i.id, totalSteps);
   const splitLeft = store.pref('splitLeft') || 52;
+  const sheetSnap = [30, 56, 88].includes(+store.pref('sheetSnap')) ? +store.pref('sheetSnap') : 56;
 
   // Build Reader DOM (Split-pane on desktop, interactive diagram + bottom sheet on mobile)
-  main.innerHTML = `<div class="reader" id="issueReader" style="--split-left:${splitLeft}%" data-domain="${domainForCategory(i.category)}">
+  main.innerHTML = `<div class="reader" id="issueReader" style="--split-left:${splitLeft}%;--sheet:${sheetSnap}%" data-domain="${domainForCategory(i.category)}">
     <!-- Left / Upper Pane: Interactive Call Anatomy Diagram & Timeline Scrubber -->
     <div class="diagram-pane" id="diagramPane">
       <div class="reg-mark tl"></div><div class="reg-mark tr"></div>
@@ -665,18 +690,18 @@ export function issueView(main, id, partArg) {
     </div>
 
     <!-- Desktop Resizable Split Divider -->
-    <div class="pane-split" id="paneSplit" role="separator" tabindex="0" aria-label="Resize diagram and reading pane">
+    <div class="pane-split" id="paneSplit" role="separator" tabindex="0" aria-label="Resize diagram and reading pane" aria-orientation="vertical" aria-valuemin="36" aria-valuemax="66" aria-valuenow="${splitLeft}">
       <div class="pane-split-bar"></div>
     </div>
 
     <!-- Right / Mobile Bottom Sheet: Step-by-Step Prose Reader -->
     <div class="doc-sheet" id="docSheet">
-      <div class="sheet-grip-row" id="sheetGrip" role="button" tabindex="0" aria-label="Drag or tap to resize reading sheet">
+      <div class="sheet-grip-row" id="sheetGrip">
         <div class="sheet-grip-bar"></div>
-        <div class="sheet-snap-pills">
-          <button type="button" data-snap="30">Map</button>
-          <button type="button" data-snap="56" class="on">Split</button>
-          <button type="button" data-snap="88">Read</button>
+        <div class="sheet-snap-pills" role="group" aria-label="Reading sheet size">
+          <button type="button" data-snap="30" ${sheetSnap === 30 ? 'class="on"' : ''}>Map</button>
+          <button type="button" data-snap="56" ${sheetSnap === 56 ? 'class="on"' : ''}>Split</button>
+          <button type="button" data-snap="88" ${sheetSnap === 88 ? 'class="on"' : ''}>Read</button>
         </div>
       </div>
       <div class="doc-pane" id="docPane">
@@ -786,6 +811,11 @@ export function issueView(main, id, partArg) {
         addSeg(String(idx), `${idx + 1} · ${label.split('&')[0].trim()}`, state, label, hint, `STEP ${idx + 1} OF 4`, tone);
       });
     }
+    const cur = row.querySelector('[aria-current]');
+    if (cur) {
+      const c = cur.getBoundingClientRect(), r = row.getBoundingClientRect();
+      row.scrollLeft = Math.max(0, row.scrollLeft + (c.left + c.width / 2) - (r.left + r.width / 2));
+    }
   }
 
   function renderReaderContent() {
@@ -834,7 +864,7 @@ export function issueView(main, id, partArg) {
         <div class="depth-banner-head">
           <span class="mono-label">${esc(depthMeta[1])} lens · ${esc(depthMeta[2])}</span>
           <div class="depth-mini-pills">
-            ${DEPTHS.map(([k, l]) => `<button type="button" class="${curDepth === k ? 'on' : ''}" data-depth="${k}">${l}</button>`).join('')}
+            ${DEPTHS.map(([k, l]) => `<button type="button" class="${curDepth === k ? 'on' : ''}" data-depth="${k}" aria-pressed="${curDepth === k}">${l}</button>`).join('')}
           </div>
         </div>
         <p>${md(bd.depths[curDepth])}</p>
@@ -1094,6 +1124,7 @@ export function issueView(main, id, partArg) {
       const pctLeft = Math.max(36, Math.min(66, Math.round(((e.clientX - rect.left) / rect.width) * 100)));
       readerEl.style.setProperty('--split-left', `${pctLeft}%`);
       store.pref('splitLeft', pctLeft);
+      splitEl.setAttribute('aria-valuenow', pctLeft);
     });
     const stopDrag = () => {
       dragging = false;
@@ -1104,6 +1135,17 @@ export function issueView(main, id, partArg) {
     splitEl.addEventListener('dblclick', () => {
       readerEl.style.setProperty('--split-left', '52%');
       store.pref('splitLeft', 52);
+      splitEl.setAttribute('aria-valuenow', 52);
+    });
+    splitEl.addEventListener('keydown', e => {
+      if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      e.stopPropagation();
+      const cur = parseFloat(readerEl.style.getPropertyValue('--split-left')) || 52;
+      const v = Math.max(36, Math.min(66, cur + (e.key === 'ArrowRight' ? 2 : -2)));
+      readerEl.style.setProperty('--split-left', `${v}%`);
+      store.pref('splitLeft', v);
+      splitEl.setAttribute('aria-valuenow', v);
     });
   }
 
@@ -1112,6 +1154,7 @@ export function issueView(main, id, partArg) {
   if (gripEl) {
     const setSnap = pctVal => {
       readerEl.style.setProperty('--sheet', `${pctVal}%`);
+      store.pref('sheetSnap', pctVal);
       gripEl.querySelectorAll('[data-snap]').forEach(b => b.classList.toggle('on', +b.dataset.snap === pctVal));
     };
     gripEl.querySelectorAll('[data-snap]').forEach(btn => {
@@ -1121,13 +1164,13 @@ export function issueView(main, id, partArg) {
       });
     });
 
-    let startY = 0, startPct = 56, sheetDragging = false;
+    let startY = 0, startPct = sheetSnap, sheetDragging = false;
     gripEl.addEventListener('pointerdown', e => {
       if (e.target.closest('button')) return;
       sheetDragging = true;
       startY = e.clientY;
-      const cur = parseFloat(readerEl.style.getPropertyValue('--sheet') || '56');
-      startPct = isNaN(cur) ? 56 : cur;
+      const cur = parseFloat(readerEl.style.getPropertyValue('--sheet') || String(sheetSnap));
+      startPct = isNaN(cur) ? sheetSnap : cur;
       readerEl.classList.add('sheet-moving');
       gripEl.setPointerCapture(e.pointerId);
     });
@@ -1142,7 +1185,7 @@ export function issueView(main, id, partArg) {
       if (!sheetDragging) return;
       sheetDragging = false;
       readerEl.classList.remove('sheet-moving');
-      const cur = parseFloat(readerEl.style.getPropertyValue('--sheet') || '56');
+      const cur = parseFloat(readerEl.style.getPropertyValue('--sheet') || String(sheetSnap));
       const snaps = [30, 56, 88];
       const nearest = snaps.reduce((a, b) => Math.abs(b - cur) < Math.abs(a - cur) ? b : a);
       setSnap(nearest);
@@ -1155,6 +1198,10 @@ export function issueView(main, id, partArg) {
   function onKey(ev) {
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(ev.target?.tagName) || ev.metaKey || ev.ctrlKey || ev.altKey) return;
     if (!document.getElementById('palette')?.hidden) return;
+    if (sheetScrim) {
+      if (ev.key === 'Escape') { ev.preventDefault(); closePolicySheet(); return; }
+      if (ev.key !== 'p' && ev.key !== 'P') return;
+    }
     if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') {
       if (pi < 0) return;
       ev.preventDefault();
@@ -1170,13 +1217,13 @@ export function issueView(main, id, partArg) {
   // Listen for topbar depth switch or policy sheet button events
   const onTopbarDepth = () => renderReaderContent();
   const onTopbarPolicy = () => openPolicySheet(i);
-  window.addEventListener('cards:topbar-depth', onTopbarDepth);
-  window.addEventListener('cards:open-policy-sheet', onTopbarPolicy);
+  document.addEventListener('cards:topbar-depth', onTopbarDepth);
+  document.addEventListener('cards:open-policy-sheet', onTopbarPolicy);
 
   activeReaderCleanup = () => {
     document.removeEventListener('keydown', onKey);
-    window.removeEventListener('cards:topbar-depth', onTopbarDepth);
-    window.removeEventListener('cards:open-policy-sheet', onTopbarPolicy);
+    document.removeEventListener('cards:topbar-depth', onTopbarDepth);
+    document.removeEventListener('cards:open-policy-sheet', onTopbarPolicy);
     closePolicySheet();
   };
 }
@@ -1185,8 +1232,12 @@ export function issueView(main, id, partArg) {
 let sheetScrim = null;
 export function closePolicySheet() {
   if (!sheetScrim) return;
+  const o = sheetScrim._opener;
+  const app = document.getElementById('app');
+  if (app) app.inert = false;
   sheetScrim.remove();
   sheetScrim = null;
+  if (o && document.contains(o)) o.focus({ preventScroll: true });
 }
 
 export function openPolicySheet(issue, focusPolicyId = null) {
@@ -1232,10 +1283,14 @@ export function openPolicySheet(issue, focusPolicyId = null) {
 
   scrim.querySelector('.modal-close').onclick = closePolicySheet;
   scrim.addEventListener('click', e => { if (e.target === scrim) closePolicySheet(); });
+  scrim._opener = document.activeElement;
+  const app = document.getElementById('app');
+  if (app) app.inert = true;
   document.body.appendChild(scrim);
   sheetScrim = scrim;
   requestAnimationFrame(() => {
     scrim.classList.add('open');
+    scrim.querySelector('.modal-close')?.focus({ preventScroll: true });
     if (focusPolicyId) {
       scrim.querySelector(`#ps-${focusPolicyId}`)?.scrollIntoView({ block: 'center', behavior: 'smooth' });
     }

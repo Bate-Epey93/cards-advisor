@@ -14,11 +14,12 @@ function ensureHost() {
 }
 
 /**
- * toast({ msg, action, onAction, secondary, onSecondary, timeout, id, icon })
+ * toast({ msg, action, onAction, secondary, onSecondary, onDismiss, timeout, id, icon })
  * timeout 0 keeps it until dismissed. Reusing an id replaces the existing toast.
+ * onDismiss runs only when the user taps ×, not on timeout.
  */
 export function toast(opts = {}) {
-  const { msg = '', action, onAction, secondary, onSecondary, timeout = 3200, id, icon } = opts;
+  const { msg = '', action, onAction, secondary, onSecondary, onDismiss, timeout = 3200, id, icon } = opts;
   const h = ensureHost();
 
   if (id) h.querySelector(`[data-toast-id="${id}"]`)?.remove();
@@ -41,7 +42,7 @@ export function toast(opts = {}) {
 
   el.querySelector('[data-act]')?.addEventListener('click', () => { onAction?.(el); });
   el.querySelector('[data-sec]')?.addEventListener('click', () => { onSecondary?.(); close(); });
-  el.querySelector('.toast-x').addEventListener('click', close);
+  el.querySelector('.toast-x').addEventListener('click', () => { onDismiss?.(); close(); });
 
   h.appendChild(el);
   requestAnimationFrame(() => el.classList.add('in'));

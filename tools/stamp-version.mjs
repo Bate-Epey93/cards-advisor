@@ -8,13 +8,16 @@
 //
 // Run before every commit:  node tools/stamp-version.mjs
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, statSync, existsSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const WATCH = ['index.html', 'manifest.webmanifest', 'css', 'js', 'vendor', 'data', 'fonts', 'assets', 'icons'];
 const SKIP = new Set(['js/version.js']);   // rewritten by this script
+// Watched files that are deliberately not precached because nothing loads them.
+// Delete the file or add it to ASSETS in sw.js to drop it from this list.
+const UNPRECACHED = new Set(['data/brush.js', 'fonts/BricolageGrotesque.woff2']);
 
 function walk(p, out = []) {
   const abs = join(ROOT, p);
@@ -39,6 +42,25 @@ const date = new Date().toISOString().slice(0, 10);
 const swPath = join(ROOT, 'sw.js');
 let sw = readFileSync(swPath, 'utf8');
 const swBefore = sw;
+
+// Drift check: every watched file must be precached, and every precached path
+// must exist, or a first offline launch would be missing it.
+const start = sw.indexOf('const ASSETS = [');
+const end = sw.indexOf('].map', start);
+if (start < 0 || end < 0) {
+  console.error('could not find the ASSETS list in sw.js');
+  process.exit(1);
+}
+const assets = [...sw.slice(start, end).matchAll(/'([^']*)'/g)].map(m => m[1]).filter(Boolean);
+const listed = new Set(assets);
+const missingFiles = assets.filter(a => !existsSync(join(ROOT, a)));
+const notPrecached = [...files, 'js/version.js'].filter(f =>
+  !listed.has(f) && !UNPRECACHED.has(f));
+if (missingFiles.length || notPrecached.length) {
+  if (missingFiles.length) console.error('ASSETS in sw.js lists files that do not exist:\n  ' + missingFiles.join('\n  '));
+  if (notPrecached.length) console.error('watched files missing from ASSETS in sw.js:\n  ' + notPrecached.join('\n  '));
+  process.exit(1);
+}
 sw = sw.replace(/const VERSION = '[^']*';/, `const VERSION = 'cards-${hash}';`);
 if (sw === swBefore && !sw.includes(`cards-${hash}`)) {
   console.error('could not find the VERSION line in sw.js');

@@ -39,7 +39,9 @@ export async function loadData() {
   ]);
 
   const breakdownByObs = new Map(bd.breakdowns.map(b => [b.observed, b]));
-  const issues = obs.issues.map(o => ({ ...o, breakdown: breakdownByObs.get(o.id) || null }));
+  // strip research-file '---' separators left at the end of observed fields
+  const clean = v => typeof v === 'string' ? v.replace(/\s*\n+\s*-{3,}\s*$/, '').trim() : v;
+  const issues = obs.issues.map(o => ({ ...Object.fromEntries(Object.entries(o).map(([k, v]) => [k, clean(v)])), breakdown: breakdownByObs.get(o.id) || null }));
 
   const policy = new Map();
   faq.items.forEach(f => policy.set(f.id, { kind: 'faq', ...f }));
@@ -76,9 +78,14 @@ export function buildDeck() {
   D.breakdowns.forEach(b => (b.sayThisNotThis || []).forEach((s, i) => deck.push({
     id: `s:${b.id}:${i}`, kind: 'say this', q: `Instead of: ${s.not}`, a: s.say, note: s.why, extra: b.title
   })));
-  D.faq.items.forEach(f => (f.figures || []).slice(0, 2).forEach((fig, i) => deck.push({
-    id: `f:${f.id}:${i}`, kind: 'bank figure', q: `${f.question}\n(${fig.split(/[:—-]/)[0].trim()})`, a: fig, note: `${f.section} · confirm in-system`, extra: f.dateTag
-  })));
+  D.faq.items.forEach(f => (f.figures || []).slice(0, 2).forEach((fig, i) => {
+    // the hint names the kind of value, never the value itself
+    const hint = /^\+?\d[\d-]{6,}$/.test(fig) ? 'which number?' : /\$/.test(fig) ? 'how much?' : /day|hour|week|month|year/i.test(fig) ? 'how long?' : 'which figure?';
+    deck.push({
+      id: `f:${f.id}:${i}`, kind: 'bank figure', q: `${f.question}\n(${hint})`, a: fig, note: `${f.section} · confirm in-system`,
+      extra: /undated/i.test(f.dateTag || '') ? '' : f.dateTag
+    });
+  }));
   return deck;
 }
 

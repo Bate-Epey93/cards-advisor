@@ -30,6 +30,7 @@ const DEFAULTS = {
     onePage: false,
     gateMode: false,
     splitLeft: 52,
+    sheetSnap: 56,
     hlOn: false,
     hlPanel: false,
     lastBackup: 0,
@@ -39,19 +40,47 @@ const DEFAULTS = {
   streak: { days: [], count: 0 }
 };
 
+const isObj = v => !!v && typeof v === 'object' && !Array.isArray(v);
+// Coerce stored or imported state into the shapes the rest of the app relies on.
+function normalize(p) {
+  p = isObj(p) ? p : {};
+  const s = Object.assign(structuredClone(DEFAULTS), p);
+  for (const k of ['notes', 'hl', 'seen', 'progress', 'cards', 'drills', 'drafts']) if (!isObj(s[k])) s[k] = {};
+  if (!Array.isArray(s.debriefs)) s.debriefs = [];
+  s.prefs = Object.assign(structuredClone(DEFAULTS.prefs), isObj(p.prefs) ? p.prefs : {});
+  s.profile = Object.assign(structuredClone(DEFAULTS.profile), isObj(p.profile) ? p.profile : {});
+  if (!isObj(s.streak) || !Array.isArray(s.streak.days)) s.streak = { days: [], count: 0 };
+  for (const [k, v] of Object.entries(s.progress)) {
+    if (!isObj(v)) { delete s.progress[k]; continue; }
+    if (!Array.isArray(v.read)) v.read = [];
+    if (!isObj(v.checks)) v.checks = {};
+  }
+  for (const [k, v] of Object.entries(s.hl)) if (!Array.isArray(v)) delete s.hl[k];
+  for (const [k, v] of Object.entries(s.drills)) {
+    if (!isObj(v) || !Array.isArray(v.runs)) { delete s.drills[k]; continue; }
+    if (typeof v.best !== 'number') v.best = 0;
+  }
+  for (const [k, v] of Object.entries(s.cards)) if (!isObj(v)) delete s.cards[k];
+  return s;
+}
+// One-time key migration: the topbar and Settings used to store 'spec'.
+function migrate(s) {
+  if (s.prefs.depth === 'spec') s.prefs.depth = 'specialist';
+  return s;
+}
+
 let state = load();
 
 function load() {
   try {
     const raw = localStorage.getItem(KEY);
     if (!raw) return structuredClone(DEFAULTS);
-    const parsed = JSON.parse(raw);
-    const merged = Object.assign(structuredClone(DEFAULTS), parsed);
-    merged.prefs = Object.assign(structuredClone(DEFAULTS.prefs), parsed.prefs || {});
-    merged.progress = Object.assign({}, parsed.progress || {});
-    merged.profile = Object.assign(structuredClone(DEFAULTS.profile), parsed.profile || {});
-    return merged;
-  } catch { return structuredClone(DEFAULTS); }
+    return migrate(normalize(JSON.parse(raw)));
+  } catch {
+    // keep the unreadable value so the next save does not destroy it for good
+    try { const r = localStorage.getItem(KEY); if (r) localStorage.setItem(KEY + ':corrupt', r); } catch {}
+    return structuredClone(DEFAULTS);
+  }
 }
 
 let pending = null;
@@ -64,7 +93,8 @@ function save() { if (!pending) pending = setTimeout(flush, 220); }
 
 export const store = {
   get all() { return state; },
-  flushNow() { clearTimeout(pending); pending = null; flush(); },
+  // only writes when a save is queued, so page-hide events do not rewrite (or re-raise a quota error) for nothing
+  flushNow() { if (!pending) return; clearTimeout(pending); pending = null; flush(); },
 
   note(id, val) {
     if (val === undefined) return state.notes[id] || '';
@@ -175,6 +205,11 @@ export const store = {
     save(); return state.debriefs[0];
   },
   removeDebrief(id) { state.debriefs = state.debriefs.filter(d => d.id !== id); save(); },
+  restoreDebrief(d, idx) {
+    if (!d || state.debriefs.some(x => x.id === d.id)) return;
+    state.debriefs.splice(Math.max(0, Math.min(idx, state.debriefs.length)), 0, d);
+    save();
+  },
 
   /* ── employee ID profile & credential badge ── */
   get profile() {
@@ -205,6 +240,14 @@ export const store = {
     if (s.days.length > 400) s.days = s.days.slice(-400);
     save(); return s;
   },
+  // streak.count only while it is still alive (last day today or yesterday, UTC like touchStreak)
+  get currentStreak() {
+    const s = state.streak || {};
+    const last = s.days?.[s.days.length - 1];
+    const today = new Date().toISOString().slice(0, 10);
+    const yest = new Date(Date.now() - 864e5).toISOString().slice(0, 10);
+    return (last === today || last === yest) ? (s.count || 0) : 0;
+  },
 
   valueAtRisk() {
     return Object.keys(state.notes).length + Object.keys(state.hl).length + state.debriefs.length + this.drillCount + this.totalStepsRead;
@@ -212,11 +255,10 @@ export const store = {
   exportAll() { return JSON.stringify(state, null, 2); },
   importAll(json) {
     const parsed = JSON.parse(json);
-    if (typeof parsed !== 'object' || !parsed) throw new Error('not cards advisor data');
-    state = Object.assign(structuredClone(DEFAULTS), parsed);
-    state.prefs = Object.assign(structuredClone(DEFAULTS.prefs), parsed.prefs || {});
-    state.progress = Object.assign({}, parsed.progress || {});
-    state.profile = Object.assign(structuredClone(DEFAULTS.profile), parsed.profile || {});
+    if (!isObj(parsed) || !['prefs', 'progress', 'notes', 'hl', 'debriefs', 'drills', 'cards', 'profile', 'streak'].some(k => k in parsed)) {
+      throw new Error('not cards advisor data');
+    }
+    state = migrate(normalize(parsed));
     flush(); return true;
   },
   reset() { state = structuredClone(DEFAULTS); flush(); }

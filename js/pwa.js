@@ -31,7 +31,8 @@ function promptUpdate(worker) {
       // ourselves if controllerchange has not fired by then.
       setTimeout(() => hardReload(), 4000);
     },
-    onSecondary: () => { updateReady = false; }
+    onSecondary: () => { updateReady = false; },
+    onDismiss: () => { updateReady = false; }
   });
 }
 
@@ -55,12 +56,12 @@ export async function checkForUpdate({ announce = false } = {}) {
   try {
     await reg.update();
   } catch {
-    if (announce) toast({ msg: 'Could not reach the server. You are offline.', timeout: 3600 });
+    if (announce) { dismissToast('checking'); toast({ msg: 'Could not reach the server. You are offline.', timeout: 3600 }); }
     return 'offline';
   }
   if (reg.waiting) { dismissToast('checking'); promptUpdate(reg.waiting); return 'update'; }
-  if (reg.installing) { if (announce) toast({ msg: 'Downloading an update…', timeout: 2600 }); return 'installing'; }
-  if (announce) toast({ msg: `Up to date — ${APP_VERSION}`, timeout: 3000 });
+  if (reg.installing) { if (announce) { dismissToast('checking'); toast({ msg: 'Downloading an update…', timeout: 2600 }); } return 'installing'; }
+  if (announce) { dismissToast('checking'); toast({ msg: `Up to date — ${APP_VERSION}`, timeout: 3000 }); }
   return 'current';
 }
 
@@ -69,6 +70,9 @@ export function initPWA() {
   installPrompt();
 
   if (!('serviceWorker' in navigator) || location.protocol === 'file:') return;
+  // Uncontrolled at boot means first install: clients.claim() will fire controllerchange,
+  // and that must not reload the page.
+  const hadController = !!navigator.serviceWorker.controller;
   const base = location.pathname.replace(/[^/]*$/, '');
 
   navigator.serviceWorker.register(base + 'sw.js').then(r => {
@@ -83,7 +87,7 @@ export function initPWA() {
       incoming.addEventListener('statechange', () => {
         // controller present means this is an update, not the first install
         if (incoming.state === 'installed' && navigator.serviceWorker.controller) promptUpdate(incoming);
-        if (incoming.state === 'activated' && !navigator.serviceWorker.controller) {
+        if (incoming.state === 'activated' && !hadController) {
           toast({ msg: 'Cards Advisor is installed and works offline.', timeout: 3600, icon: '✓' });
         }
       });
@@ -98,7 +102,7 @@ export function initPWA() {
     window.addEventListener('online', () => checkForUpdate());
   }).catch(() => {});
 
-  navigator.serviceWorker.addEventListener('controllerchange', () => hardReload());
+  navigator.serviceWorker.addEventListener('controllerchange', () => { if (hadController) hardReload(); });
 }
 
 /* ── install-to-homescreen button ── */
@@ -127,11 +131,18 @@ function installPrompt() {
   // iOS has no beforeinstallprompt: tell the user how, once.
   const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
   const standalone = window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
-  if (isIOS && !standalone && !localStorage.getItem('cards:ios-hint')) {
-    localStorage.setItem('cards:ios-hint', '1');
-    setTimeout(() => toast({
-      msg: 'Add Cards Advisor to your home screen: Share, then Add to Home Screen.',
-      timeout: 7000, icon: '⇪'
-    }), 2600);
+  if (isIOS && !standalone) {
+    // storage can throw (blocked site data): treat the hint as seen rather than abort boot
+    let seen = true;
+    try { seen = !!localStorage.getItem('cards:ios-hint'); } catch {}
+    if (!seen) setTimeout(() => {
+      // never stack over the privacy notice; the hint comes back on a later launch
+      if (document.querySelector('[data-toast-id="privacy"]')) return;
+      try { localStorage.setItem('cards:ios-hint', '1'); } catch {}
+      toast({
+        msg: 'Add Cards Advisor to your home screen: Share, then Add to Home Screen.',
+        timeout: 7000, icon: '⇪'
+      });
+    }, 2600);
   }
 }

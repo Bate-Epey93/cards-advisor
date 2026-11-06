@@ -186,14 +186,14 @@ const CAT_DOMAIN = {
   'fraud and unauthorized transactions': 'failure',
   'lost, stolen, replacement and renewal': 'operations',
   'disputes and chargebacks': 'economics',
-  'fees, interest and billing': 'economics',
-  'payments, holds and limits': 'economics',
   'rewards and points': 'biology',
-  'digital wallet, app and online banking': 'software',
-  'application, activation and delivery': 'software',
-  'collections, hardship and credit bureau': 'operations',
-  'account closure and estates': 'mechanical',
-  'complaints, service and escalation': 'proposal'
+  'fees and interest': 'economics',
+  'digital wallet and online': 'software',
+  'account access, pin and lock': 'operations',
+  'pre-authorized payments and subscriptions': 'economics',
+  'limits and credit decisions': 'economics',
+  'collections and hardship': 'operations',
+  'product changes and closures': 'mechanical'
 };
 
 export function domainForCategory(cat = '') {
@@ -325,7 +325,7 @@ export function buildCallGraph(issue) {
     { idx: 3, label: '4 · PLAYBOOK', x: 684, w: 214 }
   ];
   const nodes = [
-    { id: 'obs-0', part: '0', stepIdx: 0, lane: 0, x: 32, y: 115, w: 176, h: 72, kind: 'quote', num: '01', title: 'Observed signal', sub: `${(issue.quotes || []).length} client quotes`, tone: 'red' },
+    { id: 'obs-0', part: '0', stepIdx: 0, lane: 0, x: 32, y: 115, w: 176, h: 72, kind: 'quote', num: '01', title: 'Observed signal', sub: (issue.quotes || []).length ? `${issue.quotes.length} client quotes` : 'No verbatim quotes', tone: 'red' },
     { id: 'obs-1', part: '1', stepIdx: 1, lane: 1, x: 254, y: 115, w: 176, h: 72, kind: 'emotion', num: '02', title: 'Job & emotion', sub: shortText(issue.emotion || issue.underlyingJob || 'Read the caller', 26), tone: 'vio' },
     { id: 'obs-2', part: '2', stepIdx: 2, lane: 2, x: 476, y: 115, w: 176, h: 72, kind: 'policy', num: '03', title: 'Policy & rules', sub: shortText(issue.category, 26), tone: 'teal' },
     { id: 'obs-3', part: '3', stepIdx: 3, lane: 3, x: 698, y: 115, w: 186, h: 72, kind: 'resolve', num: '04', title: 'Call playbook', sub: 'Resolution & notes', tone: 'amber' }
@@ -354,10 +354,13 @@ function edgePath(na, nb) {
   return `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
 }
 
+let lastZoom = 1;
+const ZOOMS = [0.75, 1, 1.25, 1.5, 1.85];
+
 export function mountCallDiagram(paneEl, issue, opts = {}) {
   const graph = buildCallGraph(issue);
   const nodeMap = new Map(graph.nodes.map(n => [n.id, n]));
-  let zoom = 1;
+  let zoom = lastZoom;
   let activePart = String(opts.part ?? '0');
 
   const scrollEl = paneEl.querySelector('.diagram-scroll');
@@ -457,7 +460,7 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
       </g>`;
     }).join('');
 
-    scrollEl.innerHTML = `<svg class="dg-svg" viewBox="0 0 ${graph.width} ${graph.height}" style="width:${Math.round(graph.width * zoom)}px;max-width:${zoom === 1 ? '100%' : 'none'};height:auto">
+    scrollEl.innerHTML = `<svg class="dg-svg" viewBox="0 0 ${graph.width} ${graph.height}" style="--z:${zoom};width:${Math.round(graph.width * zoom)}px;max-width:${zoom === 1 ? '100%' : 'none'};height:auto">
       <defs>
         <marker id="dg-arrow" viewBox="0 0 10 10" refX="7.5" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
           <path d="${arrowRoughD}" class="dg-arrow-muted"/>
@@ -485,7 +488,7 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
       el.addEventListener('keydown', ev => {
         if (ev.key === 'Enter' || ev.key === ' ') {
           ev.preventDefault();
-          el.click();
+          el.dispatchEvent(new MouseEvent('click', { bubbles: true }));
         }
       });
       el.addEventListener('pointerenter', () => {
@@ -539,12 +542,16 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
     activePart = String(part);
     if (originEl) originEl.hidden = true;
     renderSvg();
-    requestAnimationFrame(() => {
-      const activeNode = scrollEl.querySelector('.dg-node-active');
-      if (activeNode && zoom > 1) {
-        activeNode.scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
-      }
-    });
+    requestAnimationFrame(centerActive);
+  }
+
+  // Centre the active node by scrolling only the diagram container (never the page)
+  function centerActive() {
+    const n = scrollEl.querySelector('.dg-node-active');
+    if (!n) return;
+    const r = n.getBoundingClientRect(), s = scrollEl.getBoundingClientRect();
+    if (scrollEl.scrollWidth > scrollEl.clientWidth + 4) scrollEl.scrollLeft += (r.left + r.width / 2) - (s.left + s.width / 2);
+    if (scrollEl.scrollHeight > scrollEl.clientHeight + 4) scrollEl.scrollTop += (r.top + r.height / 2) - (s.top + s.height / 2);
   }
 
   function spotlight(partKey, on = true) {
@@ -557,9 +564,7 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
     }
   }
 
-  function setZoom(z) {
-    zoom = Math.max(0.75, Math.min(1.85, z));
-    renderSvg();
+  function syncFit() {
     const fitBtn = paneEl.querySelector('[data-zoom="fit"]');
     if (fitBtn) {
       fitBtn.textContent = zoom === 1 ? 'FIT' : `${Math.round(zoom * 100)}% ↺`;
@@ -567,9 +572,23 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
     }
   }
 
+  function setZoom(z) {
+    zoom = z;
+    lastZoom = z;
+    renderSvg();
+    syncFit();
+    requestAnimationFrame(centerActive);
+  }
+
+  function stepZoom(d) {
+    const i = ZOOMS.indexOf(zoom);
+    const j = Math.max(0, Math.min(ZOOMS.length - 1, (i < 0 ? 1 : i) + d));
+    setZoom(ZOOMS[j]);
+  }
+
   // Wire zoom buttons
-  paneEl.querySelector('[data-zoom="out"]')?.addEventListener('click', () => setZoom(zoom - 0.2));
-  paneEl.querySelector('[data-zoom="in"]')?.addEventListener('click', () => setZoom(zoom + 0.2));
+  paneEl.querySelector('[data-zoom="out"]')?.addEventListener('click', () => stepZoom(-1));
+  paneEl.querySelector('[data-zoom="in"]')?.addEventListener('click', () => stepZoom(1));
   paneEl.querySelector('[data-zoom="fit"]')?.addEventListener('click', () => setZoom(1));
 
   scrollEl.addEventListener('click', () => {
@@ -577,6 +596,8 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
   });
 
   renderSvg();
+  syncFit();
+  requestAnimationFrame(centerActive);
 
   return {
     setPart,

@@ -6,18 +6,23 @@ import { data } from './data.js';
 import { esc, md } from './render.js';
 import { toast } from './toast.js';
 
+// Team and product words that start a capitalised pair without naming a person ("Fraud Team said").
+const ORG = '(?:Fraud|Card|Cards|Customer|Client|Team|Service|Services|Support|Desk|Visa|Mastercard|Amex|Branch|Bank|Merchant|Collections|Disputes?|Security|Escalations?|Credit|Debit|Back|Front|Head|Office)';
+
 const GUARDS = [
-  { re: /(?:\d[ -]?){13,19}/, why: 'That looks like a card or account number.' },
-  { re: /\d{8,}/, why: 'That is a run of eight or more digits, which is how account and reference numbers look.' },
-  { re: /\b(?:Mr|Mrs|Ms|Mx|Dr|Mme|Mlle|M)\.?\s+[A-Z][a-zà-ÿ]+/, why: 'That looks like a client\'s name.' },
-  { re: /\b[A-Z][a-z]+\s+[A-Z][a-z]+(?:\s+(?:called|phoned|said|wants|asked))/, why: 'That looks like a client\'s full name.' },
-  { re: /[\w.+-]+@[\w-]+\.[\w.]+/, why: 'That is an email address.' },
-  { re: /\b\d{3}[ -]?\d{3}[ -]?\d{4}\b/, why: 'That looks like a phone number.' },
-  { re: /\b\d{1,5}\s+[A-Z][a-z]+\s+(?:St|Street|Ave|Avenue|Rd|Road|Blvd|Dr|Drive|Cres|Crescent|Way|Lane)\b/, why: 'That looks like a street address.' }
+  { re: /(?<!\d)\d{4}(?:[ .-]{0,3}\d{4}){2}[ .-]{0,3}\d{1,4}(?:[ .-]{0,3}\d{1,3})?(?!\d)|(?<!\d)\d{4}[ .-]{0,3}\d{6}[ .-]{0,3}\d{5}(?!\d)/g, why: 'That looks like a card or account number.' },
+  { re: /\d{8,}/g, why: 'That is a run of eight or more digits, which is how account and reference numbers look.' },
+  { re: /(?<![\p{L}.'])(?:(?:Mr|Mrs|Ms|Mx|Dr|Mme|Mlle)\.?|M\.)\s+\p{Lu}[\p{L}'-]+/gu, why: 'That looks like a client\'s name.' },
+  { re: /(?<![\p{L}.'])(?:mr|mrs|mme|mlle)\.?\s+\p{L}[\p{L}'-]+/giu, why: 'That looks like a client\'s name.' },
+  { re: new RegExp(`(?<!\\p{L})(?!${ORG}(?!\\p{L}))\\p{Lu}[\\p{Ll}'-]+\\s+(?!${ORG}(?!\\p{L}))\\p{Lu}[\\p{Ll}'-]+\\s+(?:called|phoned|said|wants|asked)\\b`, 'gu'), why: 'That looks like a client\'s full name.' },
+  { re: /[\w.+-]+@[\w-]+\.[\w.]+/g, why: 'That is an email address.' },
+  { re: /(?<!\d)(?:\+?1[\s.-]?)?\(?(\d{3})\)?[\s.-]?\d{3}[\s.-]?\d{4}(?!\d)/g, allow: m => /^8(?:00|33|44|55|66|77|88)$/.test(m[1]), why: 'That looks like a phone number.' },
+  { re: /\b\d{1,5}\s+[A-Z][a-z]+\s+(?:St|Street|Ave|Avenue|Rd|Road|Blvd|Dr|Drive|Cres|Crescent|Way|Lane)\b/g, why: 'That looks like a street address.' },
+  { re: /\b\d{1,5}\s+(?:(?:rue|av\.?|avenue|boul\.?|boulevard|chemin|ch\.)\s+\p{L}[\p{L}'-]*|\p{L}[\p{L}'-]*\s+(?:st|street|ave|avenue|rd|road|blvd|drive|cres|crescent|lane)\.?(?!\p{L}))/giu, why: 'That looks like a street address.' }
 ];
 
 export function guard(text) {
-  for (const g of GUARDS) { const m = text.match(g.re); if (m) return { hit: m[0], why: g.why }; }
+  for (const g of GUARDS) for (const m of text.matchAll(g.re)) { if (g.allow?.(m)) continue; return { hit: m[0], why: g.why }; }
   return null;
 }
 
@@ -53,7 +58,7 @@ export function debriefView(main) {
           </div>
 
           <div class="field">
-            <span>1 · Issue type</span>
+            <span><label for="dbIssue">1 · Issue type</label></span>
             <select id="dbIssue">
               <option value="">Pick the closest issue driver…</option>
               ${opts}
@@ -62,22 +67,22 @@ export function debriefView(main) {
           </div>
 
           <div class="field">
-            <span>2 · What worked on the call</span>
+            <span><label for="dbWorked">2 · What worked on the call</label></span>
             <textarea id="dbWorked" rows="2" placeholder="The opener, the diagnostic question, or the sequence that landed…"></textarea>
           </div>
 
           <div class="field">
-            <span>3 · What to look up before next shift</span>
+            <span><label for="dbLookup">3 · What to look up before next shift</label></span>
             <textarea id="dbLookup" rows="2" placeholder="The figure you weren't sure of, or the procedure you had to place a hold for…"></textarea>
           </div>
 
           <div class="field">
-            <span>4 · Pattern noticed (optional)</span>
+            <span><label for="dbPattern">4 · Pattern noticed (optional)</label></span>
             <input id="dbPattern" placeholder="e.g. Third decline-after-alert this week, all stale SMS numbers">
           </div>
 
           <div class="debrief-foot">
-            <div class="guard-msg" id="dbGuard">
+            <div class="guard-msg" id="dbGuard" role="status" aria-live="polite">
               <span class="dim">Zero network calls. Card numbers, names, emails, phones, and addresses are automatically blocked.</span>
             </div>
             <button class="btn pri" id="dbSave">Save debrief →</button>
@@ -144,18 +149,23 @@ export function debriefView(main) {
   const badgeEl = main.querySelector('#guardBadge');
   const badgeTxt = main.querySelector('#guardBadgeTxt');
 
+  let lastGuard = 'ok'; // the markup above already shows the clear notice
   const check = () => {
     for (const f of fields) {
       const g = guard(f.value);
       if (g) {
-        guardEl.innerHTML = `<span class="guard-alert"><strong>Blocked:</strong> ${esc(g.why)} Remove <code>${esc(g.hit)}</code> and describe the pattern instead.</span>`;
+        const key = 'b:' + g.hit;
+        if (key !== lastGuard) guardEl.innerHTML = `<span class="guard-alert"><strong>Blocked:</strong> ${esc(g.why)} Remove <code>${esc(g.hit)}</code> and describe the pattern instead.</span>`;
+        lastGuard = key;
         badgeEl?.classList.remove('ok');
         badgeEl?.classList.add('blocked');
         if (badgeTxt) badgeTxt.textContent = 'Client Data Blocked';
         return g;
       }
     }
-    guardEl.innerHTML = `<span class="dim">Zero network calls. Card numbers, names, emails, phones, and addresses are automatically blocked.</span>`;
+    const key = 'ok';
+    if (key !== lastGuard) guardEl.innerHTML = `<span class="dim">Zero network calls. Card numbers, names, emails, phones, and addresses are automatically blocked.</span>`;
+    lastGuard = key;
     badgeEl?.classList.add('ok');
     badgeEl?.classList.remove('blocked');
     if (badgeTxt) badgeTxt.textContent = 'Privacy Guard Active · Local Only';
@@ -173,5 +183,17 @@ export function debriefView(main) {
     toast({ msg: 'Debrief saved.', icon: '✓', timeout: 2200 });
     debriefView(main);
   };
-  main.querySelectorAll('[data-del]').forEach(b => b.onclick = () => { store.removeDebrief(b.dataset.del); debriefView(main); });
+  main.querySelectorAll('[data-del]').forEach(b => b.onclick = () => {
+    const id = b.dataset.del;
+    const idx = store.debriefs.findIndex(d => d.id === id);
+    const gone = store.debriefs[idx];
+    store.removeDebrief(id);
+    debriefView(main);
+    if (!gone) return;
+    const t = toast({ id: 'debrief-undo', msg: 'Debrief removed.', action: 'Undo', timeout: 6000, onAction: () => {
+      t.close();
+      store.restoreDebrief(gone, idx);
+      if (location.hash.startsWith('#/debrief')) debriefView(main);
+    } });
+  });
 }
