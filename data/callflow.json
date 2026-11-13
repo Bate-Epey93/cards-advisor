@@ -1,0 +1,415 @@
+{
+  "about": "Personal study notes on call craft. Generic practice, not any bank's official model. Follow your own procedures on a real call.",
+  "home": {
+    "title": "The call, start to end",
+    "intro": "Six steps. Each has two sides: what you do as the advisor, and what the client experiences.",
+    "role": "An advisor does more than answer. You guide the client through the problem or the decision, give advice and perspective so they can make an informed choice, and resolve the issue."
+  },
+  "values": [
+    {
+      "id": "care",
+      "name": "Care",
+      "short": "Full attention. Their interest first.",
+      "long": "Focused, personal attention. Put the client's interests first and treat them the way you would want to be treated."
+    },
+    {
+      "id": "connect",
+      "name": "Connect",
+      "short": "Adapt to them. Make it human.",
+      "long": "Adapt to what this client needs and create a human connection, so the call feels tailored and they feel understood."
+    },
+    {
+      "id": "expertise",
+      "name": "Expertise",
+      "short": "Guide them. Explain it clearly.",
+      "long": "Lend what you know to guide them through the call: understand the problem, resolve it, and explain it clearly."
+    }
+  ],
+  "steps": [
+    {
+      "n": 1,
+      "name": "Be Ready",
+      "short": "In Ready on time, tools open, last call closed.",
+      "homeYou": "in Ready on time, tools open, last call closed.",
+      "homeClient": "answered fast by someone present.",
+      "values": ["care", "expertise"],
+      "you": [
+        "Log in early and be in Ready at your scheduled start. Every late minute comes off your availability.",
+        "Open what most calls need: the card system, the knowledge base, your notes.",
+        "Finish the last call's notes before you go Ready. Carry nothing into the next call.",
+        "Headset on, water close, one slow breath. The next client gets a fresh advisor."
+      ],
+      "client": [
+        "The call is answered quickly, with no silence at the start.",
+        "The advisor sounds present, not in the middle of something else.",
+        "They are never asked to wait while the last call is tidied up."
+      ],
+      "sayLabel": "Check before you go Ready",
+      "sayQuoted": false,
+      "say": [
+        "Is the last file closed?",
+        "Are my systems open and working?",
+        "Do I know where today's policy updates are?"
+      ],
+      "numbers": "Compliance (94 percent target), Other Not Ready, wrap time.",
+      "watch": "Going Ready while still typing notes. The client gets half of you."
+    },
+    {
+      "n": 2,
+      "name": "Welcome and Listen",
+      "short": "Greet, verify, then let them finish.",
+      "homeYou": "greet, verify, then let them finish.",
+      "homeClient": "heard the first time.",
+      "values": ["care", "connect"],
+      "you": [
+        "Greet, give your name, and verify. Frame verification as protection for them.",
+        "Verify the way your procedure says. Never ask for a one-time code.",
+        "Ask what happened, then stay quiet until they finish their first full account.",
+        "Note their words: amounts, dates, \"third time\", \"always\", \"never\".",
+        "Hear how they say it: pace, volume, pauses, a sigh, a shaky voice.",
+        "Say back what you heard and name the feeling before you solve anything."
+      ],
+      "client": [
+        "They tell the story once.",
+        "They hear their own problem said back correctly.",
+        "They feel like a person with a name and a situation."
+      ],
+      "sayLabel": "Lines that fit this step",
+      "sayQuoted": true,
+      "say": [
+        "Thanks for calling, you're speaking with Sam. I'll verify you first so your card stays protected.",
+        "Tell me what happened. Take your time.",
+        "So the card was declined at the pharmacy and you've already waited. I can hear how frustrating that is."
+      ],
+      "numbers": "Engage time. Listening well here shortens the rest of the call.",
+      "watch": "Interrupting to solve. It saves ten seconds and costs their trust.",
+      "more": { "label": "Listening cues", "href": "#/call/listen" }
+    },
+    {
+      "n": 3,
+      "name": "Solve Immediate Need",
+      "short": "Fix what they called about first, and say what you are doing.",
+      "homeYou": "fix what they called about first, and say what you are doing.",
+      "homeClient": "always knows what is happening.",
+      "values": ["expertise", "care"],
+      "you": [
+        "Fix the thing they called about before anything else.",
+        "Say what you are doing and how long it will take.",
+        "Run the risk checks for this issue, then ask your questions in order.",
+        "Need a hold? Ask first, give the reason and the time, come back and thank them.",
+        "Give figures you can stand behind. Confirm in your systems before you say them."
+      ],
+      "client": [
+        "Their reason for calling is handled first.",
+        "There is no dead air. They always know what is happening.",
+        "They hear plain words and real dates."
+      ],
+      "sayLabel": "Lines that fit this step",
+      "sayQuoted": true,
+      "say": [
+        "Here's what I'm going to do, and it will take about two minutes.",
+        "May I place you on a short hold while I check that? It should be under a minute.",
+        "Thanks for holding. Here's what I found."
+      ],
+      "numbers": "Engage time and hold time.",
+      "watch": "Transferring a call you could solve. Your handle time drops, their effort rises.",
+      "more": { "label": "Hold and transfers", "href": "#/call/transfers" }
+    },
+    {
+      "n": 4,
+      "name": "Checkpoint",
+      "short": "Confirm it worked and that they agree.",
+      "homeYou": "confirm it worked and that they agree.",
+      "homeClient": "gets to say yes or no.",
+      "values": ["connect", "expertise"],
+      "you": [
+        "Recap in one sentence what you did.",
+        "Confirm the fix worked from their side.",
+        "Ask if anything about this is still unclear or worrying.",
+        "Move on only once they agree it is sorted."
+      ],
+      "client": [
+        "They get to say yes or no.",
+        "Nothing is assumed on their behalf.",
+        "They feel in control of the call."
+      ],
+      "sayLabel": "Lines that fit this step",
+      "sayQuoted": true,
+      "say": [
+        "The block is lifted and your card is working again. Does that sort out what you called about?",
+        "Is anything about this still worrying you?"
+      ],
+      "numbers": "Repeat calls. A skipped checkpoint is tomorrow's call back.",
+      "watch": "Asking \"anything else?\" as a goodbye. Ask it as a real question and wait."
+    },
+    {
+      "n": 5,
+      "name": "Deeper Discovery and Additional Advice",
+      "short": "Ask why it happened, offer options that fit.",
+      "homeYou": "ask why it happened, offer options that fit.",
+      "homeClient": "makes an informed choice.",
+      "values": ["expertise", "connect"],
+      "you": [
+        "Now be the advisor. Ask why this happened and what would stop it next time.",
+        "Ask one or two open questions about how they use the card.",
+        "Offer options with the trade-off of each, then let them choose.",
+        "Suggest only what fits their situation, and only with their clear yes.",
+        "No product offer to someone in distress or in a fraud claim."
+      ],
+      "client": [
+        "They leave knowing more than they asked for.",
+        "They make an informed choice. Nothing is pushed on them.",
+        "The advice fits their life."
+      ],
+      "sayLabel": "Lines that fit this step",
+      "sayQuoted": true,
+      "say": [
+        "While I have you, can I ask how you usually pay when you travel?",
+        "There are two ways to avoid this next time. Here is what each one means for you.",
+        "It's your call. Which fits you better?"
+      ],
+      "numbers": "Adds engage time. Worth it when it prevents the next call.",
+      "watch": "Selling. Advice starts from their need, never from an offer. The Bank Act rule on appropriate products (s. 627.06) and the need for express consent both point the same way. Confirm in your systems how your centre applies them."
+    },
+    {
+      "n": 6,
+      "name": "Making Their Day",
+      "short": "Recap, dates, one real personal touch.",
+      "homeYou": "recap, dates, one real personal touch.",
+      "homeClient": "ends certain and valued.",
+      "values": ["care", "connect"],
+      "you": [
+        "Recap what was done and what happens next, with dates.",
+        "Tell them what they will receive in writing.",
+        "Add one personal touch tied to something they told you.",
+        "Ask if there is anything else, and mean it.",
+        "Finish your notes in wrap so the next advisor never asks them to repeat."
+      ],
+      "client": [
+        "They end certain about what happens next.",
+        "They feel remembered as a person.",
+        "They would be glad to reach you again."
+      ],
+      "sayLabel": "Lines that fit this step",
+      "sayQuoted": true,
+      "say": [
+        "To recap: the card is working, your new alert number is saved, and you'll get a message confirming it today.",
+        "I hope the rest of the trip goes smoothly.",
+        "Is there anything else I can help you with today?"
+      ],
+      "numbers": "Wrap time. Notes done right once, then back to Ready.",
+      "watch": "A scripted goodbye. One true sentence beats three polite ones."
+    }
+  ],
+  "model": {
+    "kicker": "Example call",
+    "title": "Declined at the pharmacy",
+    "intro": "One call from Ready to wrap. Each advisor line shows the value it carries. The amounts and timings are made up for the example. Follow your own procedures on a real call and confirm any figure in your systems.",
+    "parts": [
+      {
+        "step": 1,
+        "lines": [
+          { "who": "note", "text": "In Ready. Last file closed. Card system and knowledge base open." }
+        ]
+      },
+      {
+        "step": 2,
+        "lines": [
+          { "who": "you", "values": ["care"], "text": "Thanks for calling, you're speaking with Sam. I'll verify you first so your card stays protected." },
+          { "who": "client", "text": "My card was just declined at the pharmacy, for my wife's prescription, in front of a queue. I got a text an hour ago and ignored it. I thought it was a scam." },
+          { "who": "heard", "text": "fast pace, \"in front of a queue\". Embarrassed and in a hurry." },
+          { "who": "you", "values": ["connect"], "text": "Declined at the pharmacy for your wife's prescription, with people waiting. That is stressful, and I'm glad you called. I can deal with it on this call." }
+        ]
+      },
+      {
+        "step": 3,
+        "lines": [
+          { "who": "you", "values": ["expertise"], "tag": "Narrated, so no hold needed", "text": "I'm opening the alert now, so you may hear me typing. It was about a $289 online purchase this morning. Was that you?" },
+          { "who": "client", "text": "Yes, that was me. A printer." },
+          { "who": "you", "values": ["care"], "tag": "Asked, gave the reason and the time", "text": "Thank you. I need about a minute to confirm the fraud notes before I lift the block. May I place you on a short hold?" },
+          { "who": "hold", "text": "Hold 0:45" },
+          { "who": "you", "values": ["expertise"], "text": "Thanks for holding. The block is lifted. The pharmacy can run the card again now." }
+        ]
+      },
+      {
+        "step": 4,
+        "lines": [
+          { "who": "you", "values": ["connect"], "text": "So the block is off and the card is working. Does that sort out what you called about?" },
+          { "who": "client", "text": "Yes. Thank you." }
+        ]
+      },
+      {
+        "step": 5,
+        "lines": [
+          { "who": "you", "values": ["expertise"], "text": "Before you go, can I ask one thing? The alert went to a number ending 0412. Is that still your phone?" },
+          { "who": "client", "text": "No, that's my old one." },
+          { "who": "you", "values": ["expertise"], "tag": "Options, their choice", "text": "That explains the text you didn't trust. Two options: I update the number now, so the next alert reaches you and one reply clears it. Or we leave it, and you call us each time. Which do you prefer?" },
+          { "who": "client", "text": "Update it, please." }
+        ]
+      },
+      {
+        "step": 6,
+        "lines": [
+          { "who": "you", "values": ["care"], "text": "Done. To recap: the card works, alerts now go to your current phone, and you'll get a message today confirming both. I hope your wife feels better soon. Is there anything else I can help with?" },
+          { "who": "wrap", "text": "block lifted after the client confirmed the purchase, alert number updated, confirmation sent. Back to Ready." }
+        ]
+      }
+    ],
+    "split": { "engage": 370, "hold": 45, "wrap": 80 },
+    "splitNote": "Example timings, not targets."
+  },
+  "listen": {
+    "kicker": "Step 2 skill",
+    "title": "Listening cues",
+    "intro": "On the phone, the voice is the body language. Listen for the words they choose and for how they sound. Each cue is a hint to check, never a verdict.",
+    "groups": [
+      {
+        "title": "The words they choose",
+        "sub": "Verbal cues",
+        "cues": [
+          { "cue": "\"Always\", \"never\", \"every time\"", "mean": "frustration that has built up, not a literal count.", "do": "acknowledge the pattern. Do not argue the number." },
+          { "cue": "An amount or a date, said twice", "mean": "this is the thing that matters most to them.", "do": "say it back exactly, then deal with it first." },
+          { "cue": "\"This is the third time I've called\"", "mean": "they no longer trust the process.", "do": "own the history. If you must transfer, make it warm." },
+          { "cue": "\"I guess\", \"if you say so\"", "mean": "they are not convinced.", "do": "stop and ask which part does not sit right." }
+        ]
+      },
+      {
+        "title": "How they sound",
+        "sub": "Non-verbal cues",
+        "cues": [
+          { "cue": "Fast and loud", "mean": "anger or fear.", "do": "slow your own pace and lower your voice. Let them finish." },
+          { "cue": "A long pause after you give a figure", "mean": "confusion or shock.", "do": "wait. Then check what they understood." },
+          { "cue": "A sigh, or a flat voice", "mean": "they have given up expecting help.", "do": "name it kindly and give one concrete next step with a time." },
+          { "cue": "A shaky voice or short breaths", "mean": "distress.", "do": "slow down, offer time, keep to the fix. No offers on this call." }
+        ]
+      },
+      {
+        "title": "What is around them",
+        "sub": "Background",
+        "cues": [
+          { "cue": "Someone prompting answers, hurry, secrecy", "mean": "a scam in progress or pressure from someone else.", "do": "ask open questions about the purpose and follow your fraud procedure." }
+        ]
+      }
+    ],
+    "showTitle": "Show them you are listening",
+    "show": [
+      "Small sounds: \"I see\", \"mm-hm\"",
+      "Say it back in your words",
+      "Name the feeling",
+      "Ask if you got it right",
+      "Stay quiet while they finish"
+    ]
+  },
+  "transfers": {
+    "kicker": "Step 3 skill",
+    "title": "Hold and transfers",
+    "intro": "UCC, the universal call centre, is the phone software you take calls on. These are its states, and how to move a client without losing them.",
+    "statesTitle": "Your states on the phone",
+    "states": [
+      { "name": "Not Ready", "mine": true },
+      { "name": "Ready", "mine": true },
+      { "name": "Ringing", "mine": false },
+      { "name": "Talking", "mine": false },
+      { "name": "Hold", "mine": false },
+      { "name": "Wrap-up", "mine": false }
+    ],
+    "statesNote": "You choose the two highlighted ones. The system sets the rest as the call moves. Every Not Ready gets its true reason code. On a live call you can hold, consult, transfer or conference. Button names depend on your centre's software.",
+    "order": ["hold", "warm", "cold"],
+    "default": "warm",
+    "modes": {
+      "hold": {
+        "label": "Hold",
+        "when": "You need more than a few seconds away from the client: a check with another team, or a lookup that needs your full attention. For a short lookup, stay on the line and say what you are doing.",
+        "steps": [
+          "Ask, and wait for the yes.",
+          "Give the reason.",
+          "Give a time, and make it honest.",
+          "Check back before the time runs out, even if you need longer.",
+          "Thank them when you return, then say what you found."
+        ],
+        "say": [
+          { "to": "Before the hold", "text": "May I place you on a short hold while I confirm that? It should take about two minutes." },
+          { "to": "Instead of a hold", "text": "I'm pulling up your account now, so you may hear me typing." },
+          { "to": "Checking back", "text": "Thanks for waiting. I need about one more minute. Is that okay?" },
+          { "to": "Coming back", "text": "Thanks for holding. Here's what I found." }
+        ],
+        "never": "Mute in place of a hold for more than a few seconds, or a hold the client did not agree to.",
+        "numbers": "Moves: average hold time. Keeping your usual pages open before the call is the best way to need fewer holds."
+      },
+      "warm": {
+        "label": "Warm transfer",
+        "when": "The client is upset, the matter is complex or about fraud, or they would have to explain it all again. This is the default when another team must take over.",
+        "steps": [
+          "Tell the client why and to whom, and ask if that is okay.",
+          "Reach the colleague first and check they can take it.",
+          "Brief them in 30 seconds: name, verified or not, the issue in one sentence, what you have done, what the client needs.",
+          "Bring the client in and introduce the colleague by name.",
+          "Step out once the colleague has it. Note the account."
+        ],
+        "say": [
+          { "to": "To the client", "text": "Our disputes team handles this. With your permission I'll bring a colleague on the line and explain everything, so you don't have to repeat it." },
+          { "to": "To the colleague", "text": "I have Ms. Roy on the line, verified. Two card charges she doesn't recognise, card is blocked, she travels Friday. She needs the dispute opened today." },
+          { "to": "Handing over", "text": "Ms. Roy, I have Dana from our disputes team with us. She knows what happened and will take it from here." }
+        ],
+        "never": "Leave before the colleague accepts, or make the client repeat what they already told you.",
+        "numbers": "Moves: hold time goes up while you brief. That is the right trade when it saves the client from starting over."
+      },
+      "cold": {
+        "label": "Cold transfer",
+        "when": "A simple wrong department, the client asks to be put straight through, or your procedure requires it. The client is calm and has nothing to re-explain.",
+        "steps": [
+          "Say where they are going and why.",
+          "Give the direct number in case the call drops.",
+          "Tell them what to say when someone answers.",
+          "Transfer.",
+          "Note the account so the next advisor can see what happened."
+        ],
+        "say": [
+          { "to": "To the client", "text": "The mortgage team handles that. I'm connecting you now. I won't be on the line, so here is their direct number in case we get cut off. When they answer, say you are calling about your renewal date." }
+        ],
+        "never": "Cold-transfer an upset client or a fraud call, or transfer a call you could solve to shorten your handle time.",
+        "numbers": "Moves: little on your side. The cost lands on the client if it was the wrong choice."
+      }
+    }
+  },
+  "numbers": {
+    "kicker": "Me",
+    "title": "My numbers",
+    "intro": "What each one measures and the honest way to move it. Centres count these differently, so confirm the definitions in your systems and with your team lead.",
+    "ahtTitle": "Handle time is three parts",
+    "ahtFormula": "AHT = engage + hold + wrap",
+    "ahtGloss": "AHT is average handle time: the full time one call costs, from hello to the end of your notes.",
+    "parts": [
+      {
+        "key": "engage",
+        "name": "Average engage time",
+        "what": "Live talk time with the client. Care, Connect and Expertise all happen here.",
+        "lever": "listen fully the first time and ask your questions in order."
+      },
+      {
+        "key": "hold",
+        "name": "Average hold time",
+        "what": "How long the client waits after you press Hold.",
+        "lever": "open your usual pages before the call, and narrate short lookups."
+      },
+      {
+        "key": "wrap",
+        "name": "After call work, or wrap time",
+        "what": "Notes and follow-up once the client has gone.",
+        "lever": "note as you go and use the same note structure every time."
+      }
+    ],
+    "onrTitle": "Other Not Ready",
+    "onr": "Time you take away from your schedule, either doing after-call work outside wrap or leaving your station at your own discretion. Scheduled breaks and lunch are not part of it.",
+    "onrLever": "finish your notes inside wrap, and use the true reason code every time. If the system caused it, tell your lead straight away.",
+    "availTitle": "Compliance: your 94 percent",
+    "avail": "Compliance is the share of your scheduled day you are available. The target is 94 percent, counted against your schedule minus breaks and lunch. So your slack is 6 percent of your productive minutes.",
+    "availExample": "Example: a 7.5 hour day with 60 minutes of breaks and lunch leaves 390 productive minutes and 23.4 minutes of slack.",
+    "availNote": "Confirm the target and how it is counted in your systems. Being in Ready at start time means logging in before it.",
+    "target": 94,
+    "defaults": { "hours": 7.5, "breaks": 60, "used": 0 },
+    "hourChoices": [7, 7.5, 8],
+    "neverTitle": "Never buy a number with the client's time",
+    "never": "Transferring to cut handle time. Thin notes to cut wrap. Mute in place of hold. Each one comes back as a repeat call or a complaint."
+  }
+}

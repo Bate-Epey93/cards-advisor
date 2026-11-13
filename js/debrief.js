@@ -2,7 +2,7 @@
 // data and explains why, because a personal study app is the wrong place for it and
 // the advisor's employer would agree.
 import { store } from './store.js';
-import { data } from './data.js';
+import { data, callSteps } from './data.js';
 import { esc, md } from './render.js';
 import { toast } from './toast.js';
 
@@ -38,8 +38,17 @@ export function debriefView(main) {
   const top = Object.entries(byIssue).sort((a, b) => b[1] - a[1]).slice(0, 6);
   const maxN = top.length ? Math.max(1, top[0][1]) : 1;
 
+  // optional: which of the six call steps slipped most. A number from 1 to 6, never free text.
+  const steps = callSteps();
+  const stepName = n => steps.find(s => s.n === n)?.name || `Step ${n}`;
+  const slips = steps.map(s => [s, list.filter(d => d.step === s.n).length]);
+  const slipTotal = slips.reduce((a, [, n]) => a + n, 0);
+  const slipMax = Math.max(1, ...slips.map(([, n]) => n));
+  let step = 0;
+
   main.innerHTML = `<section class="screen screen-active">
     <div class="screen-inner">
+      <a class="back-inline" href="#/me">← Me</a>
       <header class="view-head">
         <div>
           <h1 class="h-xl">Shift debrief</h1>
@@ -77,6 +86,14 @@ export function debriefView(main) {
             <input id="dbPattern" placeholder="e.g. Third decline-after-alert this week, all stale SMS numbers">
           </div>
 
+          <div class="field">
+            <span id="dbStepLbl">Which step slipped most today? (optional)</span>
+            <div id="dbSteps" role="group" aria-labelledby="dbStepLbl" style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px">
+              ${steps.map(s => `<button type="button" class="score-btn" data-step="${s.n}" aria-pressed="false" aria-label="${s.n}: ${esc(s.name)}" title="${esc(s.name)}" style="min-height:44px;min-width:0;padding:8px 0">${s.n}</button>`).join('')}
+            </div>
+            <span class="dim" id="dbStepName" aria-live="polite" style="font-size:12.5px;display:block;margin-top:6px">Tap a number, or leave it blank. Tap again to clear.</span>
+          </div>
+
           <div class="debrief-foot">
             <div class="guard-msg" id="dbGuard" role="status" aria-live="polite">
               <span class="dim">${FOOTER}</span>
@@ -107,6 +124,22 @@ export function debriefView(main) {
             </div>
           </div>` : ''}
 
+          ${slipTotal ? `<div class="pol-card">
+            <div class="pol-card-top">
+              <strong>Steps that slip</strong>
+              <span class="mono dim" style="font-size:11px">${slipTotal}</span>
+            </div>
+            <div class="driver-bars">
+              ${slips.filter(([, n]) => n > 0).sort((a, b) => b[1] - a[1]).map(([s, n]) => `<div class="driver-row">
+                <div class="between" style="font-size:12.5px;margin-bottom:4px">
+                  <a href="#/call/step/${s.n}" class="driver-link">${s.n}. ${esc(s.name)}</a>
+                  <span class="mono dim">${n}</span>
+                </div>
+                <div class="driver-bar-track"><div class="driver-bar-fill" style="width:${Math.round((n / slipMax) * 100)}%"></div></div>
+              </div>`).join('')}
+            </div>
+          </div>` : ''}
+
           <details class="disc" style="margin:0">
             <summary>Why this helps</summary>
             <div class="body">Calls blur together after a while. Writing down the one line that worked and the one thing you had to look up turns each shift into practice.</div>
@@ -129,6 +162,7 @@ export function debriefView(main) {
             ${d.worked ? `<div class="debrief-line"><div class="debrief-line-body"><strong>Worked:</strong> ${md(d.worked)}</div></div>` : ''}
             ${d.lookUp ? `<div class="debrief-line"><div class="debrief-line-body"><strong>Look up:</strong> ${md(d.lookUp)}</div></div>` : ''}
             ${d.pattern ? `<div class="debrief-line"><div class="debrief-line-body"><strong>Noticed:</strong> ${md(d.pattern)}</div></div>` : ''}
+            ${d.step >= 1 && d.step <= 6 ? `<div class="debrief-line"><div class="debrief-line-body"><strong>Step that slipped:</strong> <a href="#/call/step/${d.step}">${d.step}. ${esc(stepName(d.step))}</a></div></div>` : ''}
             <div class="pol-card-foot" style="margin-top:auto;padding-top:8px;justify-content:flex-end">
               <button type="button" class="link-btn dim" data-del="${esc(d.id)}" style="background:none;border:0;padding:10px 4px;min-height:44px;font-size:12.5px;cursor:pointer;color:var(--muted);text-decoration:underline">Remove</button>
             </div>
@@ -140,6 +174,14 @@ export function debriefView(main) {
 
   const fields = ['dbWorked', 'dbLookup', 'dbPattern'].map(id => main.querySelector('#' + id));
   const guardEl = main.querySelector('#dbGuard');
+
+  const stepNote = main.querySelector('#dbStepName');
+  main.querySelectorAll('#dbSteps [data-step]').forEach(b => b.onclick = () => {
+    const n = +b.dataset.step;
+    step = step === n ? 0 : n;
+    main.querySelectorAll('#dbSteps [data-step]').forEach(x => x.setAttribute('aria-pressed', String(+x.dataset.step === step)));
+    stepNote.textContent = step ? `${step}. ${stepName(step)}` : 'Tap a number, or leave it blank. Tap again to clear.';
+  });
 
   let lastGuard = 'ok'; // the markup above already shows the clear notice
   const check = () => {
@@ -164,7 +206,9 @@ export function debriefView(main) {
     const issue = main.querySelector('#dbIssue').value;
     const [worked, lookUp, pattern] = fields.map(f => f.value.trim());
     if (!issue || (!worked && !lookUp)) { toast({ msg: 'Pick the call type and write at least one line.', timeout: 2600 }); return; }
-    store.addDebrief({ issue, worked, lookUp, pattern });
+    const entry = { issue, worked, lookUp, pattern };
+    if (step >= 1 && step <= 6) entry.step = step;
+    store.addDebrief(entry);
     store.touchStreak();
     toast({ msg: 'Saved.', icon: '✓', timeout: 2200 });
     debriefView(main);

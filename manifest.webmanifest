@@ -1,7 +1,7 @@
 {
   "name": "Cards Advisor",
   "short_name": "Cards Advisor",
-  "description": "Study tool for a bank cards advisor: common card issues, what the client needs, and how to handle each call step by step. Not affiliated with any bank.",
+  "description": "Study tool for a bank cards advisor: the six steps of a call, common card issues, what the client needs, and how to handle each one. Not affiliated with any bank.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
@@ -15,10 +15,10 @@
     { "src": "icons/maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ],
   "shortcuts": [
+    { "name": "Call", "url": "./#/call" },
     { "name": "Issues", "url": "./#/" },
+    { "name": "Practice", "url": "./#/practice" },
     { "name": "Policy", "url": "./#/policy" },
-    { "name": "Flashcards", "url": "./#/cards" },
-    { "name": "Debrief", "url": "./#/debrief" },
-    { "name": "Badge", "url": "./#/id" }
+    { "name": "My numbers", "url": "./#/call/numbers" }
   ]
 }

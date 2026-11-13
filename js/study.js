@@ -1,8 +1,18 @@
-// Flashcards over the key figures, the say-this lines and the bank's own numbers. Five boxes,
-// shown to the advisor as New, Learning and Known.
+// Flashcards over the key figures, the say-this lines, the bank's own numbers, the six
+// call steps and my own numbers. Five boxes, shown to the advisor as New, Learning and Known.
 import { buildDeck } from './data.js';
 import { store } from './store.js';
 import { esc, md } from './render.js';
+
+// kind -> [filter label, card label, label for the extra line]
+const KINDS = {
+  'call step': ['The six call steps', 'Call step', 'Also:'],
+  'my numbers': ['My numbers', 'My numbers', 'Also:'],
+  'figure': ['Key figures', 'Key figure', 'What to say:'],
+  'say this': ['Say this, not this', 'Say this, not this', 'From the issue:'],
+  'bank figure': ['Bank pages', 'Bank page', 'Page dated:']
+};
+const kindOf = k => KINDS[k] || KINDS['bank figure'];
 
 let deckCache = null;
 function deck() { return deckCache || (deckCache = buildDeck()); }
@@ -40,9 +50,10 @@ export function cardsView(main, mode = 'due', kindFilter = '') {
     const nextDays = [1, 2, 4, 8, 16][Math.min(5, box + 1) - 1];
 
     main.innerHTML = `<section class="screen screen-active"><div class="screen-inner" style="max-width:780px">
+      <a class="back-inline" href="#/practice">← Practice</a>
       <div class="lib-hero">
         <h1 class="title">Flashcards</h1>
-        <p class="subtitle">Rules, numbers and what to say. Missed cards come back sooner.</p>
+        <p class="subtitle">The call steps, my numbers, rules and what to say. Missed cards come back sooner.</p>
       </div>
 
       <div class="fc-levels" role="img" aria-label="How well you know the deck" style="display:flex;gap:2px;height:6px;border-radius:999px;overflow:hidden;background:var(--line)">
@@ -61,12 +72,7 @@ export function cardsView(main, mode = 'due', kindFilter = '') {
           <button class="lib-fchip ${mode === 'all' ? 'on' : ''}" data-mode="all" type="button" aria-pressed="${mode === 'all'}">All</button>
         </div>
         <select id="fcKind" class="sel-pill" aria-label="Card type">
-          ${[
-            ['', 'All types'],
-            ['figure', 'Key figures'],
-            ['say this', 'Say this, not this'],
-            ['bank figure', 'Bank pages']
-          ].map(([k, lbl]) => `<option value="${k}" ${kindFilter === k ? 'selected' : ''}>${lbl}</option>`).join('')}
+          ${[['', 'All types'], ...Object.keys(KINDS).filter(k => all.some(c => c.kind === k)).map(k => [k, KINDS[k][0]])].map(([k, lbl]) => `<option value="${k}" ${kindFilter === k ? 'selected' : ''}>${lbl}</option>`).join('')}
         </select>
       </div>
 
@@ -87,14 +93,14 @@ export function cardsView(main, mode = 'due', kindFilter = '') {
         </div>
 
         <div class="rv-card fc-stage" id="fc" role="button" tabindex="0" aria-pressed="${flipped}">
-          <div class="rv-type">${c.kind === 'figure' ? 'Key figure' : c.kind === 'say this' ? 'Say this, not this' : 'Bank page'}</div>
+          <div class="rv-type">${kindOf(c.kind)[1]}</div>
           <div class="fc-prompt">${md(c.q)}</div>
 
           ${flipped ? `
             <div class="fc-answer">
               <div class="fc-ans-main">${md(c.a)}</div>
               ${c.note ? `<div class="fc-ans-note">${md(c.note)}</div>` : ''}
-              ${c.extra ? `<div class="fc-ans-extra"><strong>${c.kind === 'figure' ? 'What to say:' : c.kind === 'say this' ? 'From the issue:' : 'Page dated:'}</strong> ${md(c.extra)}</div>` : ''}
+              ${c.extra ? `<div class="fc-ans-extra"><strong>${kindOf(c.kind)[2]}</strong> ${md(c.extra)}</div>` : ''}
             </div>
           ` : `
             <div class="fc-tap-hint">Tap to flip<span class="kbd-hint"> or press Space</span></div>
@@ -116,7 +122,9 @@ export function cardsView(main, mode = 'due', kindFilter = '') {
           <button type="button" class="big-btn" id="flipBtn" style="width:100%;justify-content:center;margin-top:14px">Show answer</button>
         `}
 
-        <p class="fine" style="margin-top:12px">Bank numbers come from public pages. Confirm in-system before you quote one.</p>
+        <p class="fine" style="margin-top:12px">${c.kind === 'call step' || c.kind === 'my numbers'
+          ? 'My own study notes on call craft. Centres count these numbers differently, so confirm in your systems.'
+          : 'Bank numbers come from public pages. Confirm in your systems before you quote one.'}</p>
       `}
     </div></section>`;
 

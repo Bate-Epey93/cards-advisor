@@ -5,6 +5,78 @@ import { esc } from './render.js';
 import { PARTS } from './data.js';
 import { store } from './store.js';
 
+/* ═════════ The six call steps ═════════
+   Every guide is laid out in the order the call is run. The 11 numbered parts
+   of a full guide keep their indices (saved progress stores 0..10); the four
+   panels r, c, a and m sit between them and are not numbered parts. */
+export const CALL_STEPS = [
+  { id: 'step-1', n: 1, label: 'Be Ready', short: 'Ready', tone: 'slate',
+    desc: 'What to have open and know before you pick up',
+    me: 'Last call closed, notes done, the right screens open, full attention on this client.',
+    client: 'They reach someone who is present from the first word and does not make them wait while screens load.',
+    full: ['r'], brief: ['r'] },
+  { id: 'step-2', n: 2, label: 'Welcome and Listen', short: 'Listen', tone: 'red',
+    desc: 'What they say, need, feel and fear losing, then your first 15 seconds',
+    me: 'Greet, then listen for the words and for the voice behind them before I touch anything.',
+    client: 'They tell it once, without being cut off, and hear their own problem said back.',
+    full: ['0', '1', '2', '3', '5'], brief: ['0', '1'] },
+  { id: 'step-3', n: 3, label: 'Solve Immediate Need', short: 'Solve', tone: 'teal',
+    desc: 'Risk checks, questions in order, options, and what to say',
+    me: 'Check the risks, ask the questions in order, fix what they called about.',
+    client: 'The thing they called about gets dealt with, and they are told what is happening while it does.',
+    full: ['4', '6', '7', '8'], brief: ['2', '3'] },
+  { id: 'step-4', n: 4, label: 'Checkpoint', short: 'Check', tone: 'vio',
+    desc: 'Confirm it is sorted before you move on',
+    me: 'Stop and confirm the fix worked and that I solved the problem they actually had.',
+    client: 'They get to say "yes, that is sorted" in their own words, or tell me what is still open.',
+    full: ['c'], brief: ['c'] },
+  { id: 'step-5', n: 5, label: 'Deeper Discovery and Additional Advice', short: 'Advise', tone: 'amber',
+    desc: 'Questions to ask, options with their trade-offs, and what to leave alone',
+    me: 'Ask what sits behind the call and offer options with the trade-off of each. The choice is theirs.',
+    client: 'They leave knowing something useful they did not know to ask for, with nothing pushed on them.',
+    full: ['a'], brief: ['a'] },
+  { id: 'step-6', n: 6, label: 'Making Their Day', short: 'Close', tone: 'green',
+    desc: 'Recap, closing lines, notes, and what to tell your lead',
+    me: 'Recap, close warmly, then write the note that saves the next advisor from asking again.',
+    client: 'They hang up knowing what was done, what happens next and when, and they do not have to call back.',
+    full: ['m', '9', '10'], brief: ['m'] }
+];
+
+// Tone colours as inline values, so the two tones the stylesheet has no class for still render.
+export const TONE_VAR = {
+  slate: 'var(--ink-soft)',
+  red: 'var(--failure)',
+  teal: 'var(--teal)',
+  vio: 'var(--proposal)',
+  amber: 'var(--accent)',
+  green: 'var(--step-green, #3fb984)'
+};
+
+export const PANELS = {
+  r: { label: 'Be ready for this call', node: 'Be ready', hint: 'What to have open and know before you pick up' },
+  c: { label: 'Checkpoint', node: 'Checkpoint', hint: 'Confirm it is sorted before you move on' },
+  a: { label: 'Deeper discovery and advice', node: 'Advice', hint: 'Questions to ask, options with the trade-off of each, and what to leave for another day' },
+  m: { label: 'Making their day', node: 'Closing lines', hint: 'Recap and closing lines' }
+};
+
+// The guide in call order: [{ key, step, code }]. Code is the step number plus a
+// letter when the step holds more than one screen (2a, 2b, ...).
+export function callSequence(hasBreakdown) {
+  const out = [];
+  CALL_STEPS.forEach(st => {
+    const keys = hasBreakdown ? st.full : st.brief;
+    keys.forEach((key, k) => out.push({
+      key, step: st, code: keys.length > 1 ? `${st.n}${String.fromCharCode(97 + k)}` : String(st.n)
+    }));
+  });
+  return out;
+}
+
+export function stepForKey(key, hasBreakdown) {
+  const k = String(key);
+  return CALL_STEPS.find(st => (hasBreakdown ? st.full : st.brief).includes(k)) || null;
+}
+
 /* ═════════ Rough.js Deterministic Sketch Engine ═════════
    Deterministic FNV-1a seed per element ID so hand-drawn geometry never
    shimmers or reshuffles when scrubbing steps or hovering nodes. */
@@ -243,75 +315,116 @@ export function renderMiniTopo(issue) {
 }
 
 /* ═════════ Full interactive call map ═════════ */
+// Six lanes inside the 920-unit width: 10 + 112 + 196 + 196 + 112 + 112 + 142 + five 6-unit gaps + 10.
+const LANE_GEOM = [
+  { x: 10, w: 112 },
+  { x: 128, w: 196 },
+  { x: 330, w: 196 },
+  { x: 532, w: 112 },
+  { x: 650, w: 112 },
+  { x: 768, w: 142 }
+];
+const LANE_PAD = 8;
+
+function callLanes() {
+  // Full names where the lane is wide enough, short labels in the narrow ones.
+  const names = ['1 Ready', '2 Welcome and Listen', '3 Solve Immediate Need', '4 Check', '5 Advise', '6 Making Their Day'];
+  return LANE_GEOM.map((g, idx) => ({ idx, label: names[idx], full: `${CALL_STEPS[idx].n} ${CALL_STEPS[idx].label}`, x: g.x, w: g.w }));
+}
+
 export function buildCallGraph(issue) {
   const bd = issue.breakdown;
+  const seq = callSequence(!!bd);
+  const codeOf = key => seq.find(s => s.key === key)?.code || '';
+  const lanes = callLanes();
+  const nx = lane => LANE_GEOM[lane].x + LANE_PAD;
+  const nw = lane => LANE_GEOM[lane].w - LANE_PAD * 2;
+  const polCount = (bd?.policyRefs || []).length;
+
+  // Narrow lanes stack the title under the number badge so it never runs out of the box.
+  const panelNode = (key, lane, y, sub) => ({
+    id: `part-${key}`, part: key, stepIdx: -1, seenKey: `seen-${key}`, lane, x: nx(lane), y, w: nw(lane), h: 70,
+    kind: 'panel', stack: true, num: codeOf(key), title: PANELS[key].node, sub, tone: CALL_STEPS[lane].tone
+  });
+
   if (bd) {
     const emoShort = shortText((bd.emotionalRead || issue.emotion || 'Tension').split(/[.:;]/)[0], 26);
     const jobShort = shortText((bd.underlyingJob || issue.underlyingJob || 'Restore continuity').split(/[.:;]/)[0], 28);
     const flagCount = (bd.riskFlags || []).length;
     const qCount = (bd.diagnose || []).length;
-    const polCount = (bd.policyRefs || []).length;
-
-    const lanes = [
-      { idx: 0, label: 'Listen', x: 16, w: 204 },
-      { idx: 1, label: 'Check and acknowledge', x: 236, w: 204 },
-      { idx: 2, label: 'Solve', x: 456, w: 214 },
-      { idx: 3, label: 'Wrap up', x: 686, w: 218 }
-    ];
+    const partNode = (pi, lane, y, h, kind, sub, stack = false) => ({
+      id: `part-${pi}`, part: String(pi), stepIdx: pi, lane, x: nx(lane), y, w: nw(lane), h,
+      kind, stack, num: codeOf(String(pi)), title: PARTS[pi][1], sub, tone: CALL_STEPS[lane].tone
+    });
 
     const nodes = [
-      { id: 'part-0', part: '0', stepIdx: 0, lane: 0, x: 28, y: 52, w: 180, h: 58, kind: 'quote', num: '01', title: PARTS[0][1], sub: shortText(bd.surfaceRequest, 30), tone: 'red' },
-      { id: 'part-1', part: '1', stepIdx: 1, lane: 0, x: 28, y: 132, w: 180, h: 58, kind: 'job', num: '02', title: PARTS[1][1], sub: jobShort, tone: 'red' },
-      { id: 'part-2', part: '2', stepIdx: 2, lane: 0, x: 28, y: 212, w: 180, h: 58, kind: 'emotion', num: '03', title: PARTS[2][1], sub: emoShort, tone: 'red' },
-      { id: 'part-3', part: '3', stepIdx: 3, lane: 0, x: 28, y: 292, w: 180, h: 58, kind: 'psych', num: '04', title: PARTS[3][1], sub: '', tone: 'red' },
+      panelNode('r', 0, 92, 'What to open'),
+      { id: 'part-p', part: 'p', stepIdx: -2, lane: 0, x: nx(0), y: 222, w: nw(0), h: 70, kind: 'policy', stack: true, num: '§', title: 'Policy', sub: `${polCount} source${polCount === 1 ? '' : 's'}`, tone: 'slate' },
 
-      { id: 'part-4', part: '4', stepIdx: 4, lane: 1, x: 248, y: 92, w: 180, h: 64, kind: 'flag', num: '05', title: PARTS[4][1], sub: `${flagCount} check${flagCount === 1 ? '' : 's'}`, tone: 'vio' },
-      { id: 'part-5', part: '5', stepIdx: 5, lane: 1, x: 248, y: 212, w: 180, h: 66, kind: 'engage', num: '06', title: PARTS[5][1], sub: '', tone: 'vio' },
+      partNode(0, 1, 52, 52, 'quote', shortText(bd.surfaceRequest, 30)),
+      partNode(1, 1, 116, 52, 'job', jobShort),
+      partNode(2, 1, 180, 52, 'emotion', emoShort),
+      partNode(3, 1, 244, 52, 'psych', ''),
+      partNode(5, 1, 308, 52, 'engage', ''),
 
-      { id: 'part-6', part: '6', stepIdx: 6, lane: 2, x: 468, y: 74, w: 190, h: 64, kind: 'fork', num: '07', title: PARTS[6][1], sub: `${qCount} question${qCount === 1 ? '' : 's'}`, tone: 'teal' },
-      { id: 'part-7', part: '7', stepIdx: 7, lane: 2, x: 468, y: 168, w: 190, h: 64, kind: 'resolve', num: '08', title: PARTS[7][1], sub: '', tone: 'teal' },
-      { id: 'part-8', part: '8', stepIdx: 8, lane: 2, x: 468, y: 262, w: 190, h: 64, kind: 'script', num: '09', title: PARTS[8][1], sub: `${(bd.sayThisNotThis || []).length} lines`, tone: 'teal' },
+      partNode(4, 2, 56, 58, 'flag', `${flagCount} check${flagCount === 1 ? '' : 's'}`),
+      partNode(6, 2, 134, 58, 'fork', `${qCount} question${qCount === 1 ? '' : 's'}`),
+      partNode(7, 2, 212, 58, 'resolve', ''),
+      partNode(8, 2, 290, 58, 'script', `${(bd.sayThisNotThis || []).length} lines`),
 
-      { id: 'part-p', part: 'p', stepIdx: -2, lane: 3, x: 698, y: 56, w: 194, h: 58, kind: 'policy', num: '§', title: 'Policy', sub: `${polCount} source${polCount === 1 ? '' : 's'}`, tone: 'amber' },
-      { id: 'part-9', part: '9', stepIdx: 9, lane: 3, x: 698, y: 152, w: 194, h: 62, kind: 'after', num: '10', title: PARTS[9][1], sub: '', tone: 'amber' },
-      { id: 'part-10', part: '10', stepIdx: 10, lane: 3, x: 698, y: 248, w: 194, h: 62, kind: 'lead', num: '11', title: PARTS[10][1], sub: '', tone: 'amber' }
+      panelNode('c', 3, 157, 'Is it sorted?'),
+      panelNode('a', 4, 157, 'Ask, advise'),
+
+      panelNode('m', 5, 66, 'Recap and close'),
+      partNode(9, 5, 157, 70, 'after', '', true),
+      partNode(10, 5, 248, 70, 'lead', '', true)
     ];
 
     const edges = [
+      { id: 'e-r-p', from: 'part-r', to: 'part-p', kind: 'policy' },
+      { id: 'e-r-0', from: 'part-r', to: 'part-0', kind: 'flow' },
       { id: 'e-0-1', from: 'part-0', to: 'part-1', kind: 'signal' },
       { id: 'e-1-2', from: 'part-1', to: 'part-2', kind: 'signal' },
       { id: 'e-2-3', from: 'part-2', to: 'part-3', kind: 'signal' },
-      { id: 'e-1-4', from: 'part-1', to: 'part-4', kind: 'guard' },
       { id: 'e-3-5', from: 'part-3', to: 'part-5', kind: 'flow' },
-      { id: 'e-4-5', from: 'part-4', to: 'part-5', kind: 'guard' },
-      { id: 'e-5-6', from: 'part-5', to: 'part-6', kind: 'flow' },
+      { id: 'e-5-4', from: 'part-5', to: 'part-4', kind: 'guard' },
+      { id: 'e-4-6', from: 'part-4', to: 'part-6', kind: 'flow' },
       { id: 'e-6-7', from: 'part-6', to: 'part-7', kind: 'flow' },
       { id: 'e-7-8', from: 'part-7', to: 'part-8', kind: 'flow' },
-      { id: 'e-7-p', from: 'part-7', to: 'part-p', kind: 'policy' },
-      { id: 'e-7-9', from: 'part-7', to: 'part-9', kind: 'flow' },
+      { id: 'e-8-c', from: 'part-8', to: 'part-c', kind: 'flow' },
+      { id: 'e-c-a', from: 'part-c', to: 'part-a', kind: 'flow' },
+      { id: 'e-a-m', from: 'part-a', to: 'part-m', kind: 'flow' },
+      { id: 'e-m-9', from: 'part-m', to: 'part-9', kind: 'flow' },
       { id: 'e-9-10', from: 'part-9', to: 'part-10', kind: 'lead' }
     ];
 
-    return { width: 920, height: 376, lanes, nodes, edges, totalSteps: 11 };
+    return { width: 920, height: 384, lanes, nodes, edges, totalSteps: 11 };
   }
 
-  // Observed-only 4-step graph
-  const lanes = [
-    { idx: 0, label: 'What callers report', x: 18, w: 204 },
-    { idx: 1, label: 'What they need and feel', x: 240, w: 204 },
-    { idx: 2, label: 'Policy to check', x: 462, w: 204 },
-    { idx: 3, label: 'How to handle it', x: 684, w: 214 }
-  ];
+  // Short guide: the same six lanes, with its 4 steps in Listen and Solve
+  const obsNode = (pi, lane, y, kind, title, sub) => ({
+    id: `obs-${pi}`, part: String(pi), stepIdx: pi, lane, x: nx(lane), y, w: nw(lane), h: 64,
+    kind, num: codeOf(String(pi)), title, sub, tone: CALL_STEPS[lane].tone
+  });
+  const qn = (issue.quotes || []).length;
   const nodes = [
-    { id: 'obs-0', part: '0', stepIdx: 0, lane: 0, x: 32, y: 115, w: 176, h: 72, kind: 'quote', num: '01', title: 'What callers report', sub: (issue.quotes || []).length ? `${issue.quotes.length} quote${issue.quotes.length === 1 ? '' : 's'}` : 'No quotes yet', tone: 'red' },
-    { id: 'obs-1', part: '1', stepIdx: 1, lane: 1, x: 254, y: 115, w: 176, h: 72, kind: 'emotion', num: '02', title: 'What they need and feel', sub: shortText(issue.emotion || issue.underlyingJob || 'Listen first', 26), tone: 'vio' },
-    { id: 'obs-2', part: '2', stepIdx: 2, lane: 2, x: 476, y: 115, w: 176, h: 72, kind: 'policy', num: '03', title: 'Policy to check', sub: shortText(issue.category, 26), tone: 'teal' },
-    { id: 'obs-3', part: '3', stepIdx: 3, lane: 3, x: 698, y: 115, w: 186, h: 72, kind: 'resolve', num: '04', title: 'How to handle it', sub: '', tone: 'amber' }
+    panelNode('r', 0, 110, 'What to open'),
+    obsNode(0, 1, 62, 'quote', 'What callers report', qn ? `${qn} quote${qn === 1 ? '' : 's'}` : 'No quotes yet'),
+    obsNode(1, 1, 164, 'emotion', 'What they need and feel', shortText(issue.emotion || issue.underlyingJob || 'Listen first', 26)),
+    obsNode(2, 2, 62, 'policy', 'Policy to check', shortText(issue.category, 26)),
+    obsNode(3, 2, 164, 'resolve', 'How to handle it', ''),
+    panelNode('c', 3, 110, 'Is it sorted?'),
+    panelNode('a', 4, 110, 'Ask, advise'),
+    panelNode('m', 5, 110, 'Recap and close')
   ];
   const edges = [
+    { id: 'eo-r-0', from: 'part-r', to: 'obs-0', kind: 'flow' },
     { id: 'eo-0-1', from: 'obs-0', to: 'obs-1', kind: 'signal' },
     { id: 'eo-1-2', from: 'obs-1', to: 'obs-2', kind: 'policy' },
-    { id: 'eo-2-3', from: 'obs-2', to: 'obs-3', kind: 'flow' }
+    { id: 'eo-2-3', from: 'obs-2', to: 'obs-3', kind: 'flow' },
+    { id: 'eo-3-c', from: 'obs-3', to: 'part-c', kind: 'flow' },
+    { id: 'eo-c-a', from: 'part-c', to: 'part-a', kind: 'flow' },
+    { id: 'eo-a-m', from: 'part-a', to: 'part-m', kind: 'flow' }
   ];
   return { width: 920, height: 290, lanes, nodes, edges, totalSteps: 4 };
 }
@@ -328,7 +441,8 @@ function edgePath(na, nb) {
   const y1 = na.y + na.h / 2;
   const x2 = nb.x;
   const y2 = nb.y + nb.h / 2;
-  const dx = Math.max(28, (x2 - x1) * 0.5);
+  // Lanes sit 22 units apart, so the curve handles stay inside the gap
+  const dx = Math.max(12, (x2 - x1) * 0.5);
   return `M ${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
 }
 
@@ -347,6 +461,9 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
   const isNarrow = () => scrollEl.clientWidth > 0 && scrollEl.clientWidth < graph.width * READABLE_FIT;
   const capStateEl = paneEl.querySelector('.diagram-cap-state');
 
+  // Parts are done when read; panels are done once they have been opened.
+  const nodeDone = (n, readSet) => n.stepIdx >= 0 ? readSet.has(n.stepIdx) : !!(n.seenKey && store.isChecked(issue.id, n.seenKey));
+
   const arrowRoughD = sketch('M 0.8 1.6 L 8.5 5 L 0.8 8.4 Z', 'dg-arrow-head', { roughness: 0.55, bowing: 0.45 });
 
   function renderSvg() {
@@ -360,7 +477,7 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
         roughness: 0.72,
         bowing: 0.65
       });
-      const ruleD = sketch(`M ${l.x + 12} 40 H ${l.x + l.w - 12}`, `${issue.id}:lrule:${idx}`, {
+      const ruleD = sketch(`M ${l.x + 10} 40 H ${l.x + l.w - 10}`, `${issue.id}:lrule:${idx}`, {
         roughness: 0.65,
         bowing: 0.5
       });
@@ -369,7 +486,7 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
           <rect class="dg-lane-fill ${idx % 2 === 1 ? 'alt' : ''}" x="${l.x}" y="12" width="${l.w}" height="${lh}" rx="12"/>
           <path class="dg-lane ${idx % 2 === 1 ? 'alt' : ''}" d="${laneOutline}" fill="none"/>
           <path class="dg-lane-rule" d="${ruleD}" fill="none"/>
-          <text class="dg-lane-label" x="${l.x + 14}" y="31">${esc(l.label)}</text>
+          <text class="dg-lane-label" x="${l.x + 12}" y="31">${esc(l.label)}${l.full ? `<title>${esc(l.full)}</title>` : ''}</text>
         </g>
       `;
     }).join('');
@@ -382,7 +499,7 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
       const rawD = edgePath(na, nb);
       const roughD = sketch(rawD, `${issue.id}:${e.id}`, { roughness: 0.9, bowing: 0.85 });
       const isAct = (na.part === activePart || nb.part === activePart || activePart === 'all');
-      const isDone = (na.stepIdx >= 0 && readSet.has(na.stepIdx)) && (nb.stepIdx >= 0 && readSet.has(nb.stepIdx));
+      const isDone = nodeDone(na, readSet) && nodeDone(nb, readSet);
       const cls = [
         'dg-edge',
         `dg-ekind-${e.kind}`,
@@ -404,7 +521,7 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
     // 3. Nodes: Two-pass rendering (crisp liquid-glass .dg-fill + Rough.js .dg-shape, hachure, badge & corner glyph)
     const nodesSvg = graph.nodes.map(n => {
       const isCur = n.part === activePart || (activePart === 'all');
-      const isDone = n.stepIdx >= 0 && readSet.has(n.stepIdx);
+      const isDone = nodeDone(n, readSet);
       const stateCls = isCur ? 'dg-node-active' : isDone ? 'dg-node-done' : 'dg-node-todo';
 
       const shapeD = sketch(roundRectD(0, 0, n.w, n.h, 10), `${issue.id}:${n.id}:box`);
@@ -420,7 +537,13 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
         ? sketch(`M ${n.w - 17} 16 L ${n.w - 14.8} 18.2 L ${n.w - 11} 14`, `${issue.id}:${n.id}:chk`, { roughness: 0.5, bowing: 0.4 })
         : '';
 
-      return `<g class="dg-node ${stateCls} tone-${n.tone}" data-node="${n.id}" data-part="${n.part}" transform="translate(${n.x},${n.y})" role="button" tabindex="0" aria-label="${esc((n.stepIdx >= 0 ? `Step ${n.stepIdx + 1}: ` : '') + n.title)}">
+      const stepNo = n.lane + 1;
+      const stepName = CALL_STEPS[n.lane]?.label || '';
+      const toneVar = TONE_VAR[n.tone];
+      // Stacked nodes put the title under the badge; the rest keep it beside the badge.
+      const tx = n.stack ? 12 : 41, ty = n.stack ? 45 : 23, sy = n.stack ? 60 : 44;
+
+      return `<g class="dg-node ${stateCls} tone-${n.tone}"${toneVar ? ` style="--node-tone:${toneVar}"` : ''} data-node="${n.id}" data-part="${n.part}" transform="translate(${n.x},${n.y})" role="button" tabindex="0" aria-label="${esc(`${n.part === 'p' ? '' : `Step ${stepNo}, ${stepName}: `}${n.title}`)}">
         ${haloD ? `<path class="dg-halo" d="${haloD}" fill="none"/>` : ''}
         <rect class="dg-fill" x="0" y="0" width="${n.w}" height="${n.h}" rx="10"/>
         ${hachD ? `<path class="dg-hachure" d="${hachD}" fill="none"/>` : ''}
@@ -429,8 +552,8 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
         <path class="dg-badge-bg" d="${badgeD}" fill="none"/>
         <text class="dg-badge-txt" x="22.5" y="22.5" text-anchor="middle">${esc(n.num)}</text>
         ${isDone ? `<circle class="dg-done-dot" cx="${n.w - 14}" cy="16" r="5.5"/><path d="${doneCheckD}" fill="none" stroke="var(--bg)" stroke-width="1.6" stroke-linecap="round"/>` : ''}
-        <text class="dg-title" x="41" y="23">${esc(n.title)}</text>
-        <text class="dg-sub" x="12" y="44">${esc(n.sub)}</text>
+        <text class="dg-title" x="${tx}" y="${ty}">${esc(n.title)}</text>
+        <text class="dg-sub" x="12" y="${sy}">${esc(n.sub)}</text>
       </g>`;
     }).join('');
 
@@ -484,14 +607,16 @@ export function mountCallDiagram(paneEl, issue, opts = {}) {
     if (!capStateEl) return;
     const prog = store.prog(issue.id);
     const readCount = (prog.read || []).filter(x => x >= 0 && x < graph.totalSteps).length;
+    const unit = graph.totalSteps === 11 ? 'parts' : 'steps';
+    const st = stepForKey(activePart, !!issue.breakdown);
     if (activePart === 'all') {
-      capStateEl.textContent = `All steps: ${readCount} of ${graph.totalSteps} done`;
+      capStateEl.textContent = `The whole call in order: ${readCount} of ${graph.totalSteps} ${unit} read`;
     } else if (activePart === 'o') {
       { const qn = (issue.quotes || []).length; capStateEl.textContent = `What callers report: ${qn} quote${qn === 1 ? '' : 's'}`; }
     } else if (activePart === 'p') {
-      capStateEl.textContent = 'Policy for this issue. Confirm in-system before quoting.';
-    } else if (/^\d+$/.test(activePart)) {
-      capStateEl.textContent = `${readCount} of ${graph.totalSteps} steps done`;
+      capStateEl.textContent = 'Policy for this issue. Confirm in your systems before quoting.';
+    } else if (st) {
+      capStateEl.textContent = `Step ${st.n} of 6: ${st.label}. ${readCount} of ${graph.totalSteps} ${unit} read`;
     }
   }
 

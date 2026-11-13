@@ -7,6 +7,7 @@ import { cardsView } from './study.js';
 import { practiceView, drillView, stopTimers } from './practice.js';
 import { debriefView } from './debrief.js';
 import { badgeView } from './badge.js';
+import { callView, callSearchIndex } from './call.js';
 import { unmountHighlighter, openPanel } from './highlight.js';
 import { renderRoughCardLogo } from './diagram.js';
 import { initPWA, checkForUpdate } from './pwa.js';
@@ -126,7 +127,7 @@ function runSearch(q) {
           <span class="s">${esc(h.sub)}</span>
         </span>
       </button>`).join('')
-    : `<div class="empty" style="margin:12px">Nothing found. Try "abroad", "lock", "56 days", "spouse", or "$50".</div>`;
+    : `<div class="empty" style="margin:12px">Nothing found. Try "abroad", "lock", "hold", "warm transfer", "56 days", or "$50".</div>`;
   pHits.length ? pInput.setAttribute('aria-activedescendant', 'pr-0') : pInput.removeAttribute('aria-activedescendant');
   pResults.querySelectorAll('.pr').forEach(b => {
     b.onclick = () => {
@@ -176,6 +177,38 @@ document.addEventListener('keydown', e => {
   }
 });
 
+/* ─────────── me ─────────── */
+// Hub for the personal screens that left the bottom nav.
+function meView() {
+  document.body.classList.remove('reading');
+  const items = [
+    ['#/call/numbers', 'My numbers', 'Handle time, hold, wrap, Other Not Ready and the 94 percent compliance target, worked out for my own shift.'],
+    ['#/debrief', 'Shift debrief', `Three lines after a shift, kept on this device. ${store.debriefs.length} saved.`],
+    ['#/cards', 'Flashcards', 'The six call steps, my numbers, key figures and say this, not this lines. Missed cards come back sooner.'],
+    ['#/id', 'Badge', 'My name and role on the advisor badge.'],
+    ['#/about', 'Settings', 'Detail level, issue layout, theme, backup and updates.']
+  ];
+  main.innerHTML = `<section class="screen screen-active">
+    <div class="screen-inner" style="max-width:860px">
+      <header class="view-head">
+        <div>
+          <h1 class="h-xl">Me</h1>
+          <p class="lede">My numbers, my notes after a shift, and how this app is set up.</p>
+        </div>
+      </header>
+      <nav class="set-list" aria-label="Me">
+        ${items.map(([href, title, desc]) => `<a class="set-block" href="${href}" style="flex-wrap:nowrap;min-height:44px">
+          <span class="set-info" style="flex:1 1 auto;min-width:0">
+            <strong>${esc(title)}</strong>
+            <p>${esc(desc)}</p>
+          </span>
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true" style="flex:0 0 auto;color:var(--muted)"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>`).join('')}
+      </nav>
+    </div>
+  </section>`;
+}
+
 /* ─────────── about / settings / backup ─────────── */
 function aboutView() {
   document.body.classList.remove('reading');
@@ -197,7 +230,7 @@ function aboutView() {
       <div class="b-warn">
         <span class="lbl">Before you use this</span>
         <p style="margin:4px 0">Not affiliated with any bank. A personal study tool, not an official bank source.</p>
-        <p style="margin:4px 0">Confirm every figure in-system before you quote it.</p>
+        <p style="margin:4px 0">Confirm every figure in your systems before you quote it.</p>
         <p style="margin:4px 0">Never type client details. Nothing you write leaves this device, and the Debrief screen blocks anything that looks like client details.</p>
       </div>
 
@@ -269,12 +302,12 @@ function aboutView() {
 
         <details class="set-block set-more">
           <summary class="set-info"><strong>Where the content comes from</strong></summary>
-          <p style="flex:1 1 100%;margin:0;font-size:13.5px;color:var(--muted)">Public material, all dated: consumer reviews, news archives, public bank pages, and Canadian law and regulator guidance (the Bank Act, FCAC (the federal consumer regulator), the Quebec Consumer Protection Act, and Visa and Mastercard Zero Liability). Confirm every figure in-system before you quote it.</p>
+          <p style="flex:1 1 100%;margin:0;font-size:13.5px;color:var(--muted)">Public material, all dated: consumer reviews, news archives, public bank pages, and Canadian law and regulator guidance (the Bank Act, FCAC (the federal consumer regulator), the Quebec Consumer Protection Act, and Visa and Mastercard Zero Liability). Confirm every figure in your systems before you quote it.</p>
         </details>
 
         <details class="set-block set-more">
           <summary class="set-info"><strong>About this app</strong></summary>
-          <p style="flex:1 1 100%;margin:0;font-size:13.5px;color:var(--muted)">Cards Advisor is a study tool for bank cards advisors, with ${D.issues.length} card issues (${D.breakdowns.length} full guides), the policy behind each figure, practice calls and flashcards.</p>
+          <p style="flex:1 1 100%;margin:0;font-size:13.5px;color:var(--muted)">Cards Advisor is a study tool for bank cards advisors, with the six steps of a call, ${D.issues.length} card issues (${D.breakdowns.length} full guides), the policy behind each figure, practice calls and flashcards. The call notes are my own study notes and general call craft, not any bank's official model.</p>
         </details>
       </div>
     </div>
@@ -338,6 +371,15 @@ export function go(hash) {
 
 const scrollMem = new Map();
 
+// Which of the five tabs lights up for each route segment.
+const NAV_FOR = {
+  call: 'call',
+  '': 'issues', issue: 'issues', cat: 'issues',
+  practice: 'practice', drill: 'practice', cards: 'practice',
+  policy: 'policy',
+  me: 'me', debrief: 'me', id: 'me', badge: 'me', about: 'me'
+};
+
 function route(ev) {
   closePalette();
   const from = ev?.oldURL ? (new URL(ev.oldURL).hash || '#/') : null;
@@ -364,6 +406,8 @@ function route(ev) {
     case 'drill': drillView(main, a); break;
     case 'debrief': debriefView(main); break;
     case 'id': case 'badge': badgeView(main); break;
+    case 'call': document.body.classList.remove('reading'); callView(main, a, b); break;
+    case 'me': meView(); break;
     case 'about': aboutView(); break;
     default: history.replaceState(null, '', '#/'); seg = ''; bankView(main);
   }
@@ -375,13 +419,9 @@ function route(ev) {
   main.scrollTo({ top: (toBank && fromIssue) ? (scrollMem.get(location.hash || '#/') || 0) : 0, behavior: 'instant' });
 
   // Highlight active tab in top/bottom nav pill
+  const activeNav = NAV_FOR[seg || ''] || '';
   document.querySelectorAll('#tbNav .tb-tab').forEach(tab => {
-    const navKey = tab.dataset.nav;
-    const isIssues = (seg === '' || seg === undefined || seg === 'issue' || seg === 'cat') && navKey === 'issues';
-    const isPractice = (seg === 'practice' || seg === 'drill') && navKey === 'practice';
-    const isId = (seg === 'id' || seg === 'badge') && navKey === 'id';
-    const isExact = seg === navKey;
-    const active = isIssues || isPractice || isId || isExact;
+    const active = tab.dataset.nav === activeNav;
     tab.classList.toggle('active', active);
     if (active) tab.setAttribute('aria-current', 'page'); else tab.removeAttribute('aria-current');
   });
@@ -395,7 +435,7 @@ function firstRun() {
   if (store.pref('privacyAck')) return;
   toast({
     id: 'privacy', icon: '!', timeout: 0,
-    msg: 'Study tool, not an official bank source. Confirm figures in-system. Never type client details here.',
+    msg: 'Study tool, not an official bank source. Confirm figures in your systems. Never type client details here.',
     action: 'Got it',
     onAction: () => { store.pref('privacyAck', Date.now()); dismissToast('privacy'); },
     onDismiss: () => store.pref('privacyAck', Date.now())
@@ -430,6 +470,16 @@ function maybeNagBackup() {
     return;
   }
   INDEX = searchIndex();
+  // Call tab entries come from js/call.js; search still works if that index fails.
+  try {
+    for (const x of callSearchIndex() || []) {
+      if (!x || !x.title || !x.href) continue;
+      const sub = x.sub || '';
+      INDEX.push({ kind: x.kind || 'Call', title: x.title, sub, href: x.href, text: String(x.text || `${x.title} ${sub}`).toLowerCase() });
+    }
+  } catch (e) { console.warn('call search index unavailable', e); }
+  // A first load with no hash opens on the Call tab; '#/' stays the Issues list.
+  if (!location.hash) history.replaceState(null, '', '#/call');
   window.addEventListener('hashchange', route);
   window.addEventListener('beforeunload', () => store.flushNow());
   window.addEventListener('pagehide', () => store.flushNow());

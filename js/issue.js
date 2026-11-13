@@ -5,30 +5,37 @@ import { store } from './store.js';
 import { esc, md } from './render.js';
 import { mountHighlighter, unmountHighlighter } from './highlight.js';
 import { verifyBadge, policyCard } from './policy.js';
-import { renderMiniTopo, domainForCategory, mountCallDiagram } from './diagram.js';
+import { renderMiniTopo, domainForCategory, mountCallDiagram, CALL_STEPS, TONE_VAR, PANELS, callSequence, stepForKey } from './diagram.js';
 import { toast } from './toast.js';
 
 const FREQ_RANK = { 'very common': 0, common: 1, occasional: 2 };
 const EMOTIONS = ['angry', 'scared', 'embarrassed', 'confused', 'resigned', 'blindsided', 'anxious', 'humiliated'];
 
-// The 4 groups of a full guide
-export const ACTS = [
-  { id: 'act-1', label: 'Listen', short: 'Listen', parts: [0, 1, 2, 3], tone: 'red', desc: 'What they say, need and feel, and what they fear losing' },
-  { id: 'act-2', label: 'Check and acknowledge', short: 'Check', parts: [4, 5], tone: 'vio', desc: 'Risk checks, then your first 15 seconds' },
-  { id: 'act-3', label: 'Solve', short: 'Solve', parts: [6, 7, 8], tone: 'teal', desc: 'Questions in order, options, and what to say' },
-  { id: 'act-4', label: 'Wrap up', short: 'Wrap up', parts: [9, 10], tone: 'amber', desc: 'Notes, written confirmation, and what to tell your lead' }
-];
+// The six call steps as the groups of a full guide. `parts` lists the numbered
+// parts inside each step; steps 1, 4 and 5 hold a panel and no numbered part.
+export const ACTS = CALL_STEPS.map(st => ({
+  id: st.id, n: st.n, label: st.label, short: st.short, tone: st.tone, desc: st.desc,
+  keys: st.full,
+  parts: st.full.filter(k => /^\d+$/.test(k)).map(Number)
+}));
 
-// 4 steps for short guides
+// 4 steps for short guides. They sit in call steps 2 and 3; the tone follows the call step.
 export const OBS_STEPS = [
   ['signal', 'What callers report', 'What clients say in public complaints and reviews', 'red', 'Reports'],
-  ['underneath', 'What they need and feel', 'What they are trying to get back to, and what made it worse', 'vio', 'Needs'],
+  ['underneath', 'What they need and feel', 'What they are trying to get back to, and what made it worse', 'red', 'Needs'],
   ['policy', 'Policy to check', 'Laws and bank pages for this kind of call', 'teal', 'Policy'],
-  ['playbook', 'How to handle it', 'The steps for this call, plus your notes', 'amber', 'Handle it']
+  ['playbook', 'How to handle it', 'The steps for this call, plus your notes', 'teal', 'Handle it']
 ];
 
-function actForPart(pi) {
-  return ACTS.find(a => a.parts.includes(pi)) || ACTS[0];
+const PANEL_KEYS = Object.keys(PANELS);
+const isPanelKey = k => PANEL_KEYS.includes(String(k));
+const toneStyle = (tone, prop = 'background') => TONE_VAR[tone] ? ` style="${prop}:${TONE_VAR[tone]}"` : '';
+
+// Title and hint of any screen in the call sequence, part or panel
+function screenMeta(key, hasBd) {
+  if (isPanelKey(key)) return { label: PANELS[key].label, hint: PANELS[key].hint };
+  const row = (hasBd ? PARTS : OBS_STEPS)[+key];
+  return row ? { label: row[1], hint: row[2] } : { label: String(key), hint: '' };
 }
 
 let filters = { q: '', cat: '', emo: '', chip: 'all' };
@@ -86,12 +93,12 @@ export function bankView(main, cat) {
         <div class="home-cont-text">
           <span class="eyebrow-sm">${heroDone ? 'Finished' : heroPct > 0 ? 'Pick up where you left off' : 'Start here'}</span>
           <h2 class="home-sys">${esc(heroIssue.title)}</h2>
-          <div class="home-where">Step ${heroNextStep + 1} of ${heroTotal}: ${esc(heroStepTitle)}</div>
-          <div class="bd-strata" aria-label="${(heroProg.read || []).length} of ${heroTotal} steps done">
+          <div class="home-where">${heroPct > 0 ? `${heroIssue.breakdown ? 'Part' : 'Step'} ${heroNextStep + 1} of ${heroTotal}: ${esc(heroStepTitle)}` : `Step 1 of 6: ${esc(CALL_STEPS[0].label)}`}</div>
+          <div class="bd-strata" aria-label="${(heroProg.read || []).length} of ${heroTotal} ${heroIssue.breakdown ? 'parts' : 'steps'} read">
             ${Array.from({ length: heroTotal }, (_, k) => `<span class="${(heroProg.read || []).includes(k) ? 'on' : ''}"></span>`).join('')}
           </div>
           <div class="row" style="gap:12px;margin-top:4px;align-items:center">
-            <a class="big-btn" href="#/issue/${heroIssue.id}/${heroNextStep}">
+            <a class="big-btn" href="#/issue/${heroIssue.id}/${heroPct > 0 && !heroDone ? heroNextStep : 'r'}">
               <span>${heroDone ? 'Review' : heroPct > 0 ? 'Continue' : 'Start'}</span>
               <span class="btn-ico" aria-hidden="true"><svg class="ico" viewBox="0 0 20 20"><path d="M5 10h10M11 6l4 4-4 4"/></svg></span>
             </a>
@@ -146,7 +153,7 @@ export function bankView(main, cat) {
 
     <div id="bankGridWrap"></div>
 
-    <p class="fine">Not affiliated with any bank. Public sources only: confirm in-system before quoting a client. Nothing you type leaves this device.</p>
+    <p class="fine">Not affiliated with any bank. Public sources only: confirm in your systems before quoting a client. Nothing you type leaves this device.</p>
   </div></section>`;
 
   const gridWrap = main.querySelector('#bankGridWrap');
@@ -210,11 +217,11 @@ export function bankView(main, cat) {
       const nextStep = typeof prog.pos === 'number' && prog.pos < total ? prog.pos : 0;
       const essence = i.underlyingJob || i.breakdown?.underlyingJob || i.trainingPoint || '';
 
-      return `<a class="bd-card" data-domain="${dom}" href="#/issue/${i.id}/${pct > 0 && pct < 100 ? nextStep : 0}">
+      return `<a class="bd-card" data-domain="${dom}" href="#/issue/${i.id}/${pct > 0 && pct < 100 ? nextStep : 'r'}">
         <div class="bd-top">
           <span class="chip dom-chip">${esc(i.category)}</span>
           ${i.frequency === 'very common' ? `<span class="chip freq-high">Very common</span>` : ''}
-          ${pct >= 100 ? `<img class="enso-stamp card-stamp" src="assets/enso-complete.svg" alt="Done" title="All steps done">` : ''}
+          ${pct >= 100 ? `<img class="enso-stamp card-stamp" src="assets/enso-complete.svg" alt="Done" title="All ${hasBd ? 'parts' : 'steps'} read">` : ''}
         </div>
         <div class="bd-name">${esc(i.title)}</div>
         ${essence ? `<div class="bd-essence">${esc(essence)}</div>` : ''}
@@ -223,7 +230,7 @@ export function bankView(main, cat) {
           ${Array.from({ length: total }, (_, k) => `<span class="${readSet.has(k) ? 'on' : ''}"></span>`).join('')}
         </div>` : ''}
         <div class="bd-foot">
-          <span class="bd-last">${hasBd ? '11 steps' : '4 steps'}</span>
+          <span class="bd-last">${hasBd ? 'Six steps, 11 parts' : 'Six steps, short guide'}</span>
           ${pct > 0 ? `<span class="bd-pct">${readSet.size} of ${total}</span>` : ''}
         </div>
       </a>`;
@@ -532,7 +539,7 @@ function renderObservedStep(issue, stepIdx) {
     return `
       <div class="solution-card spot-card" data-spot-part="2">
         <div class="sc-label">What applies here</div>
-        <p>${issue.verifiedContext ? md(issue.verifiedContext) : `Always verify figures in-system before quoting. Below are the closest bank pages and rules set by law for <strong>${esc(issue.category)}</strong>.`}</p>
+        <p>${issue.verifiedContext ? md(issue.verifiedContext) : `Always verify figures in your systems before quoting. Below are the closest bank pages and rules set by law for <strong>${esc(issue.category)}</strong>.`}</p>
       </div>
       ${related.length ? `<div class="sd-block"><h3>Related bank pages (${related.length})</h3>${related.map(policyCard).join('')}</div>` : ''}
       <div class="sd-block"><h3>Key figures</h3><p class="dim">Set by law or card network rules</p>${rules.map(r => policyCard(policyById(r.id))).join('')}</div>
@@ -550,6 +557,178 @@ function renderObservedStep(issue, stepIdx) {
         <li><span class="diag-num">3</span><div class="diag-body"><strong>Fix it now and confirm in writing:</strong> give the realistic timeline and a reference number before you end the call.</div></li>
       </ol>
     </div>
+  `;
+}
+
+/* ═════════ The four panels of the call: r, c, a, m ═════════
+   Full guides carry authored content (callReady, callCheckpoint, callAdvice,
+   callClose). Any guide without a field gets a general version built from the
+   issue's own fields, so every panel renders for every issue. */
+const asList = v => (Array.isArray(v) ? v : v == null || v === '' ? [] : [v])
+  .filter(x => typeof x === 'string' && x.trim());
+const lowerFirst = s => String(s || '').replace(/^[A-Z](?![A-Z])/, c => c.toLowerCase()).replace(/[.\s]+$/, '');
+
+function callContent(issue) {
+  const bd = issue.breakdown || {};
+  const job = issue.underlyingJob || bd.underlyingJob || '';
+  const feel = issue.emotion || '';
+
+  const rd = bd.callReady && typeof bd.callReady === 'object' && !Array.isArray(bd.callReady) ? bd.callReady : { open: bd.callReady };
+  const cp = bd.callCheckpoint && typeof bd.callCheckpoint === 'object' && !Array.isArray(bd.callCheckpoint) ? bd.callCheckpoint : { lines: bd.callCheckpoint };
+  const ad = bd.callAdvice && typeof bd.callAdvice === 'object' ? bd.callAdvice : {};
+  const cl = bd.callClose && typeof bd.callClose === 'object' && !Array.isArray(bd.callClose) ? bd.callClose : { lines: bd.callClose };
+
+  const or = (list, fallback) => (list.length ? list : fallback);
+
+  return {
+    authored: !!(bd.callReady || bd.callCheckpoint || bd.callAdvice || bd.callClose),
+    ready: {
+      open: or(asList(rd.open), [
+        'The client profile, so you can verify before you say anything about the account',
+        'The card in question: its status, any lock or restriction, and the last few transactions',
+        `The policy pages for ${issue.category || 'this kind of call'} (Policy for this issue, below)`,
+        'Notes from earlier contacts, so they do not have to tell it twice'
+      ]),
+      know: or(asList(rd.know), [
+        job ? `What they are usually trying to do: ${lowerFirst(job)}.` : '',
+        feel ? `How they tend to sound: ${lowerFirst(feel)}.` : '',
+        'Verification protects the client. Say it that way: "Before I open the account I am going to confirm it is you, so nobody else can do this in your name."'
+      ].filter(Boolean))
+    },
+    checkpoint: {
+      confirm: or(asList(cp.confirm), [
+        'Say back what you did in one plain sentence',
+        'Where you can, test it while they are on the line, or tell them exactly how they will see that it worked',
+        'Ask, then wait. Let them say it is sorted in their own words',
+        'If they hesitate, go back to Solve. Do not move on to advice with the first problem still open'
+      ]),
+      lines: or(asList(cp.lines), [
+        '"Before I move on: is the thing you called about sorted from your side?"',
+        '"Is there anything about it that is still worrying you?"'
+      ])
+    },
+    advice: {
+      ask: or(asList(ad.ask), [
+        '"Is the mobile number we have for you the one you carry?"',
+        '"Has this happened before, or is this the first time?"',
+        '"Is there anything coming up, like a trip or a large purchase, that this card needs to work for?"'
+      ]),
+      options: (Array.isArray(ad.options) ? ad.options.filter(o => o && typeof o.do === 'string' && o.do.trim()) : []).length
+        ? ad.options.filter(o => o && typeof o.do === 'string' && o.do.trim())
+        : [
+          { do: 'Keep the contact details current', why: 'Alerts and codes reach them, so a question about a purchase is one reply and not a declined card. The trade-off: it has to be updated again whenever the number changes.' },
+          { do: 'Add the card to their phone wallet', why: 'A backup if the plastic is declined, lost or late. The trade-off: it only helps where tap is accepted.' },
+          { do: 'Show where the lock is in the app', why: 'Instant if the card is misplaced. The trade-off: a lock is not a report, so a lost or stolen card still needs a call.' }
+        ],
+      notNow: (typeof ad.notNow === 'string' && ad.notNow.trim()) ||
+        'Limit increases, balance protection or any other product while they are upset or in a fraud claim.'
+    },
+    close: {
+      recap: or(asList(cl.recap), [
+        'What was done on this call, in one sentence',
+        'What happens next, who does it, and by when',
+        'The reference or confirmation they can quote',
+        'What to do, and which number to use, if it does not go as said'
+      ]),
+      lines: or(asList(cl.lines), [
+        '"To recap: [what was done]. Next, [what happens and by when]. Your reference is [reference]."',
+        '"Is there anything else I can help you with today?"',
+        '"Thank you for your patience today. Take care."'
+      ])
+    }
+  };
+}
+
+// Every step is dual: what it means for me, and what the client experiences.
+function dualStrip(st) {
+  if (!st) return '';
+  return `<div class="scale-band step-dual">
+    <div class="sb-label">Step ${st.n} of 6: ${esc(st.label)}</div>
+    <p style="margin:0 0 6px"><strong>For me:</strong> ${esc(st.me)}</p>
+    <p style="margin:0"><strong>For the client:</strong> ${esc(st.client)}</p>
+  </div>`;
+}
+
+function sayLines(lines, label, spotKey) {
+  if (!lines.length) return '';
+  return `<div class="solution-card spot-card" data-spot-part="${spotKey}">
+    <div class="sc-label">${esc(label)}</div>
+    ${lines.map(l => `<div style="display:flex;align-items:flex-start;gap:10px;margin:10px 0 0">
+      <blockquote class="step-quote" style="flex:1 1 auto;min-width:0;margin:0">${md(l)}</blockquote>
+      <button type="button" class="gbtn" style="flex:0 0 auto" data-copy-text="${esc(l)}">Copy</button>
+    </div>`).join('')}
+  </div>`;
+}
+
+function plainList(items, heading) {
+  if (!items.length) return '';
+  return `<div class="sd-block">
+    <h3>${esc(heading)}</h3>
+    <div class="sd-list">${items.map(t => `<div class="sd-item">${md(t)}</div>`).join('')}</div>
+  </div>`;
+}
+
+function renderCallPanel(issue, key) {
+  const C = callContent(issue);
+  const general = C.authored ? '' : `<p class="dim" style="font-size:13px;margin:10px 0 0">General version, built from what callers report about this issue. Adjust it to the call in front of you.</p>`;
+
+  if (key === 'r') {
+    return `
+      <div class="model-card spot-card" data-spot-part="r">
+        <div class="mc-kick">Have open</div>
+        <div class="flag-checklist">
+          ${C.ready.open.map((t, idx) => {
+            const cKey = `ready-${idx}`;
+            const on = store.isChecked(issue.id, cKey);
+            return `<button type="button" class="check-card ${on ? 'done' : ''}" data-check="${cKey}">
+              <span class="check-box">${on ? '✓' : '○'}</span>
+              <span class="check-text">${md(t)}</span>
+            </button>`;
+          }).join('')}
+        </div>
+        <div class="row" style="margin-top:12px;justify-content:flex-end">
+          <button type="button" class="gbtn" data-open-policy="">Policy for this issue</button>
+        </div>
+      </div>
+      ${plainList(C.ready.know, 'Know before you pick up')}
+      ${general}
+    `;
+  }
+
+  if (key === 'c') {
+    return `
+      ${plainList(C.checkpoint.confirm, 'How to confirm it is sorted')}
+      ${sayLines(C.checkpoint.lines, 'Ask it out loud, then wait for the answer', 'c')}
+      ${general}
+    `;
+  }
+
+  if (key === 'a') {
+    return `
+      <div class="model-card spot-card" data-spot-part="a">
+        <div class="mc-kick">Ask</div>
+        ${C.advice.ask.map(q => `<blockquote class="step-quote" style="margin:8px 0 0">${md(q)}</blockquote>`).join('')}
+      </div>
+      <div class="sd-block">
+        <h3>Advise: give options, they choose</h3>
+        <div class="sd-list">
+          ${C.advice.options.map(o => `<div class="sd-item"><strong>${md(String(o.do).replace(/[.\s]+$/, ''))}.</strong> ${md(o.why || '')}</div>`).join('')}
+        </div>
+      </div>
+      <div class="problem-card">
+        <div class="pc-label">Not on this call</div>
+        <p style="margin:0">${md(C.advice.notNow)}</p>
+        <p class="dim" style="font-size:13px;margin:8px 0 0">Advice starts from a need the client has told you about. A product is offered only when it fits that need, and only with their clear yes (Bank Act s. 627.06 and the express consent rule). Confirm in your systems.</p>
+      </div>
+      ${general}
+    `;
+  }
+
+  // key === 'm'
+  return `
+    ${plainList(C.close.recap, 'Recap before you close')}
+    ${sayLines(C.close.lines, 'Closing lines', 'm')}
+    ${general}
   `;
 }
 
@@ -572,10 +751,19 @@ export function issueView(main, id, partArg) {
   const onePage = !!store.pref('onePage');
   const depth = store.pref('depth') || 'agent';
 
-  // Determine current part: '0'..'10' (or '0'..'3' for observed), 'all', 'o', 'p'
-  const savedPos = store.prog(i.id).pos;
-  if (partArg !== undefined && !/^(\d+|all|o|p)$/.test(String(partArg))) partArg = undefined;
-  let part = partArg !== undefined ? String(partArg) : (onePage && bd ? 'all' : String(savedPos ?? 0));
+  // The guide in call order: panels and parts on the six steps
+  const hasBd = !!bd;
+  const seq = callSequence(hasBd);
+  const seqIndex = key => seq.findIndex(s => s.key === String(key));
+  const markSeen = key => { if (!store.isChecked(i.id, `seen-${key}`)) store.toggleCheck(i.id, `seen-${key}`); };
+
+  // Determine current part: '0'..'10' (or '0'..'3' for observed), a panel 'r' 'c' 'a' 'm', 'all', 'o', 'p'
+  const savedProg = store.prog(i.id);
+  const savedPos = savedProg.pos;
+  const started = (savedProg.read || []).length > 0;
+  if (partArg !== undefined && !/^(\d+|all|o|p|r|c|a|m)$/.test(String(partArg))) partArg = undefined;
+  // A guide nobody has started opens on step 1, Be Ready
+  let part = partArg !== undefined ? String(partArg) : (onePage && bd ? 'all' : started ? String(savedPos ?? 0) : 'r');
   if (!bd && (part === 'all' || (+part >= 4))) part = '0';
 
   const isNumeric = /^\d+$/.test(part);
@@ -583,6 +771,8 @@ export function issueView(main, id, partArg) {
   if (pi >= 0) {
     part = String(pi);
     store.markStep(i.id, pi, totalSteps);
+  } else if (isPanelKey(part)) {
+    markSeen(part);
   }
 
   const prog = store.prog(i.id);
@@ -597,14 +787,14 @@ export function issueView(main, id, partArg) {
     <div class="diagram-pane" id="diagramPane">
       <div class="dg-legend" id="dgLegend">
         <button class="dgl-tog" id="dgLegendTog" type="button" aria-expanded="false" aria-controls="dgLegendItems">
-          <span class="dgl-tog-dots" aria-hidden="true"><i class="tone-red"></i><i class="tone-vio"></i><i class="tone-teal"></i><i class="tone-amber"></i></span>
-          <span class="dgl-tog-lbl">Legend</span>
+          <span class="dgl-tog-dots" aria-hidden="true">${CALL_STEPS.map(st => `<i class="tone-${st.tone}"${toneStyle(st.tone)}></i>`).join('')}</span>
+          <span class="dgl-tog-lbl">Six steps</span>
           <svg class="dgl-chev" viewBox="0 0 10 10" aria-hidden="true"><path d="M2 3.5 5 6.5 8 3.5"/></svg>
         </button>
         <span class="dgl-items" id="dgLegendItems">
-          ${(bd ? ACTS.map(a => [a.label, a.tone]) : OBS_STEPS.map(s => [s[1], s[3]])).map(([l, t]) => `<span class="dgl-item"><i class="dgl-dot tone-${t}"></i>${esc(l)}</span>`).join('')}
+          ${CALL_STEPS.map(st => `<span class="dgl-item"><i class="dgl-dot tone-${st.tone}"${toneStyle(st.tone)}></i>${st.n} ${esc(st.label)}</span>`).join('')}
         </span>
-        <span class="dgl-note">Tap a box to open that step</span>
+        <span class="dgl-note">Tap a box to open that part of the call</span>
       </div>
 
       <div class="diagram-scroll" id="diagramScroll"></div>
@@ -676,6 +866,7 @@ export function issueView(main, id, partArg) {
     if (location.hash === targetHash) {
       part = String(nextPart);
       if (/^\d+$/.test(part)) store.markStep(i.id, +part, totalSteps);
+      else if (isPanelKey(part)) markSeen(part);
       renderReaderContent();
       diagram.setPart(part);
       renderTimeline();
@@ -708,7 +899,7 @@ export function issueView(main, id, partArg) {
       btn.className = `tl-seg tl-${state}`;
       if (String(pKey) === String(part)) btn.setAttribute('aria-current', 'step');
       btn.innerHTML = `<span class="tl-seg-top">${esc(label)}</span>` +
-        (dotTone ? `<span class="tl-microdots"><span class="tl-dot ${state === 'done' || state === 'on' ? 'done' : ''} tone-${dotTone}"></span></span>` : '');
+        (dotTone ? `<span class="tl-microdots"><span class="tl-dot ${state === 'done' || state === 'on' ? 'done' : ''} tone-${dotTone}"${toneStyle(dotTone)}></span></span>` : '');
 
       btn.addEventListener('pointerenter', () => {
         pop.querySelector('.tl-pop-layer').textContent = groupLabel;
@@ -729,24 +920,18 @@ export function issueView(main, id, partArg) {
       row.appendChild(btn);
     };
 
+    // One segment per screen, in call order. The code is the call step, plus a
+    // letter when the step holds more than one screen (2a, 2b, ...).
+    seq.forEach(({ key, step, code }) => {
+      const { label, hint } = screenMeta(key, hasBd);
+      const isCur = key === part;
+      const isDone = isPanelKey(key) ? store.isChecked(i.id, `seen-${key}`) : curRead.has(+key);
+      const state = isCur ? 'on' : isDone ? 'done' : 'todo';
+      addSeg(key, isCur ? `${code}. ${label}` : code, state, `${code}. ${label}`, hint, `Step ${step.n} of 6: ${step.label}`, step.tone);
+    });
     if (bd) {
-      PARTS.forEach(([k, label, hint], idx) => {
-        const act = actForPart(idx);
-        const isCur = String(idx) === part;
-        const isDone = curRead.has(idx);
-        const state = isCur ? 'on' : isDone ? 'done' : 'todo';
-        const shortLbl = isCur ? `${idx + 1}. ${label}` : String(idx + 1);
-        addSeg(String(idx), shortLbl, state, `${idx + 1}. ${label}`, hint, act.label, act.tone);
-      });
-      addSeg('all', 'All steps', part === 'all' ? 'on' : 'todo', 'All steps', 'Every step on one page', '', null);
+      addSeg('all', 'Whole call', part === 'all' ? 'on' : 'todo', 'The whole call', 'Every step on one page, in call order', '', null);
       addSeg('o', 'Quotes', part === 'o' ? 'on' : 'todo', 'What callers report', `${(i.quotes || []).length} quotes from public complaints`, '', null);
-    } else {
-      OBS_STEPS.forEach(([k, label, hint, tone, short], idx) => {
-        const isCur = String(idx) === part;
-        const isDone = curRead.has(idx);
-        const state = isCur ? 'on' : isDone ? 'done' : 'todo';
-        addSeg(String(idx), `${idx + 1}. ${short}`, state, label, hint, `Step ${idx + 1} of 4`, tone);
-      });
     }
     const cur = row.querySelector('[aria-current]');
     if (cur) {
@@ -760,39 +945,33 @@ export function issueView(main, id, partArg) {
     const curDepth = store.pref('depth') || 'agent';
     const stamp = `<img class="enso-stamp stamped" src="assets/enso-complete.svg" alt="Done" title="All steps done">`;
 
-    // Context line (issue name and position) plus group tabs
-    let actTabsHtml = '';
-    if (bd) {
-      const curAct = pi >= 0 ? actForPart(pi) : null;
-      const pos = pi >= 0 ? `Step ${pi + 1} of 11` : part === 'all' ? 'All steps' : '';
-      actTabsHtml = `
-        <div class="step-head">
-          <div class="step-where">
-            <span class="step-issue">${esc(i.title)}</span>${pos ? `<span class="dim">${pos}</span>` : ''}
-          </div>
-          <div class="step-tabs" role="tablist" aria-label="Steps of the call">
-            ${ACTS.map(a => {
-              const isOn = curAct?.id === a.id;
-              const allActDone = a.parts.every(pIdx => (curProg.read || []).includes(pIdx));
-              return `<button type="button" role="tab" class="step-tab tone-${a.tone} ${isOn ? 'on' : allActDone ? 'past' : ''}" data-go-part="${a.parts[0]}" aria-selected="${isOn}" title="${esc(a.label)}">${esc(a.short)}</button>`;
-            }).join('')}
-            <button type="button" role="tab" class="step-tab ${part === 'all' ? 'on' : ''}" data-go-part="all" aria-selected="${part === 'all'}" title="All steps">All</button>
-          </div>
+    // Where we are in the call: the screen, its step, and its neighbours
+    const curIdx = seqIndex(part);
+    const curItem = curIdx >= 0 ? seq[curIdx] : null;
+    const curStep = curItem ? curItem.step : null;
+    const numPi = /^\d+$/.test(part) ? +part : -1;
+    const stepKeys = st => (hasBd ? st.full : st.brief);
+    const keyDone = k => isPanelKey(k) ? store.isChecked(i.id, `seen-${k}`) : (curProg.read || []).includes(+k);
+
+    // Context line (issue name and position) plus the six step tabs
+    const pos = curStep
+      ? `Step ${curStep.n} of 6${stepKeys(curStep).length > 1 ? `, ${stepKeys(curStep).indexOf(part) + 1} of ${stepKeys(curStep).length}` : ''}`
+      : part === 'all' ? 'Whole call' : '';
+    const actTabsHtml = `
+      <div class="step-head">
+        <div class="step-where">
+          <span class="step-issue">${esc(i.title)}</span>${pos ? `<span class="dim">${pos}</span>` : ''}
         </div>
-      `;
-    } else {
-      const pos = pi >= 0 ? `Step ${pi + 1} of 4` : '';
-      actTabsHtml = `
-        <div class="step-head">
-          <div class="step-where">
-            <span class="step-issue">${esc(i.title)}</span>${pos ? `<span class="dim">${pos}</span>` : ''}
-          </div>
-          <div class="step-tabs" role="tablist" aria-label="Steps">
-            ${OBS_STEPS.map(([k, lbl, h, tone, short], idx) => `<button type="button" role="tab" class="step-tab tone-${tone} ${pi === idx ? 'on' : ''}" data-go-part="${idx}" aria-selected="${pi === idx}" title="${esc(lbl)}">${esc(short)}</button>`).join('')}
-          </div>
+        <div class="step-tabs" role="tablist" aria-label="The six steps of the call">
+          ${CALL_STEPS.map(st => {
+            const isOn = curStep?.id === st.id;
+            const allDone = stepKeys(st).every(keyDone);
+            return `<button type="button" role="tab" class="step-tab tone-${st.tone} ${isOn ? 'on' : allDone ? 'past' : ''}" data-go-part="${stepKeys(st)[0]}" aria-selected="${isOn}" title="${st.n} ${esc(st.label)}" aria-label="Step ${st.n}: ${esc(st.label)}">${esc(st.short)}</button>`;
+          }).join('')}
+          ${bd ? `<button type="button" role="tab" class="step-tab ${part === 'all' ? 'on' : ''}" data-go-part="all" aria-selected="${part === 'all'}" title="The whole call on one page">All</button>` : ''}
         </div>
-      `;
-    }
+      </div>
+    `;
 
     // Detail-level notes for full guides, closed by default, below the content
     const depthMeta = DEPTHS.find(d => d[0] === curDepth) || DEPTHS[0];
@@ -810,8 +989,34 @@ export function issueView(main, id, partArg) {
     let mainBlockHtml = '';
     let footerHtml = '';
 
-    if (bd && pi >= 0) {
-      const [key, label, hint] = PARTS[pi];
+    // Back and Next walk the call in six-step order, through panels and parts
+    const walkFooter = () => {
+      const prev = curIdx > 0 ? seq[curIdx - 1] : null;
+      const next = curIdx < seq.length - 1 ? seq[curIdx + 1] : null;
+      const lastHref = bd ? `#/drill/${i.id}` : '#/debrief';
+      const lastLabel = bd ? 'Practise this call (3 min)' : 'Write shift debrief';
+      return `
+        <div class="step-foot">
+          ${prev
+            ? `<button type="button" class="gbtn ghost step-back" data-go-part="${prev.key}" title="Keyboard: ← and →">← Back</button>`
+            : `<a class="gbtn ghost step-back" href="#/">← Issues</a>`}
+          ${next
+            ? `<button type="button" class="big-btn step-next" data-go-part="${next.key}" title="Keyboard: ← and →">
+                <span>${esc(`Next: ${screenMeta(next.key, hasBd).label}`)}</span>
+                ${arrow}
+              </button>`
+            : `<a class="big-btn step-next" href="${lastHref}">
+                <span>${esc(lastLabel)}</span>
+                ${arrow}
+              </a>`}
+        </div>
+      `;
+    };
+    // The first screen of each step opens with what the step means for me and for the client
+    const dualIfFirst = () => (curStep && stepKeys(curStep)[0] === part ? dualStrip(curStep) : '');
+
+    if (bd && numPi >= 0) {
+      const [key, label, hint] = PARTS[numPi];
       const isComplete = store.issuePct(i.id, 11) >= 100;
 
       mainBlockHtml = `
@@ -822,51 +1027,52 @@ export function issueView(main, id, partArg) {
         <p class="step-subtitle">${esc(hint)}</p>
         <div class="hl-bar" id="hlBar"></div>
         <div class="blocks" id="readerBlocks">
-          ${renderBreakdownPart(i, bd, pi)}
+          ${dualIfFirst()}
+          ${renderBreakdownPart(i, bd, numPi)}
         </div>
         ${depthBanner}
       `;
-
-      const prevPart = pi > 0 ? String(pi - 1) : null;
-      const nextLabel = pi < PARTS.length - 1
-        ? `Next: ${PARTS[pi + 1][1]}`
-        : 'Practise this call (3 min)';
-
-      footerHtml = `
-        <div class="step-foot">
-          ${prevPart !== null
-            ? `<button type="button" class="gbtn ghost step-back" data-go-part="${prevPart}" title="Keyboard: ← and →">← Back</button>`
-            : `<a class="gbtn ghost step-back" href="#/">← Issues</a>`}
-          ${pi < PARTS.length - 1
-            ? `<button type="button" class="big-btn step-next" data-go-part="${pi + 1}" title="Keyboard: ← and →">
-                <span>${esc(nextLabel)}</span>
-                ${arrow}
-              </button>`
-            : `<a class="big-btn step-next" href="#/drill/${i.id}">
-                <span>${esc(nextLabel)}</span>
-                ${arrow}
-              </a>`}
-        </div>
-      `;
-    } else if (bd && part === 'all') {
-      // Viewing every step counts as reading all 11
-      for (let k = 0; k < 11; k++) store.markStep(i.id, k, 11);
+      footerHtml = walkFooter();
+    } else if (isPanelKey(part)) {
+      const { label, hint } = PANELS[part];
       mainBlockHtml = `
-        <h1 class="step-title">${esc(i.title)} ${stamp}</h1>
+        <h1 class="step-title">${esc(label)}</h1>
+        <p class="step-subtitle">${esc(hint)}</p>
         <div class="hl-bar" id="hlBar"></div>
         <div class="blocks" id="readerBlocks">
-          ${PARTS.map(([key, label, hint], k) => `
-            <section class="all-part-sec" data-spot-part="${k}">
-              <div class="b-h"><span class="part-pill">${k + 1}</span> ${esc(label)}</div>
-              ${renderBreakdownPart(i, bd, k)}
-            </section>
+          ${dualIfFirst()}
+          ${renderCallPanel(i, part)}
+        </div>
+      `;
+      footerHtml = walkFooter();
+    } else if (bd && part === 'all') {
+      // Viewing the whole call counts as reading all 11 parts and opening the four panels
+      for (let k = 0; k < 11; k++) store.markStep(i.id, k, 11);
+      PANEL_KEYS.forEach(markSeen);
+      mainBlockHtml = `
+        <h1 class="step-title">${esc(i.title)} ${stamp}</h1>
+        <p class="step-subtitle">The whole call on one page, in the order you run it.</p>
+        <div class="hl-bar" id="hlBar"></div>
+        <div class="blocks" id="readerBlocks">
+          ${CALL_STEPS.map(st => `
+            ${dualStrip(st)}
+            ${stepKeys(st).map(k => {
+              const item = seq[seqIndex(k)];
+              const meta = screenMeta(k, true);
+              return `
+                <section class="all-part-sec" data-spot-part="${k}">
+                  <div class="b-h"><span class="part-pill">${esc(item.code)}</span> ${esc(meta.label)}</div>
+                  ${isPanelKey(k) ? renderCallPanel(i, k) : renderBreakdownPart(i, bd, +k)}
+                </section>
+              `;
+            }).join('')}
           `).join('')}
         </div>
         ${depthBanner}
       `;
       footerHtml = `
         <div class="step-foot">
-          <button type="button" class="gbtn ghost step-back" data-go-part="0">← One step at a time</button>
+          <button type="button" class="gbtn ghost step-back" data-go-part="r">← One step at a time</button>
           <a class="big-btn step-next" href="#/drill/${i.id}">
             <span>Practise this call</span>
             ${arrow}
@@ -886,7 +1092,7 @@ export function issueView(main, id, partArg) {
       `;
       footerHtml = `
         <div class="step-foot">
-          <button type="button" class="gbtn ghost step-back" data-go-part="0">← Back to the guide</button>
+          <button type="button" class="gbtn ghost step-back" data-go-part="r">← Back to the guide</button>
           <a class="big-btn step-next" href="#/policy"><span>All policy</span>${arrow}</a>
         </div>
       `;
@@ -905,8 +1111,8 @@ export function issueView(main, id, partArg) {
         </div>
       `;
     } else {
-      // Short guide, 4 steps
-      const stepIdx = pi >= 0 ? pi : 0;
+      // Short guide, its 4 steps sit in call steps 2 and 3
+      const stepIdx = numPi >= 0 ? Math.min(3, numPi) : 0;
       const [sKey, sLabel, sHint] = OBS_STEPS[stepIdx];
       const isComplete = store.issuePct(i.id, 4) >= 100;
       mainBlockHtml = `
@@ -917,25 +1123,11 @@ export function issueView(main, id, partArg) {
         <p class="step-subtitle">${esc(sHint)}</p>
         <div class="hl-bar" id="hlBar"></div>
         <div class="blocks" id="readerBlocks">
+          ${dualIfFirst()}
           ${renderObservedStep(i, stepIdx)}
         </div>
       `;
-      footerHtml = `
-        <div class="step-foot">
-          ${stepIdx > 0
-            ? `<button type="button" class="gbtn ghost step-back" data-go-part="${stepIdx - 1}" title="Keyboard: ← and →">← Back</button>`
-            : `<a class="gbtn ghost step-back" href="#/">← Issues</a>`}
-          ${stepIdx < 3
-            ? `<button type="button" class="big-btn step-next" data-go-part="${stepIdx + 1}" title="Keyboard: ← and →">
-                <span>${esc(`Next: ${OBS_STEPS[stepIdx + 1][1]}`)}</span>
-                ${arrow}
-              </button>`
-            : `<a class="big-btn step-next" href="#/debrief">
-                <span>Write shift debrief</span>
-                ${arrow}
-              </a>`}
-        </div>
-      `;
+      footerHtml = walkFooter();
     }
 
     // Your notes, at the bottom of the step
@@ -948,6 +1140,13 @@ export function issueView(main, id, partArg) {
 
     stepBody.innerHTML = actTabsHtml + mainBlockHtml + notesBlock + footerHtml;
     docPane.scrollTop = 0;
+
+    // Six tabs can be wider than a phone: keep the current one in view without moving the page
+    const tabsEl = stepBody.querySelector('.step-tabs');
+    const onTab = tabsEl?.querySelector('.step-tab.on');
+    if (tabsEl && onTab && tabsEl.scrollWidth > tabsEl.clientWidth) {
+      tabsEl.scrollLeft = Math.max(0, onTab.offsetLeft - (tabsEl.clientWidth - onTab.offsetWidth) / 2);
+    }
 
     // Wire step navigation buttons
     stepBody.querySelectorAll('[data-go-part]').forEach(btn => {
@@ -1013,7 +1212,7 @@ export function issueView(main, id, partArg) {
     if (blocksEl) {
       mountHighlighter({
         sectionId: `${i.id}:${part}`,
-        sectionTitle: `${i.title}: ${pi >= 0 ? (bd ? PARTS[pi][1] : OBS_STEPS[pi][1]) : ({ all: 'All steps', o: 'What callers report', p: 'Policy for this issue' })[part] || part}`,
+        sectionTitle: `${i.title}: ${seqIndex(part) >= 0 ? screenMeta(part, hasBd).label : ({ all: 'The whole call', o: 'What callers report', p: 'Policy for this issue' })[part] || part}`,
         blocksEl,
         toolbarEl: stepBody.querySelector('#hlBar')
       });
@@ -1119,10 +1318,12 @@ export function issueView(main, id, partArg) {
       if (ev.key !== 'p' && ev.key !== 'P') return;
     }
     if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') {
-      if (pi < 0) return;
+      // Arrows walk the call in six-step order, through panels and parts
+      const at = seqIndex(part);
+      if (at < 0) return;
       ev.preventDefault();
-      const next = pi + (ev.key === 'ArrowRight' ? 1 : -1);
-      if (next >= 0 && next < totalSteps) navigatePart(String(next));
+      const next = seq[at + (ev.key === 'ArrowRight' ? 1 : -1)];
+      if (next) navigatePart(next.key);
     } else if (ev.key === 'p' || ev.key === 'P') {
       ev.preventDefault();
       openPolicySheet(i);
@@ -1179,7 +1380,7 @@ export function openPolicySheet(issue, focusPolicyId = null) {
       </div>
       <div class="sheet-body">
         <div class="narrowing-note">
-          <b>Confirm in-system.</b> Laws apply to every Canadian card issuer. Bank pages are bank policy and can change without notice. Confirm either one in-system before you quote it.
+          <b>Confirm in your systems.</b> Laws apply to every Canadian card issuer. Bank pages are bank policy and can change without notice. Confirm either one in your systems before you quote it.
         </div>
         ${refs.length ? `<div class="sd-block">
           <h3>Linked to this call (${refs.length})</h3>

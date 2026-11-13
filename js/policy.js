@@ -6,7 +6,7 @@ import { esc, md } from './render.js';
 import { toast } from './toast.js';
 
 export function verifyBadge() {
-  return `<span class="verify" title="Confirm in your own systems before saying it to a client">confirm in-system</span>`;
+  return `<span class="verify" title="Confirm in your own systems before saying it to a client">confirm in your systems</span>`;
 }
 
 function staleBadge(date) {
@@ -257,7 +257,7 @@ function policyDetail(main, id) {
       ${dated ? `<p class="dim" style="font-size:12.5px;margin:4px 0 12px">Page dated: ${esc(p.dateTag)}</p>` : ''}
       <div class="scale-band">
         <div class="sb-label">${verifyBadge()} Public bank page, not an official source</div>
-        <p>Saved from the bank's public site on ${esc(p.fetched || 'an unknown date')}. It can change without notice. Confirm in-system before you quote it. ${staleBadge(p.fetched)}</p>
+        <p>Saved from the bank's public site on ${esc(p.fetched || 'an unknown date')}. It can change without notice. Confirm in your systems before you quote it. ${staleBadge(p.fetched)}</p>
       </div>
       ${(p.figures || []).length ? `
         <div class="solution-card">

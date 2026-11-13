@@ -1,5 +1,5 @@
 {
-  "note": "Authored guided breakdowns, eleven parts each, for the highest-frequency issues in observed.json. The judgement layer is written by the author; quotes come from observed.json and policy facts from faq.json and rules.json. Depths: agent handles it, specialist owns the edge cases, lead fixes the system that creates it. Not an official bank source; confirm every figure in-system.",
+  "note": "Authored guided breakdowns, eleven parts each, for the highest-frequency issues in observed.json. The judgement layer is written by the author; quotes come from observed.json and policy facts from faq.json and rules.json. Depths: agent handles it, specialist owns the edge cases, lead fixes the system that creates it. Each breakdown also carries four call panels that sit between the parts on the six call steps: callReady {open[], know[]}, callCheckpoint {confirm[], lines[]}, callAdvice {ask[], options[{do, why}], notNow} and callClose {recap[], lines[]}. Not an official bank source; confirm every figure in your systems.",
   "template": ["surfaceRequest", "underlyingJob", "emotionalRead", "psychologicalNeeds", "riskFlags", "engage", "diagnose", "resolve", "sayThisNotThis", "afterCall", "preventAndFeedBack"],
   "breakdowns": [
     {
@@ -21,6 +21,66 @@
       "afterCall": "Note: restriction lifted after client confirmed [merchant] transaction, contact number updated, alert preferences confirmed, written confirmation sent. If fraud: claim reference, block time, replacement type ordered, wallet set up, client told the figures in writing.",
       "preventAndFeedBack": "Volume driver: alerts sent to stale numbers. Lead action: report declines-after-unanswered-alert as a root cause; propose a prompt to confirm the mobile number at every verified contact, and an IVR message during the restriction that routes straight to the desk that can lift it.",
       "policyRefs": ["faq-12", "faq-22", "faq-01", "faq-05", "r-liability-after-report", "r-liability-cap"],
+      "callReady": {
+        "open": [
+          "The card's status and the restriction: when it was placed and which purchase set it off",
+          "The last few authorisations, so you can read the declined purchase back to them",
+          "The alert history: what was sent, to which number, and whether anyone replied",
+          "The contact details on file, to compare with the phone they are calling from"
+        ],
+        "know": [
+          "A fraud flag protects the client. Confirm the flagged purchase is theirs before you lift anything.",
+          "The usual cause is an alert that went to an old number. Find that out early. It is the fix that stops the next decline.",
+          "They are often still at the counter. In the first minute, speed matters more than explanation.",
+          "If the flagged purchase is not theirs, this becomes a fraud call: block, report, replace. The liability figures are in Policy for this issue. Confirm in your systems before you quote one."
+        ]
+      },
+      "callCheckpoint": {
+        "confirm": [
+          "Tell them the restriction is off and that the same merchant can run the card again",
+          "If they are still at the till, stay on the line while they try it",
+          "Read back the number the alerts now go to"
+        ],
+        "lines": [
+          "\"The restriction is off and the pharmacy can run the card again now. Do you want to try it while I stay on the line?\"",
+          "\"Is the decline the only thing that went wrong today, or is there anything else about the card that is worrying you?\""
+        ]
+      },
+      "callAdvice": {
+        "ask": [
+          "\"Is the mobile number we have the one you carry?\"",
+          "\"When we text you about a purchase, do you usually reply?\"",
+          "\"Do you have another way to pay if the card is ever stopped again?\""
+        ],
+        "options": [
+          {
+            "do": "Update the alert number",
+            "why": "The next alert reaches them and they clear it with one reply. The trade-off: it has to be changed again if they change phones."
+          },
+          {
+            "do": "Add the card to their phone wallet",
+            "why": "A backup if the plastic is declined or lost. The trade-off: it only works where tap is accepted."
+          },
+          {
+            "do": "Show the lock in the app",
+            "why": "Instant if the card is misplaced. The trade-off: a lock is not a report, so a lost or stolen card still needs a call."
+          }
+        ],
+        "notNow": "Limit increases, balance protection or any product while they are upset or in a fraud claim."
+      },
+      "callClose": {
+        "recap": [
+          "Why it declined, in one plain sentence, without blame",
+          "What you changed: the restriction is off and the alert number is current",
+          "How to answer the next alert: reply to the text, and never give a code or a PIN to anyone who calls",
+          "The written confirmation they will receive"
+        ],
+        "lines": [
+          "\"To recap: the card was stopped because our text about the pharmacy purchase went to an old number. I have lifted the restriction, and the alerts now go to the phone in your hand.\"",
+          "\"If we text you about a purchase again, a one-word reply clears it. We will never ask you for a code or your PIN.\"",
+          "\"Is there anything else I can help you with today? Thank you for bearing with me. I hope the rest of your day goes better than the checkout did.\""
+        ]
+      },
       "depths": {
         "agent": "Confirm the flagged transaction, lift or block, fix the number, solve tonight, confirm in writing.",
         "specialist": "Recognise the rules pattern behind repeat declines (same merchant on consecutive days, limits that do not match the flag) and raise it with fraud strategy instead of lifting it a third time.",
@@ -46,6 +106,71 @@
       "afterCall": "Note: restriction and mobile lock lifted after verification of [items]; contact number abroad recorded; collect number sent in writing; emergency card ordered to [city] if applicable; client told wallet route.",
       "preventAndFeedBack": "Driver: restrictions placed while the client is unreachable abroad, with the self-serve path (the app) locked by the same event. Lead action: separate the card restriction from the mobile-banking lock in the rules where possible, and surface the global toll-free number in the decline message.",
       "policyRefs": ["faq-26", "faq-27", "faq-05", "faq-01", "r-liability-after-report"],
+      "callReady": {
+        "open": [
+          "The card's status and the restriction, and whether mobile banking is locked as well",
+          "Recent foreign authorisations, including hotel and car-rental holds",
+          "The contact details on file, and a number that reaches them where they are",
+          "The emergency replacement option and the phone numbers that work from outside Canada (Policy for this issue). Confirm in your systems."
+        ],
+        "know": [
+          "They may have nothing else to pay with tonight. Solve tonight first, explain second.",
+          "Do not send them to a branch, and do not send them to the app if the app is locked too.",
+          "A real compromise abroad is possible. Verify the flagged purchases before you lift anything.",
+          "Verification feels like suspicion to someone stranded. Frame it as protection: \"I am going to confirm it is you, so nobody else can unlock this card from another country.\"",
+          "Hotel and car-rental holds can look like double charges. A hold drops off when the merchant settles."
+        ]
+      },
+      "callCheckpoint": {
+        "confirm": [
+          "Tell them the card is unlocked and when the merchant can run it again",
+          "If mobile banking was locked, confirm they can sign in before you hang up",
+          "If the card had to be replaced, confirm where the emergency card is going, by when, and what they will pay with until then"
+        ],
+        "lines": [
+          "\"The card is unlocked. Can the hotel try it again while I stay on the line?\"",
+          "\"Are you covered for tonight and tomorrow, or is there a payment I should know about before we hang up?\""
+        ]
+      },
+      "callAdvice": {
+        "ask": [
+          "\"How much longer are you away, and which countries are still ahead?\"",
+          "\"Which number can we reach you on while you travel?\"",
+          "\"Is this the only card you have with you?\""
+        ],
+        "options": [
+          {
+            "do": "Put a reachable number on file for the trip",
+            "why": "An alert they can answer keeps the card working. The trade-off: texts can be slow or cost money when roaming, so they should know to expect them."
+          },
+          {
+            "do": "Send the number that works from abroad in writing",
+            "why": "Next time they skip the general queue. The trade-off: none for them, one minute for you."
+          },
+          {
+            "do": "Add the card to their phone wallet",
+            "why": "A second way to pay if the plastic is lost or kept by a machine. The trade-off: it only works where tap is accepted."
+          },
+          {
+            "do": "Talk through a backup for the rest of the trip",
+            "why": "A second card they already hold, or some local cash, means one stopped card no longer strands them. The trade-off: one more thing to keep safe."
+          }
+        ],
+        "notNow": "A second card, a limit increase, travel insurance or any other product while they are stranded. If they raise one themselves, note it and offer a callback once they are home."
+      },
+      "callClose": {
+        "recap": [
+          "What stopped the card and what you did about it",
+          "What will work tonight",
+          "The number that works from where they are, sent in writing",
+          "If a replacement is on the way: where it is going, by when, and what to do if it does not arrive"
+        ],
+        "lines": [
+          "\"To recap: the card was stopped because we could not reach you to check a purchase. It is unlocked now and the hotel can run it again.\"",
+          "\"I am sending you the number that works from where you are, so you do not have to sit in the general queue from abroad again.\"",
+          "\"Is there anything else I can sort out before you go? Enjoy the rest of your trip.\""
+        ]
+      },
       "depths": {
         "agent": "Verify, lift or replace, solve tonight, give the working number in writing.",
         "specialist": "Own the abroad queue: know which restrictions can be lifted by phone and which cannot, and get the emergency-card logistics right for the country.",
@@ -71,6 +196,73 @@
       "afterCall": "Note per item: classification, claim reference, block time, temporary credit status, replacement type, what the client was told about liability and timing, written confirmation sent. Debit: date of report for the 10-day clock.",
       "preventAndFeedBack": "Drivers: the lock's design is not explained in the app; alerts unanswered; trial conversions reported as fraud. Lead action: an in-app line under the lock toggle (\"bills and subscriptions keep paying\"); a claim-intake script that asks the trial question before classifying.",
       "policyRefs": ["faq-02", "faq-09", "faq-10", "faq-11", "faq-17", "faq-18", "r-liability-cap", "r-liability-after-report", "r-debit-10-days", "r-dispute-window"],
+      "callReady": {
+        "open": [
+          "The transaction list, with each item's date, merchant and status: authorised or posted",
+          "The card's status: locked, blocked or open, and when that changed",
+          "Any open claim, temporary credit or earlier report on the file",
+          "Whether this is debit or credit. The rules and timelines differ (Policy for this issue). Confirm in your systems."
+        ],
+        "know": [
+          "Block first, then talk. Nothing after the report can be charged to them.",
+          "Not every item on their list is fraud. A trial that turned into a paid plan, a hold and a recurring payment are each handled differently.",
+          "A lock stops purchases and cash. It lets bills keep paying, by design.",
+          "A PIN having been used is never, on its own, a reason to refuse a claim.",
+          "Never ask for a one-time code, and tell them nobody from the bank ever will.",
+          "No sentence should sound like doubt. They need to be believed before they can answer questions."
+        ]
+      },
+      "callCheckpoint": {
+        "confirm": [
+          "Read the list back: which items are fraud, which are a merchant dispute, which are a hold",
+          "Confirm the card is blocked and that nothing after the report is theirs to pay",
+          "Give the claim reference and say when they will next hear from the bank. Confirm the timing in your systems."
+        ],
+        "lines": [
+          "\"The card is blocked and I have reported the two charges you did not make. Does that match what you see on your side?\"",
+          "\"Is there any other charge, on this card or another one, that you are unsure about?\""
+        ]
+      },
+      "callAdvice": {
+        "ask": [
+          "\"Has anyone called or texted you lately asking for a code, a password or your card details?\"",
+          "\"Which bills or subscriptions are paid from this card?\"",
+          "\"Do you get a message when the card is used?\""
+        ],
+        "options": [
+          {
+            "do": "Turn on transaction alerts",
+            "why": "They see a charge within minutes and can call at once. The trade-off: more messages, and each one needs a glance."
+          },
+          {
+            "do": "List the bills on the old card number",
+            "why": "They know which ones to move to the new card before a payment bounces. The trade-off: ten minutes of their time this week."
+          },
+          {
+            "do": "Change the passwords where the card number was saved",
+            "why": "It closes the most likely leak. The trade-off: effort, and only they can do it."
+          },
+          {
+            "do": "Explain what a lock does and does not stop",
+            "why": "Next time they lock the card and call as well. The trade-off: none, it takes one sentence."
+          }
+        ],
+        "notNow": "Any product, limit change or balance protection. This is a fraud claim: no offers, even if the account shows one."
+      },
+      "callClose": {
+        "recap": [
+          "Each item and what it is: fraud, dispute or hold",
+          "The card is blocked, and when the new one arrives, standard or emergency",
+          "The claim reference and when they will hear next",
+          "What they can be charged for the fraud items. State the rule from Policy for this issue, and confirm in your systems.",
+          "All of the above in writing"
+        ],
+        "lines": [
+          "\"To recap: two charges reported as fraud under reference [reference], the card is blocked, and a new one is on its way. The third charge is a trial that renewed, and I have told you how we handle that one.\"",
+          "\"Nothing after this report can be charged to you. You will have all of this in writing today.\"",
+          "\"You did the right thing by calling. Is there anything else I can do for you today?\""
+        ]
+      },
       "depths": {
         "agent": "Block, state liability correctly, classify each item, give figures in writing.",
         "specialist": "Handle the contested cases: the client who shared a PIN under coercion, the affidavit, the Debit Code burden of proof, the migration that lost a credit.",
@@ -84,7 +276,7 @@
       "underlyingJob": "Answer the bank's own question and get back to their day; make sure the charge is stopped if it is not theirs.",
       "emotionalRead": "Anxiety (the bank thinks something is wrong) turning to resentment (the bank made it my problem to reach them). Tell: the caller counts the transfers and the minutes.",
       "psychologicalNeeds": "Control (I responded, now respond to me), fairness (you contacted me), competence (I know how to answer a text, your system does not let me).",
-      "riskFlags": ["Alert may be the scam itself: RBC-style alerts never ask for links or personal information; a 'reply with your PIN' is not from the bank", "Transfer again and the complaint is written; this call must be the one that ends the loop", "If the charge is the client's, the restriction can be lifted here"],
+      "riskFlags": ["Alert may be the scam itself: real bank alerts never ask for links or personal information; a 'reply with your PIN' is not from the bank", "Transfer again and the complaint is written; this call must be the one that ends the loop", "If the charge is the client's, the restriction can be lifted here"],
       "engage": "\"You got our alert, you tried to answer it, and you have been passed around. I am sorry about that; you are with the right desk now and this call is where it gets handled. Let me look at the transaction the alert was about.\"",
       "diagnose": ["Which transaction was the alert for, and is it yours?", "Did the alert ask you for anything (a link, a code, your PIN)? (scam check)", "Is the card restricted now, and do you need it in the next hour?"],
       "resolve": "Confirm or deny with the client; lift the restriction or block and report; explain how the short-code alerts work and how to reply to the next one; set alert preferences to the number in their hand. If anyone asked for a code or PIN, treat it as a scam, protect the account, route to fraud. Written confirmation.",
@@ -95,6 +287,70 @@
       "afterCall": "Note: alert reference, client's confirm or deny, action taken, alert number updated, scam check result.",
       "preventAndFeedBack": "Driver: alert replies that go nowhere, and routing that sends alert callers to a general queue. Lead action: a dedicated IVR path for 'I received an alert' with the authority to lift at first contact; measure transfers per alert call.",
       "policyRefs": ["faq-12", "faq-14", "faq-22"],
+      "callReady": {
+        "open": [
+          "The alert itself: which purchase, when it was sent, and to which number",
+          "The card's status: restricted or open",
+          "The contact history, so you can see how many times they have been transferred",
+          "What your desk can lift on its own and what has to go to the fraud team. Confirm in your systems."
+        ],
+        "know": [
+          "This call has to be the one that ends the loop. Transfer only if procedure leaves no choice, and then do it warm: reach the colleague first, brief them, introduce the client by name.",
+          "The alert may be the scam. A real alert asks for a yes or a no. It never asks for a link, a code or a PIN.",
+          "Never ask for a one-time code yourself.",
+          "They have told this story more than once. Read the notes and say back what you know before you ask anything."
+        ]
+      },
+      "callCheckpoint": {
+        "confirm": [
+          "Say what happened to the charge: confirmed as theirs, or blocked and reported",
+          "Say what state the card is in now and whether they can use it",
+          "Read back the number the alerts now go to"
+        ],
+        "lines": [
+          "\"That purchase is confirmed as yours and the card is working again. Is that what you needed when you first answered our text?\"",
+          "\"Is there anything left over from the earlier calls that nobody dealt with?\""
+        ]
+      },
+      "callAdvice": {
+        "ask": [
+          "\"When our text arrived, what did it ask you to do?\"",
+          "\"Is this the number you want alerts sent to?\"",
+          "\"Has anyone ever called you saying they were from the bank and asked for a code?\""
+        ],
+        "options": [
+          {
+            "do": "Show how to answer an alert",
+            "why": "One reply clears a real purchase in seconds. The trade-off: they need the phone on them when they shop."
+          },
+          {
+            "do": "Teach the tell of a fake alert",
+            "why": "A real one asks yes or no. Anything that asks for a link, a code or a PIN is not the bank. The trade-off: none."
+          },
+          {
+            "do": "Set the alert number",
+            "why": "The alert lands where they will see it. The trade-off: it has to be kept current."
+          },
+          {
+            "do": "Call the number on the back of the card",
+            "why": "They reach the bank on a number they trust, not one from a message. The trade-off: none."
+          }
+        ],
+        "notNow": "Any product or offer. They came to answer the bank's own question and have already lost time to transfers."
+      },
+      "callClose": {
+        "recap": [
+          "What the alert was about and what was decided",
+          "The state of the card now",
+          "How to answer the next alert",
+          "An apology for the transfers, said once and plainly"
+        ],
+        "lines": [
+          "\"To recap: the alert was about the purchase at [merchant], you confirmed it is yours, and the card is clear. Next time, a one-word reply to the text does all of this.\"",
+          "\"I am sorry it took this many calls to answer one text. It should have been simpler.\"",
+          "\"Is there anything else I can help you with today? Thank you for sticking with it.\""
+        ]
+      },
       "depths": {
         "agent": "Act on the alert at first contact; never transfer; teach the tell.",
         "specialist": "Own the alert-to-restriction rules: which alerts auto-restrict, which the desk can lift, which need fraud.",
@@ -120,6 +376,72 @@
       "afterCall": "Note: emergency replacement ordered, tracking sent; refund [amount] transferred to new account; PAP list with status; merchant fee action; complaint logged with start date [first contact]; Designated Employee referral if unresolved; written acknowledgement sent.",
       "preventAndFeedBack": "Drivers: address changes not applied to in-flight card orders; stranded credits on migration; advisors promising dates standard delivery cannot keep. Lead action: a hold-and-reissue check when an address changes within 10 days of issue; a migration checklist that includes credits; coaching on promises.",
       "policyRefs": ["faq-01", "faq-04", "faq-05", "faq-08", "r-complaint-56", "r-complaint-14", "r-obsi"],
+      "callReady": {
+        "open": [
+          "The card order history: what was ordered, when, by which delivery method, and to which address",
+          "The address on file now and the date it last changed",
+          "Notes from every earlier contact, including any date a colleague gave",
+          "Recurring payments tied to the old card number, and any that have failed",
+          "Credits, refunds or points sitting on the closed card number"
+        ],
+        "know": [
+          "Count the contacts before you greet them. On a third or fourth contact the standard wait is the wrong answer.",
+          "Own an earlier promise that was not kept. Do not repeat it, and do not blame the colleague.",
+          "Repeated dissatisfaction is a complaint, and its clock runs from the first time they raised it. The timelines are in Policy for this issue. Confirm in your systems.",
+          "Only give a date the delivery method can keep."
+        ]
+      },
+      "callCheckpoint": {
+        "confirm": [
+          "Read back the delivery address, slowly if it was wrong before",
+          "Give the delivery method, the date range and how the tracking will reach them. Confirm the range in your systems.",
+          "Confirm which payments moved to the new number on their own and which they must change"
+        ],
+        "lines": [
+          "\"The new card is going to [address], and you will have the tracking by message today. Is that the right address?\"",
+          "\"Apart from the card itself, is anything still stuck: a payment, a refund, a fee?\""
+        ]
+      },
+      "callAdvice": {
+        "ask": [
+          "\"Which payments come off this card each month?\"",
+          "\"Is there a date you need the card by, like a trip or a renewal?\"",
+          "\"How would you like us to confirm things with you: text, email or mail?\""
+        ],
+        "options": [
+          {
+            "do": "Go through the recurring payments together",
+            "why": "No bounced bill and no merchant fee. The trade-off: a few more minutes on this call."
+          },
+          {
+            "do": "Explain the two delivery options",
+            "why": "They choose the fast route or the standard one knowing the difference. The trade-off: the faster one may need someone at home to receive it."
+          },
+          {
+            "do": "Add the new card to their phone wallet",
+            "why": "They may be able to pay before the plastic arrives. The trade-off: not every card can be added before it is activated, so check before you say it. Confirm in your systems."
+          },
+          {
+            "do": "Confirm the address and contact details on everything they hold",
+            "why": "The next card goes to the right door. The trade-off: none."
+          }
+        ],
+        "notNow": "A different card, an upgrade or any product. They are on a repeat contact and a complaint is open."
+      },
+      "callClose": {
+        "recap": [
+          "What was ordered, to which address, arriving by when, with tracking",
+          "Which payments are safe and which they need to update",
+          "Any refund, credit or fee, and what was done about it",
+          "The complaint: logged, dated from the first contact, and what happens next",
+          "A follow-up from you, only if you can keep it"
+        ],
+        "lines": [
+          "\"To recap: an emergency card to [address], with tracking by message today. The refund has moved to the new card, and the complaint is logged from the day you first called.\"",
+          "\"You will have every date I gave you in writing, so nobody has to take my word for it.\"",
+          "\"I am sorry this took four contacts. Is there anything else I can do for you today?\""
+        ]
+      },
       "depths": {
         "agent": "Emergency card, migrated credit, PAP list, complaint logged, dates in writing.",
         "specialist": "Own the migration checklist and the merchant-fee reversal path; be the person who finds the stranded credits.",
@@ -145,6 +467,71 @@
       "afterCall": "Note: dispute reference, reason code, evidence attached, window dates, what the client was told about stages and reversibility, written summary sent, follow-up date owned by you.",
       "preventAndFeedBack": "Drivers: clients unsure what evidence is needed; no written summary at intake. Lead action: an evidence checklist in the app dispute flow; a written-summary macro at intake; measure disputes reopened for missing evidence.",
       "policyRefs": ["faq-17", "faq-18", "faq-19", "faq-20", "r-dispute-window", "s-fraud-vs-dispute", "s-provisional-credit"],
+      "callReady": {
+        "open": [
+          "The transaction: date, amount, the merchant name as it shows on the statement, and whether it has posted",
+          "The dispute window for that date (Policy for this issue). Check it before you promise anything, and confirm in your systems.",
+          "Any earlier dispute or note on the same charge",
+          "The evidence a dispute needs: order confirmation, promised delivery date, messages with the merchant"
+        ],
+        "know": [
+          "They authorised this purchase, so it is a merchant dispute, not fraud. Do not promise the fraud protections.",
+          "Give stages, not a single date. A date you miss costs more than a range you keep.",
+          "A temporary credit can reverse if the merchant proves delivery. Say so up front.",
+          "They have usually been bounced between the merchant and others already. Being heard comes first."
+        ]
+      },
+      "callCheckpoint": {
+        "confirm": [
+          "Read back the reference and what is attached to the dispute",
+          "Say what happens at the next stage and the range of time it takes. Confirm the ranges in your systems.",
+          "Say what you still need from them, and by when"
+        ],
+        "lines": [
+          "\"The dispute is open under reference [reference], with your order confirmation and the merchant's emails attached. Does that cover everything you sent them?\"",
+          "\"Is there any other charge from this merchant I should look at while we are here?\""
+        ]
+      },
+      "callAdvice": {
+        "ask": [
+          "\"Do you keep the order confirmation and the delivery promise when you buy online?\"",
+          "\"Has this merchant charged you for anything else, or signed you up for a repeat order?\"",
+          "\"Would you like a message each time the card is used?\""
+        ],
+        "options": [
+          {
+            "do": "Keep the proof for every online order",
+            "why": "The confirmation, the promised date and any messages decide a dispute. The trade-off: a folder to keep."
+          },
+          {
+            "do": "Raise a problem early",
+            "why": "The dispute window is counted in days from the purchase or the promised delivery. The trade-off: chasing the merchant sooner than feels polite."
+          },
+          {
+            "do": "Turn on transaction alerts",
+            "why": "A repeat charge from the same merchant is seen the day it happens. The trade-off: more messages."
+          },
+          {
+            "do": "Check a new merchant before paying",
+            "why": "Reviews and a real address cut the risk. The trade-off: a few minutes before each first order."
+          }
+        ],
+        "notNow": "Purchase protection add-ons, a different card or any product while the money is still missing and they feel unheard."
+      },
+      "callClose": {
+        "recap": [
+          "The reference and what is attached",
+          "The stages and the time range for each. Confirm in your systems.",
+          "Whether a temporary credit applies, and that it can reverse",
+          "What they need to send, and by when",
+          "The written summary they will receive"
+        ],
+        "lines": [
+          "\"To recap: the dispute is open, reference [reference]. The merchant is asked to answer first, and you will hear from us in writing at each stage.\"",
+          "\"If a temporary credit shows up, remember it can reverse if the merchant proves delivery. I would rather you hear that from me today.\"",
+          "\"Is there anything else I can help with? Thank you for having the emails ready. It made this much quicker.\""
+        ]
+      },
       "depths": {
         "agent": "Window check, evidence, stages not dates, reference and written summary.",
         "specialist": "Reason-code fluency; knowing which cases are worth pre-arbitration; handling the reversal conversation.",
